@@ -27,6 +27,10 @@
 }
 *, *::before, *::after { box-sizing: border-box; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; margin: 0; padding: 24px 16px 60px; color: var(--color-text-primary); }
+@media(min-width:600px){
+  body { padding: 40px 24px 80px; background: #f0f0f0; }
+}
+
 .screen{display:none;flex-direction:column;gap:14px;}
 .screen.active{display:flex;}
 .prog{height:3px;background:var(--color-border-tertiary);border-radius:2px;overflow:hidden;}
@@ -168,7 +172,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 </style>
 </head>
 <body>
-<div style="max-width:420px;margin:0 auto;">
+<div style="max-width:520px;margin:0 auto;background:#fafafa;border-radius:16px;">
+<style>
+@media(min-width:600px){
+  body > div { background:#fff; box-shadow:0 4px 32px rgba(0,0,0,0.10); padding:32px 32px 48px; }
+  .screen { gap:16px; }
+}
+</style>
 
 <!-- S1 -->
 <div id="s1" class="screen active">
@@ -189,10 +199,27 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   <div class="nav-row"><span class="step-lbl">Step 1 of 5</span></div>
   <div class="prog"><div class="prog-fill" style="width:20%"></div></div>
   <p class="main-q">Where do you want to go?</p>
+  <!-- Mode toggle: know where / explore -->
+  <div style="display:flex;gap:8px;margin-bottom:2px;">
+    <button id="mode-know" onclick="setDestMode('know')" style="flex:1;padding:9px;border-radius:8px;border:1.5px solid #1a1a1a;background:#1a1a1a;color:#fff;font-size:13px;font-weight:500;cursor:pointer;">I know where I'm going</button>
+    <button id="mode-explore" onclick="setDestMode('explore')" style="flex:1;padding:9px;border-radius:8px;border:0.5px solid #ddd;background:#fff;color:#555;font-size:13px;cursor:pointer;">Help me explore ✨</button>
+  </div>
+
+  <!-- Know mode: manual inputs -->
+  <div id="dest-know">
   <div class="route-row">
     <div class="input-wrap"><span class="input-lbl">Flying from</span><input class="big-input" id="origin" placeholder="City or airport" oninput="checkS1()"></div>
     <div class="route-arrow">→</div>
     <div class="input-wrap"><span class="input-lbl">Flying to</span><input class="big-input" id="dest" placeholder="City or airport" oninput="checkS1()"></div>
+  </div>
+  </div>
+
+  <!-- Explore mode: category tiles -->
+  <div id="dest-explore" style="display:none;">
+    <input class="big-input" id="origin-explore" placeholder="Flying from (city or airport)" style="margin-bottom:10px;" oninput="document.getElementById('origin').value=this.value;checkS1();">
+    <p style="margin:0 0 8px;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">PICK A VIBE</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;" id="explore-cats"></div>
+    <div id="explore-dests" style="display:none;margin-top:10px;"></div>
   </div>
   <span class="input-lbl" style="margin-top:2px;">Travelers</span>
   <div style="display:flex;gap:10px;">
@@ -215,7 +242,20 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   <div class="prog"><div class="prog-fill" style="width:40%"></div></div>
   <div class="route-pill" id="s2-route"></div>
   <div id="s2-flight-block"><p class="main-q">What cabin class?</p><div class="pill-grid"><div class="pill" onclick="pickS2(this,'cabin')">Economy</div><div class="pill" onclick="pickS2(this,'cabin')">Premium economy</div><div class="pill" onclick="pickS2(this,'cabin')">Business</div><div class="pill" onclick="pickS2(this,'cabin')">First class</div></div></div>
-  <div id="s2-hotel-block" style="display:none;margin-top:6px;"><p class="main-q">Hotel tier?</p><div class="pill-grid"><div class="pill" onclick="pickS2(this,'hotel')">Budget</div><div class="pill" onclick="pickS2(this,'hotel')">Mid-range</div><div class="pill" onclick="pickS2(this,'hotel')">Upscale</div><div class="pill" onclick="pickS2(this,'hotel')">Luxury</div></div><p class="hint" style="margin-top:4px;">Points hotels: Hyatt, Marriott, Hilton, IHG — matched to your programs.</p></div>
+  <div id="s2-hotel-block" style="display:none;margin-top:6px;">
+    <p class="main-q">Hotel tier?</p>
+    <div class="pill-grid"><div class="pill" onclick="pickS2(this,'hotel')">Budget</div><div class="pill" onclick="pickS2(this,'hotel')">Mid-range</div><div class="pill" onclick="pickS2(this,'hotel')">Upscale</div><div class="pill" onclick="pickS2(this,'hotel')">Luxury</div></div>
+    <p class="hint" style="margin-top:4px;">Points hotels: Hyatt, Marriott, Hilton, IHG — matched to your programs.</p>
+    <p style="font-size:16px;font-weight:500;color:#1a1a1a;margin:10px 0 6px;">How many nights?</p>
+    <div class="counter-row">
+      <div><div style="font-size:13px;color:#1a1a1a;">Nights</div><div style="font-size:11px;color:#888;">Hotel stay length</div></div>
+      <div class="counter-ctrl">
+        <button class="counter-btn" id="nights-minus" onclick="changeNights(-1)" disabled>−</button>
+        <span class="counter-val" id="nights-val">5</span>
+        <button class="counter-btn" onclick="changeNights(1)">+</button>
+      </div>
+    </div>
+  </div>
   <button class="cta" id="s2cta" disabled onclick="go(3)">Continue</button>
 </div>
 
@@ -273,14 +313,30 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   <div class="prog"><div class="prog-fill" style="width:80%"></div></div>
   <div class="route-pill" id="s4b-route"></div>
   <p class="main-q">A couple quick questions</p>
-  <div><p style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px;">What's your monthly credit card spend?</p><p class="hint">Think: groceries, dining, gas, streaming, subscriptions — not rent, mortgage, or car payments.</p></div>
+  <div><p style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px;">What's your monthly credit card spend?</p><p class="hint">Groceries, dining, gas, streaming, subscriptions — not rent or mortgage.</p></div>
   <div class="pill-grid">
     <div class="pill" onclick="pickSpend(this)">Under $1k</div>
     <div class="pill" onclick="pickSpend(this)">$1k – $2.5k</div>
     <div class="pill" onclick="pickSpend(this)">$2.5k – $5k</div>
     <div class="pill" onclick="pickSpend(this)">$5k+</div>
   </div>
-  <div class="bilt-note"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px;"><circle cx="7" cy="7" r="6" stroke="var(--color-text-info)" stroke-width="1.2"/><path d="M7 6v4M7 4.5v.5" stroke="var(--color-text-info)" stroke-width="1.2" stroke-linecap="round"/></svg><span class="bilt-note-text"><strong>Pay rent?</strong> Bilt Rewards earns on rent with no fee — we'll factor this in.</span></div>
+  <!-- Rent/mortgage capture -->
+  <div style="border:0.5px solid #a8cff0;border-radius:10px;padding:12px 14px;background:#e8f1fb;">
+    <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:2px;"><circle cx="7" cy="7" r="6" stroke="#0070c9" stroke-width="1.2"/><path d="M7 6v4M7 4.5v.5" stroke="#0070c9" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <div>
+        <p style="margin:0 0 2px;font-size:13px;font-weight:500;color:#0070c9;">Pay rent or mortgage?</p>
+        <p style="margin:0;font-size:12px;color:#555;line-height:1.4;">Bilt Rewards is the only card that earns points on rent and mortgage — with no fee. We'll factor it into your plan if you add it.</p>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="font-size:13px;color:#555;white-space:nowrap;">Monthly rent/mortgage</span>
+      <div style="display:flex;align-items:center;gap:4px;flex:1;">
+        <span style="font-size:13px;color:#888;">$</span>
+        <input type="number" id="rent-amount" min="0" placeholder="optional" oninput="setRentAmount(this.value)" style="flex:1;padding:7px 10px;border:0.5px solid #a8cff0;border-radius:6px;font-size:14px;color:#1a1a1a;background:#fff;">
+      </div>
+    </div>
+  </div>
   <p style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:4px 0 4px;">When do you want to travel?</p>
   <div class="pill-grid">
     <div class="pill" onclick="pickWhen(this)">3 months</div>
@@ -304,78 +360,74 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   </div>
 </div>
 
-<!-- S5a -->
+<!-- S5a: Has points -->
 <div id="s5a" class="screen">
-  <div class="nav-row"><button class="back-btn" onclick="go(4)">← Edit answers</button><span class="step-lbl">Your results</span></div>
+  <div class="nav-row"><button class="back-btn" onclick="go(4)">← Edit answers</button><span class="step-lbl">Your plan</span></div>
   <div class="prog"><div class="prog-fill" style="width:100%"></div></div>
   <div class="route-pill" id="s5a-route"></div>
-  <p class="main-q" style="font-size:17px;" id="r5a-headline">Your options</p>
-  <div id="tabstrip-a" class="tab-strip"></div>
-  <div id="panel-a-0" class="tab-panel"></div>
-  <div id="panel-a-1" class="tab-panel"></div>
-  <div id="panel-a-2" class="tab-panel"></div>
-  <div id="panel-a-3" class="tab-panel"></div>
-  <div class="hub-upsell">
-    <div class="hub-upsell-hdr">
-      <div class="hub-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2v2M9 14v2M2 9h2M14 9h2M4.2 4.2l1.4 1.4M12.4 12.4l1.4 1.4M4.2 13.8l1.4-1.4M12.4 5.6l1.4-1.4" stroke="#0070c9" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="9" r="3" stroke="#0070c9" stroke-width="1.5"/></svg></div>
-      <div><p style="margin:0;font-size:14px;font-weight:500;color:var(--color-text-primary);">Keep your plan current automatically</p><p style="margin:4px 0 0;font-size:12px;color:var(--color-text-secondary);">Connect your accounts and easy. will track your balances, alert you to transfer bonuses, and update your timeline as things change.</p></div>
-    </div>
-    <div class="alert-preview" style="margin-bottom:12px;">
-      <p style="margin:0 0 6px;font-size:11px;font-weight:500;color:var(--color-text-tertiary);">RECENT ALERTS</p>
-      <div class="alert-item"><div class="alert-dot hot"></div><div><div class="alert-text">Chase → Avianca <strong>30% transfer bonus</strong> — ends in 3 days</div><div class="alert-time">2 hours ago</div></div></div>
-      <div class="alert-item"><div class="alert-dot live"></div><div><div class="alert-text">Amex → Air France <strong>award space opened</strong> on your route</div><div class="alert-time">Yesterday</div></div></div>
-      <div class="alert-item"><div class="alert-dot soon"></div><div><div class="alert-text">Bilt → Hyatt transfer bonus <strong>ending soon</strong></div><div class="alert-time">3 days ago</div></div></div>
-    </div>
-    <button class="cta" onclick="go(7)">Connect my accounts →</button>
-    <button class="cta-ghost" style="margin-top:4px;" onclick="go(6)">Get my plan by email first</button>
-  </div>
+  <p class="main-q" style="font-size:17px;" id="r5a-headline">Here's how you get there</p>
+  <!-- Main recommendation — full breakdown -->
+  <div id="main-plan-a"></div>
+  <!-- Compact alternatives -->
+  <div id="alt-plans-a"></div>
+  <!-- Waitlist FOMO -->
+  <div id="waitlist-block-a"></div>
 </div>
 
-<!-- S5b -->
+<!-- S5b: No points -->
 <div id="s5b" class="screen">
-  <div class="nav-row"><button class="back-btn" onclick="go(4)">← Edit answers</button><span class="step-lbl">Your results</span></div>
+  <div class="nav-row"><button class="back-btn" onclick="go(4)">← Edit answers</button><span class="step-lbl">Your plan</span></div>
   <div class="prog"><div class="prog-fill" style="width:100%"></div></div>
   <div class="route-pill" id="s5b-route"></div>
-  <p class="main-q" style="font-size:17px;" id="r5b-headline">Your fastest path</p>
-  <p class="sub-q">Pick a card strategy — we'll show exactly what to spend and how long it takes.</p>
-  <div id="tabstrip-b" class="tab-strip"></div>
-  <div id="panel-b-0" class="tab-panel"></div>
-  <div id="panel-b-1" class="tab-panel"></div>
-  <div id="panel-b-2" class="tab-panel"></div>
-  <div id="panel-b-3" class="tab-panel"></div>
-  <div class="hub-upsell">
-    <div class="hub-upsell-hdr">
-      <div class="hub-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2v2M9 14v2M2 9h2M14 9h2M4.2 4.2l1.4 1.4M12.4 12.4l1.4 1.4M4.2 13.8l1.4-1.4M12.4 5.6l1.4-1.4" stroke="#0070c9" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="9" r="3" stroke="#0070c9" stroke-width="1.5"/></svg></div>
-      <div><p style="margin:0;font-size:14px;font-weight:500;color:var(--color-text-primary);">Never miss a bonus or new card offer</p><p style="margin:4px 0 0;font-size:12px;color:var(--color-text-secondary);">Once you have a card, connect it to easy. — we'll track your balance and alert you when bonuses drop.</p></div>
-    </div>
-    <div class="alert-preview" style="margin-bottom:12px;">
-      <p style="margin:0 0 6px;font-size:11px;font-weight:500;color:var(--color-text-tertiary);">RECENT ALERTS</p>
-      <div class="alert-item"><div class="alert-dot hot"></div><div><div class="alert-text">Chase → Avianca <strong>30% transfer bonus</strong> — ends in 3 days</div><div class="alert-time">2 hours ago</div></div></div>
-      <div class="alert-item"><div class="alert-dot soon"></div><div><div class="alert-text">Amex Platinum sign-up bonus <strong>increased to 120k</strong> — limited time</div><div class="alert-time">Today</div></div></div>
-    </div>
-    <button class="cta" onclick="go(7)">Connect accounts when you're ready →</button>
-    <button class="cta-ghost" style="margin-top:4px;" onclick="go(6)">Get my plan by email first</button>
-  </div>
+  <p class="main-q" style="font-size:17px;" id="r5b-headline">Here's your path</p>
+  <p class="sub-q">You don't have points yet — no problem. Here's exactly what to do.</p>
+  <div id="main-plan-b"></div>
+  <div id="alt-plans-b"></div>
+  <div id="waitlist-block-b"></div>
 </div>
 
 <!-- S6 -->
 <div id="s6" class="screen">
-  <div style="text-align:center;padding:10px 0 4px;">
-    <div style="width:44px;height:44px;border-radius:50%;background:var(--color-background-success);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10l4.5 4.5 7.5-9" stroke="#2d7a2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    <p class="main-q" style="font-size:18px;">Your plan is on its way</p>
-    <p class="sub-q" style="margin-top:6px;">Full breakdown and booking links are in your inbox.</p>
-  </div>
-  <div class="card">
-    <p style="margin:0 0 12px;font-size:13px;font-weight:500;">What's included</p>
-    <div style="display:flex;flex-direction:column;gap:10px;">
-      <div style="font-size:13px;color:var(--color-text-secondary);display:flex;gap:10px;"><span style="color:var(--color-text-success);flex-shrink:0;">✓</span>Best award routing + step-by-step transfer guide</div>
-      <div style="font-size:13px;color:var(--color-text-secondary);display:flex;gap:10px;"><span style="color:var(--color-text-success);flex-shrink:0;">✓</span>Which card to swipe for each spending category</div>
-      <div style="font-size:13px;color:var(--color-text-secondary);display:flex;gap:10px;"><span style="color:var(--color-text-success);flex-shrink:0;">✓</span>Monthly earn breakdown with exact timeline</div>
-      <div style="font-size:13px;color:var(--color-text-secondary);display:flex;gap:10px;"><span style="color:var(--color-text-success);flex-shrink:0;">✓</span>Current sign-up bonus links (refreshed weekly)</div>
+  <!-- Step 1: timeline question — shown first -->
+  <div id="s6-question">
+    <div style="text-align:center;padding:10px 0 4px;">
+      <div style="width:44px;height:44px;border-radius:50%;background:#eaf5ea;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10l4.5 4.5 7.5-9" stroke="#2d7a2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <p style="font-size:18px;font-weight:500;color:#1a1a1a;margin:0;">Your plan is saved.</p>
+      <p style="font-size:14px;color:#555;margin:6px 0 0;">One quick question before we send it.</p>
+    </div>
+    <div style="border:0.5px solid #ebebeb;border-radius:12px;padding:20px;background:#fff;">
+      <p style="margin:0 0 16px;font-size:15px;font-weight:500;color:#1a1a1a;">How soon are you thinking about this trip?</p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button onclick="pickTimeline(this,'3mo')" style="padding:13px 16px;border-radius:8px;border:0.5px solid #ddd;background:#fff;font-size:14px;color:#1a1a1a;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;">Within 3 months <span style="color:#888;font-size:12px;">I'm ready to book</span></button>
+        <button onclick="pickTimeline(this,'6mo')" style="padding:13px 16px;border-radius:8px;border:0.5px solid #ddd;background:#fff;font-size:14px;color:#1a1a1a;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;">6 months out <span style="color:#888;font-size:12px;">Saving up points now</span></button>
+        <button onclick="pickTimeline(this,'year')" style="padding:13px 16px;border-radius:8px;border:0.5px solid #ddd;background:#fff;font-size:14px;color:#1a1a1a;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;">Within a year <span style="color:#888;font-size:12px;">Planning ahead</span></button>
+        <button onclick="pickTimeline(this,'explore')" style="padding:13px 16px;border-radius:8px;border:0.5px solid #ddd;background:#fff;font-size:14px;color:#1a1a1a;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;">Just exploring <span style="color:#888;font-size:12px;">Seeing what's possible</span></button>
+      </div>
     </div>
   </div>
-  <button class="cta" onclick="go(7)">Connect accounts to stay up to date →</button>
-  <button class="cta cta-sec" style="margin-top:4px;" onclick="restart()">Plan another trip</button>
+
+  <!-- Step 2: confirmation — shown after timeline pick -->
+  <div id="s6-confirm" style="display:none;flex-direction:column;gap:14px;">
+    <div style="text-align:center;padding:10px 0 4px;">
+      <p style="font-size:18px;font-weight:500;color:#1a1a1a;margin:0;">You're all set.</p>
+      <p style="font-size:14px;color:#555;margin:6px 0 0;">Your plan is on its way — check your inbox.</p>
+    </div>
+    <div style="border:0.5px solid #ebebeb;border-radius:12px;padding:16px;background:#fff;">
+      <p style="margin:0 0 12px;font-size:13px;font-weight:500;">What's in your plan</p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="font-size:13px;color:#555;display:flex;gap:10px;"><span style="color:#2d7a2d;flex-shrink:0;">✓</span>Step-by-step transfer guide for your route</div>
+        <div style="font-size:13px;color:#555;display:flex;gap:10px;"><span style="color:#2d7a2d;flex-shrink:0;">✓</span>Which card to swipe for every spending category</div>
+        <div style="font-size:13px;color:#555;display:flex;gap:10px;"><span style="color:#2d7a2d;flex-shrink:0;">✓</span>Monthly earn breakdown + exact timeline</div>
+        <div style="font-size:13px;color:#555;display:flex;gap:10px;"><span style="color:#2d7a2d;flex-shrink:0;">✓</span>Current sign-up bonus links (refreshed weekly)</div>
+      </div>
+    </div>
+    <div style="border:1.5px solid #a8cff0;border-radius:12px;padding:16px;background:#fff;">
+      <p style="margin:0 0 4px;font-size:14px;font-weight:500;color:#1a1a1a;">Want alerts when transfer bonuses drop?</p>
+      <p style="margin:0 0 12px;font-size:12px;color:#555;">Connect your accounts and easy. will watch your balances and ping you when there's an opportunity.</p>
+      <button class="cta" onclick="go(7)">Connect my accounts →</button>
+      <button class="cta-ghost" style="margin-top:4px;" onclick="restart()">Plan another trip</button>
+    </div>
+  </div>
 </div>
 
 <!-- S7 -->
@@ -438,6 +490,223 @@ var connNames={chase:'Chase UR',amex:'Amex MR',cap1:'Capital One',bilt:'Bilt',de
 var flightPtsMap={economy:45000,'premium economy':60000,business:87500,'first class':140000};
 var hotelPtsPerNight={budget:8000,'mid-range':15000,upscale:25000,luxury:40000};
 var hotelNights=5;
+function changeNights(delta){
+  hotelNights=Math.max(1,hotelNights+delta);
+  document.getElementById('nights-val').textContent=hotelNights;
+  document.getElementById('nights-minus').disabled=hotelNights<=1;
+}
+
+// Cards to suggest when a has-points user still has a gap
+// mults = per-category earn rates for everyday spending
+var GAP_CARDS=[
+  {name:'Chase Sapphire Reserve', bank:'Chase', bonus:125000, bg:'#1a1f71',
+   cls:'cp-chase', shortName:'Chase Reserve',
+   note:'125k pts after $6k spend in 3 months. Best premium Chase card — 3x dining, 4x flights & hotels.',
+   mults:{groceries:3,dining:3,gas:2,streaming:3,other:1}},
+  {name:'Amex Platinum',          bank:'American Express', bonus:175000, bg:'#007dc5',
+   cls:'cp-amex', shortName:'Amex Platinum',
+   note:'Up to 175k pts after $12k spend in 6 months. Highest bonus available.',
+   mults:{groceries:1,dining:1,gas:1,streaming:1,other:1}},
+  {name:'Amex Gold',              bank:'American Express', bonus:100000, bg:'#b8860b',
+   cls:'cp-amex', shortName:'Amex Gold',
+   note:'Up to 100k pts after $6k spend in 6 months. 4x groceries & dining — best everyday earner.',
+   mults:{groceries:4,dining:4,gas:1,streaming:1,other:1}},
+  {name:'Capital One Venture X',  bank:'Capital One', bonus:75000, bg:'#003580',
+   cls:'cp-cap1', shortName:'Capital One',
+   note:'75k miles after $4k spend in 3 months. Simple 2x on everything.',
+   mults:{groceries:2,dining:2,gas:2,streaming:2,other:2}},
+  {name:'Chase Sapphire Preferred',bank:'Chase', bonus:75000, bg:'#2d3a8c',
+   cls:'cp-chase', shortName:'Chase Sapphire',
+   note:'75k pts after $5k spend in 3 months. Best value travel card under $100/yr.',
+   mults:{groceries:3,dining:3,gas:2,streaming:3,other:1}}
+];
+
+
+function buildGapCardSuggestion(gap, userCards, ptsPerMo){
+  if(gap<=0) return '';
+  var mo=getMonthlyBudget();
+  var haveKeys=userCards;
+  var suggestions=GAP_CARDS.filter(function(c){
+    if(c.name.indexOf('Chase')>=0    && haveKeys.indexOf('chase')>=0) return false;
+    if(c.name.indexOf('Amex')>=0     && haveKeys.indexOf('amex')>=0)  return false;
+    if(c.name.indexOf('Capital One')>=0 && haveKeys.indexOf('cap1')>=0) return false;
+    if(c.name.indexOf('Bilt')>=0     && haveKeys.indexOf('bilt')>=0)  return false;
+    return true;
+  }).slice(0,2);
+
+  if(suggestions.length===0) return '';
+  var slowMonths=Math.max(1,Math.ceil(gap/ptsPerMo));
+  var slowLabel=slowMonths===1?'1 month':''+slowMonths+' months';
+
+  var html='<div style="border:1.5px solid #a8cff0;border-radius:12px;overflow:hidden;margin-top:4px;">';
+  html+='<div style="padding:12px 14px;background:#e8f1fb;border-bottom:0.5px solid #a8cff0;">';
+  html+='<p style="margin:0;font-size:13px;font-weight:500;color:#0070c9;">⚡ Close your gap faster with a new card</p>';
+  html+='<p style="margin:4px 0 0;font-size:12px;color:#555;">At your current earn rate you\'re <strong>'+slowLabel+'</strong> away. A sign-up bonus could get you there much faster.</p>';
+  html+='</div>';
+
+  suggestions.forEach(function(c){
+    var bonusCoversGap = c.bonus >= gap;
+    var monthsWithBonus = bonusCoversGap ? 0 : Math.max(1, Math.ceil((gap-c.bonus)/ptsPerMo));
+    var withBonusLabel = monthsWithBonus===1 ? '1 month' : monthsWithBonus+' months';
+
+    // Build optimized wallet table: existing cards + this new card
+    var walletCards = haveKeys.map(function(k){ return CARD_PROFILES[k]; });
+    var newCardProfile = {name:c.name, shortName:c.shortName, cls:c.cls, mults:c.mults};
+    var allCards = walletCards.concat([newCardProfile]);
+
+    var rows=''; var newTotalPtsPerMo=0;
+    CATEGORIES.forEach(function(cat){
+      var spend=Math.round(mo*cat.w);
+      var bestCard=allCards[0], bestMult=0;
+      allCards.forEach(function(card){
+        var m=card.mults[cat.key]||1;
+        if(m>bestMult){bestMult=m;bestCard=card;}
+      });
+      var pts=Math.round(spend*bestMult);
+      newTotalPtsPerMo+=pts;
+      var isNew=(bestCard.name===c.name);
+      rows+='<tr>';
+      rows+='<td>'+cat.label+'</td>';
+      rows+='<td><span class="card-pill '+bestCard.cls+'"'+(isNew?' style="outline:2px solid #0070c9;outline-offset:1px;"':'')+'>'+bestCard.shortName+(isNew?' ✦':'')+'</span></td>';
+      rows+='<td class="c" style="color:#2d7a2d;font-weight:500;">'+bestMult+'x</td>';
+      rows+='<td>$'+spend.toLocaleString()+'</td>';
+      rows+='<td class="r" style="font-weight:500;">'+pts.toLocaleString()+'</td>';
+      rows+='</tr>';
+    });
+
+    html+='<div style="padding:14px;border-bottom:0.5px solid #ebebeb;background:#fff;">';
+    // Card header
+    html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">';
+    html+='<div style="display:flex;align-items:center;gap:10px;">';
+    html+='<div style="width:32px;height:32px;border-radius:8px;background:'+c.bg+';color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;flex-shrink:0;">NEW</div>';
+    html+='<div><p style="margin:0;font-size:13px;font-weight:500;color:#1a1a1a;">'+c.name+'</p>';
+    html+='<p style="margin:2px 0 0;font-size:11px;color:#888;">'+c.bank+'</p></div></div>';
+    html+='<div style="text-align:right;flex-shrink:0;margin-left:10px;">';
+    html+='<p style="margin:0;font-size:20px;font-weight:500;color:#2d7a2d;">'+Math.round(c.bonus/1000)+'k</p>';
+    html+='<p style="margin:0;font-size:11px;color:#888;">sign-up bonus</p></div></div>';
+    html+='<p style="margin:0 0 8px;font-size:12px;color:#555;">'+c.note+'</p>';
+
+    // Gap shortcut callout
+    if(bonusCoversGap){
+      html+='<div style="padding:8px 10px;background:#eaf5ea;border-radius:6px;font-size:12px;color:#2d7a2d;font-weight:500;margin-bottom:10px;">Sign-up bonus alone covers your entire gap — you could book in ~3 months.</div>';
+    } else {
+      html+='<div style="padding:8px 10px;background:#eaf5ea;border-radius:6px;font-size:12px;color:#2d7a2d;margin-bottom:10px;">With this bonus + your earn rate: <strong>'+withBonusLabel+'</strong> instead of '+slowLabel+'.</div>';
+    }
+
+    // Optimized wallet spend table
+    html+='<div style="background:#f5f5f5;border-radius:8px;padding:10px 12px;">';
+    html+='<p style="margin:0 0 6px;font-size:12px;font-weight:500;color:#1a1a1a;">Your optimized wallet with this card</p>';
+    html+='<p style="margin:0 0 8px;font-size:11px;color:#888;">✦ = switch to the new card for this category</p>';
+    html+='<table class="spend-table"><thead><tr><th>Category</th><th>Best card</th><th class="c">Earn</th><th>$/mo</th><th class="r">Pts/mo</th></tr></thead><tbody>'+rows+'</tbody></table>';
+    html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0 0;border-top:0.5px solid #ddd;margin-top:6px;">';
+    html+='<span style="font-size:12px;color:#0070c9;">Total points/month with this card added</span>';
+    html+='<span style="font-size:14px;font-weight:500;color:#0070c9;">'+newTotalPtsPerMo.toLocaleString()+' pts</span>';
+    html+='</div>';
+    if(newTotalPtsPerMo>ptsPerMo){
+      var uplift=newTotalPtsPerMo-ptsPerMo;
+      html+='<div style="font-size:11px;color:#2d7a2d;margin-top:4px;">+'+uplift.toLocaleString()+' pts/month more than your current cards alone</div>';
+    }
+    html+='</div></div>';
+  });
+
+  html+='<div style="padding:10px 14px;background:#f5f5f5;">';
+  html+='<p style="margin:0;font-size:11px;color:#888;">Recommendations are illustrative. Approval not guaranteed. Save your plan to get current application links.</p>';
+  html+='</div></div>';
+  return html;
+}
+// Annual fee credit breakdowns — effective cost after credits beginners already spend on
+var CARD_FEES={
+  'Chase Sapphire Preferred':{raw:95,effective:45,credits:[{label:'$50 annual hotel credit (prepaid bookings)',val:50}],note:'Effectively ~$45/yr for most people.'},
+  'Amex Platinum':{raw:895,effective:95,credits:[{label:'$300 back on streaming — Disney+, Peacock, Hulu, YouTube Premium',val:300},{label:'$200 Uber Cash — rides and Uber Eats, $15/month',val:200},{label:'$400 Resy dining credit — $100/quarter at thousands of restaurants',val:400}],note:'Use just the streaming and Uber credits and the fee drops to ~$395. Add dining and it pays for itself.'},
+  'Amex Gold':{raw:250,effective:10,credits:[{label:'$120 dining credit — $10/mo at Grubhub, Cheesecake Factory',val:120},{label:'$120 Uber Cash — $10/mo toward rides or Uber Eats',val:120}],note:'The dining and Uber credits almost fully cover the fee for most people.'},
+  'Capital One Venture X':{raw:395,effective:0,credits:[{label:'$300 travel credit — applies to any travel purchase automatically',val:300},{label:'$100 Global Entry or TSA PreCheck credit',val:100}],note:'For anyone who travels even occasionally, the effective fee is $0 or less.'},
+  'Chase Freedom Unlimited':{raw:0,effective:0,credits:[],note:'No annual fee — ever.'},
+  'Bilt Mastercard':{raw:0,effective:0,credits:[],note:'No annual fee — earns points on rent.'}
+};
+function buildFeeBlock(cardName){
+  var f=CARD_FEES[cardName];
+  if(!f) return '';
+  if(f.raw===0) return '<div style="display:flex;align-items:center;gap:6px;margin-top:8px;padding:6px 10px;background:#eaf5ea;border-radius:8px;border:1px solid #a3d4a3;"><span style="font-size:14px;">✓</span><span style="font-size:12px;font-weight:500;color:#2d7a2d;">No annual fee — ever</span></div>';
+  var html='<div style="margin-top:10px;border:1.5px solid #a3d4a3;border-radius:10px;overflow:hidden;">';
+  html+='<div style="padding:8px 12px;background:#eaf5ea;display:flex;align-items:center;gap:8px;">';
+  html+='<span style="font-size:14px;">💡</span>';
+  html+='<span style="font-size:12px;font-weight:500;color:#2d7a2d;">Here\'s the real cost after credits</span>';
+  html+='</div>';
+  html+='<div style="padding:10px 12px;background:#fff;">';
+  html+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">';
+  html+='<span style="font-size:13px;color:#aaa;text-decoration:line-through;">$'+f.raw+'/yr sticker price</span>';
+  html+='<span style="font-size:15px;font-weight:500;color:#2d7a2d;">→ ~$'+f.effective+'/yr effective</span>';
+  html+='</div>';
+  f.credits.forEach(function(c){
+    html+='<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:5px;">';
+    html+='<span style="background:#eaf5ea;color:#2d7a2d;font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;flex-shrink:0;margin-top:1px;">−$'+c.val+'</span>';
+    html+='<span style="font-size:12px;color:#555;line-height:1.4;">'+c.label+'</span>';
+    html+='</div>';
+  });
+  html+='<p style="margin:6px 0 0;font-size:11px;color:#888;font-style:italic;border-top:0.5px solid #ebebeb;padding-top:6px;">'+f.note+'</p>';
+  html+='</div></div>';
+  return html;
+}
+
+// ── Explore destination data ──
+var EXPLORE_CATS=[
+  {id:'beach',emoji:'🏖',label:'Beach & Islands',dests:['Maldives','Bali','Hawaii']},
+  {id:'ski',emoji:'⛷',label:'Ski & Alps',dests:['Aspen','Zermatt','Hokkaido']},
+  {id:'europe',emoji:'🏛',label:'European Classic',dests:['Paris','Rome','Barcelona']},
+  {id:'asia',emoji:'🌏',label:'Asia & Pacific',dests:['Tokyo','Bangkok','Singapore']},
+  {id:'caribbean',emoji:'🌴',label:'Mexico & Caribbean',dests:['Cancun','Tulum','Turks & Caicos']},
+  {id:'city',emoji:'🌆',label:'City Splurge',dests:['Dubai','London','New York']}
+];
+var DEST_BG={'Maldives':'linear-gradient(160deg,#0077b6,#00b4d8)','Bali':'linear-gradient(160deg,#2d6a4f,#52b788)','Hawaii':'linear-gradient(160deg,#0096c7,#48cae4)','Aspen':'linear-gradient(160deg,#4a90c4,#a8d8ea)','Zermatt':'linear-gradient(160deg,#2c3e50,#4a90c4)','Hokkaido':'linear-gradient(160deg,#457b9d,#a8dadc)','Paris':'linear-gradient(160deg,#6c3483,#a569bd)','Rome':'linear-gradient(160deg,#b7410e,#e07b54)','Barcelona':'linear-gradient(160deg,#c0392b,#f39c12)','Tokyo':'linear-gradient(160deg,#c0392b,#e74c3c)','Bangkok':'linear-gradient(160deg,#d4a017,#f39c12)','Singapore':'linear-gradient(160deg,#1a252f,#2e86ab)','Cancun':'linear-gradient(160deg,#1a7a4a,#52b788)','Tulum':'linear-gradient(160deg,#2d6a4f,#b5e48c)','Turks & Caicos':'linear-gradient(160deg,#0096c7,#90e0ef)','Dubai':'linear-gradient(160deg,#b8860b,#f1c40f)','London':'linear-gradient(160deg,#2c3e50,#4a4e69)','New York':'linear-gradient(160deg,#1a252f,#2c3e50)'};
+var DEST_TAGLINE={'Maldives':'Overwater bungalows & turquoise atolls','Bali':'Rice terraces, temples & jungle villas','Hawaii':'Volcanoes, surf & the aloha spirit','Aspen':'World-class powder & mountain luxury','Zermatt':'The Matterhorn at your doorstep','Hokkaido':'Japan\'s powder paradise','Paris':'Art, fashion & the world\'s best croissants','Rome':'2,800 years of history on every corner','Barcelona':'Gaudí, tapas & beach in one city','Tokyo':'Neon, ramen, shrines & bullet trains','Bangkok':'Street food capital of the world','Singapore':'Where futurism meets hawker culture','Cancun':'All-inclusive done right on the Caribbean','Tulum':'Boutique jungle cenotes & white sand','Turks & Caicos':'The clearest water in the Atlantic','Dubai':'Skyline that defies gravity','London':'History, theatre & the world\'s best pubs','New York':'The city that never sleeps, for good reason'};
+
+function setDestMode(mode){
+  var ex=mode==='explore';
+  document.getElementById('dest-know').style.display=ex?'none':'';
+  document.getElementById('dest-explore').style.display=ex?'':'none';
+  var kb=document.getElementById('mode-know'),eb=document.getElementById('mode-explore');
+  kb.style.background=ex?'#fff':'#1a1a1a';kb.style.color=ex?'#555':'#fff';kb.style.border=ex?'0.5px solid #ddd':'1.5px solid #1a1a1a';
+  eb.style.background=ex?'#1a1a1a':'#fff';eb.style.color=ex?'#fff':'#555';eb.style.border=ex?'1.5px solid #1a1a1a':'0.5px solid #ddd';
+  if(ex) buildExploreCats();
+}
+function buildExploreCats(){
+  document.getElementById('explore-dests').style.display='none';
+  document.getElementById('explore-cats').style.display='grid';
+  var html='';
+  EXPLORE_CATS.forEach(function(c){
+    html+='<button onclick="showExploreDests(\''+c.id+'\')" style="padding:10px 4px;border-radius:10px;border:0.5px solid #ddd;background:#fff;cursor:pointer;text-align:center;">';
+    html+='<div style="font-size:20px;margin-bottom:4px;">'+c.emoji+'</div>';
+    html+='<div style="font-size:11px;font-weight:500;color:#1a1a1a;line-height:1.3;">'+c.label+'</div>';
+    html+='</button>';
+  });
+  document.getElementById('explore-cats').innerHTML=html;
+}
+function showExploreDests(catId){
+  var cat=null;for(var i=0;i<EXPLORE_CATS.length;i++){if(EXPLORE_CATS[i].id===catId){cat=EXPLORE_CATS[i];break;}}
+  if(!cat)return;
+  document.getElementById('explore-cats').style.display='none';
+  var html='<p style="margin:0 0 8px;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">PICK YOUR DESTINATION</p>';
+  html+='<div style="display:flex;flex-direction:column;gap:8px;">';
+  cat.dests.forEach(function(d){
+    var bg=DEST_BG[d]||'linear-gradient(160deg,#2c3e50,#4a90c4)';
+    html+='<button onclick="pickExploreDest(\''+d+'\')" style="padding:14px 16px;border-radius:12px;border:none;background:'+bg+';color:#fff;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;">';
+    html+='<div><div style="font-size:15px;font-weight:500;">'+d+'</div><div style="font-size:12px;opacity:0.8;margin-top:2px;">'+(DEST_TAGLINE[d]||'')+'</div></div>';
+    html+='<span style="font-size:18px;opacity:0.7;">→</span>';
+    html+='</button>';
+  });
+  html+='</div>';
+  html+='<button onclick="buildExploreCats()" style="margin-top:8px;width:100%;padding:8px;border:0.5px solid #ddd;background:#fff;border-radius:8px;font-size:12px;color:#888;cursor:pointer;">← All categories</button>';
+  var el=document.getElementById('explore-dests');
+  el.innerHTML=html;el.style.display='';
+}
+function pickExploreDest(dest){
+  document.getElementById('dest').value=dest;
+  var oe=document.getElementById('origin-explore');
+  if(oe&&oe.value) document.getElementById('origin').value=oe.value;
+  checkS1();
+  setTimeout(function(){if(document.getElementById('origin').value.trim().length>1)go(2);},200);
+}
+
 var CARD_PROFILES={
   chase:{name:'Chase Sapphire Preferred',shortName:'Chase Sapphire',cls:'cp-chase',mults:{groceries:3,dining:3,gas:2,streaming:3,other:1}},
   amex:{name:'Amex Gold',shortName:'Amex Gold',cls:'cp-amex',mults:{groceries:4,dining:4,gas:1,streaming:1,other:1}},
@@ -458,10 +727,13 @@ var BOOKING_OPTS=[
   {label:'Fewest pts',recommended:false,airline:'Iberia',airlineCode:'IB',airlineColor:'#c0392b',cabin:'Business',route:'Amex → Iberia Plus',hotel:'Hilton Paris Opéra',hotelCode:'HLT',hotelColor:'#1e8449',hotelTier:'Mid-range · Hilton',cpp:0.018,ptsM:0.82}
 ];
 var NEW_CARDS=[
-  {label:'Recommended',recommended:true,name:'Chase Sapphire Preferred',bank:'Chase · $95/yr annual fee',bonus:60000,mults:{groceries:3,dining:3,gas:2,streaming:3,other:1},airline:'Air France',airlineCode:'AF',airlineColor:'#002157',cabin:'Business',route:'via Flying Blue',hotel:'Le Bristol Paris',hotelCode:'HYT',hotelColor:'#1a5276',hotelTier:'Luxury · Hyatt Cat 7'},
-  {label:'Big bonus',recommended:false,name:'Amex Platinum',bank:'Amex · $695/yr annual fee',bonus:100000,mults:{groceries:1,dining:1,gas:1,streaming:1,other:1},airline:'Air France',airlineCode:'AF',airlineColor:'#002157',cabin:'La Première',route:'via Amex → Flying Blue',hotel:'Paris Marriott Opéra',hotelCode:'MAR',hotelColor:'#c0392b',hotelTier:'Luxury · Marriott'},
-  {label:'No annual fee',recommended:false,name:'Chase Freedom Unlimited',bank:'Chase · No annual fee',bonus:20000,mults:{groceries:1.5,dining:3,gas:1.5,streaming:1.5,other:1.5},airline:'British Airways',airlineCode:'BA',airlineColor:'#2b5be8',cabin:'Club World',route:'via Avios',hotel:'Hilton Paris Opéra',hotelCode:'HLT',hotelColor:'#1e8449',hotelTier:'Upscale · Hilton'},
-  {label:'Bilt + rent',recommended:false,name:'Bilt Mastercard',bank:'Wells Fargo · No annual fee',bonus:0,mults:{groceries:2,dining:3,gas:2,streaming:1,other:1},airline:'Air France',airlineCode:'AF',airlineColor:'#002157',cabin:'Business',route:'via Bilt → Flying Blue',hotel:'Le Bristol Paris',hotelCode:'HYT',hotelColor:'#1a5276',hotelTier:'Luxury · Hyatt Cat 7'}
+  {label:'Recommended',recommended:true, name:'Chase Sapphire Preferred', bank:'Chase',           bonus:75000,  minSpend:5000,  mults:{groceries:3,dining:3,gas:2,streaming:3,other:1}},
+  {label:'Premium',    recommended:false, name:'Chase Sapphire Reserve',  bank:'Chase',           bonus:125000, minSpend:6000,  mults:{groceries:3,dining:3,gas:2,streaming:3,other:1}},
+  {label:'Big bonus',  recommended:false, name:'Amex Platinum',           bank:'American Express',bonus:175000, minSpend:12000, mults:{groceries:1,dining:1,gas:1,streaming:1,other:1}},
+  {label:'Everyday',   recommended:false, name:'Amex Gold',               bank:'American Express',bonus:100000, minSpend:6000,  mults:{groceries:4,dining:4,gas:1,streaming:1,other:1}},
+  {label:'Simple',     recommended:false, name:'Capital One Venture X',   bank:'Capital One',     bonus:75000,  minSpend:4000,  mults:{groceries:2,dining:2,gas:2,streaming:2,other:2}},
+  {label:'No fee',     recommended:false, name:'Chase Freedom Unlimited', bank:'Chase',           bonus:20000,  minSpend:500,   mults:{groceries:1.5,dining:3,gas:1.5,streaming:1.5,other:1.5}},
+  {label:'Rent earner',recommended:false, name:'Bilt Mastercard',         bank:'Wells Fargo',     bonus:0,      minSpend:0,     mults:{groceries:2,dining:3,gas:2,streaming:1,other:1,rent:1}}
 ];
 function tog(id,en){var e=document.getElementById(id);if(e)e.disabled=!en;}
 function showOnly(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
@@ -595,29 +867,594 @@ function getDestInfo(dest){
     'upscale':{n:'Marriott '+city,c:'#c0392b',code:'MAR',tier:'Upscale · Marriott Bonvoy'},
     'luxury':{n:'Park Hyatt '+city,c:'#1a5276',code:'HYT',tier:'Luxury · Hyatt'}}};
 }
+// Destination flavor text — makes the itinerary feel like a real dream trip
+var DEST_VIBES={
+  'tokyo':  {emoji:'🗼',hotel:'Arguably the world\'s best city hotel. Floor-to-ceiling views of Mount Fuji at sunrise.',flight:'The gold standard of business class — ANA\'s cabin is often called the best in the sky.'},
+  'japan':  {emoji:'🗼',hotel:'Floor-to-ceiling views of Mount Fuji at sunrise. Impeccable service.',flight:'ANA business class is frequently rated the world\'s best. You\'ll see why.'},
+  'paris':  {emoji:'🗼',hotel:'One of the great hotels in the world. The croissants at breakfast are worth the trip alone.',flight:'Air France business class feels like Paris before you land.'},
+  'france': {emoji:'🗼',hotel:'An institution on the rue du Faubourg Saint-Honoré. True Parisian luxury.',flight:'Air France business class feels like Paris before you land.'},
+  'london': {emoji:'🎡',hotel:'Right on the Thames with views of Parliament. London at its most cinematic.',flight:'British Airways Club World — flat bed, champagne, and the best smoked salmon you\'ve ever had.'},
+  'maldives':{emoji:'🌊',hotel:'Your own overwater bungalow. The Indian Ocean in every direction.',flight:'Emirates business class to paradise — the shower spa alone is worth the points.'},
+  'bali':   {emoji:'🌺',hotel:'Hidden in the jungle above Ubud. Rice terraces out every window.',flight:'Singapore Airlines business class is consistently rated the world\'s best.'},
+  'dubai':  {emoji:'🌆',hotel:'On the Palm, with views of the Burj Al Arab across the water.',flight:'Emirates business class is a destination in itself — the bar, the suite, the shower.'},
+  'bangkok':{emoji:'🛺',hotel:'Bangkok\'s most storied address, on the river. Market and temples at your doorstep.',flight:'Thai Airways business class — generous, comfortable, and genuinely underrated.'},
+  'singapore':{emoji:'🌿',hotel:'Iconic terrace overlooking the skyline and Marina Bay Sands.',flight:'Singapore Airlines Suites — the most private business class seat ever built.'},
+  'hawaii': {emoji:'🌺',hotel:'The original Maui beach hotel. Whales breach right offshore in winter.',flight:'Direct from the mainland — one of the easiest long-haul award redemptions you can make.'},
+  'barcelona':{emoji:'🌞',hotel:'Converted into a hotel overlooking the sea. Frank Gehry\'s fish sculpture out front.',flight:'Iberia business class is a quiet gem — comfortable and often wide open for award seats.'},
+  'amsterdam':{emoji:'🚲',hotel:'Restored 19th-century building. Concertgebouw across the street.',flight:'KLM business class is underrated. Good food, great service, and easy to book with Chase points.'},
+  'cancun': {emoji:'🌴',hotel:'All-inclusive done properly. The pool bar is excellent.',flight:'Easy award redemption. Great value relative to the cash price.'},
+  'sydney': {emoji:'🦘',hotel:'On the harbor, Opera House framed in every window. Wake up to the best view in Australia.',flight:'Qantas business class — Australia\'s finest, and the points requirement is often lower than you\'d expect.'},
+  'new york':{emoji:'🗽',hotel:'Central Park view from the 51st floor. The breakfast is legendary.',flight:'Delta One business class — lie-flat, direct, and often available.'},
+  'default': {emoji:'✈',hotel:'A hotel that matches the adventure. Points stay mean you arrive refreshed.',flight:'Business class on points — the same seat, fraction of the cash price.'}
+};
+function getVibe(dest){
+  var d=(dest||'').toLowerCase();
+  for(var k in DEST_VIBES){if(d.indexOf(k)>=0)return DEST_VIBES[k];}
+  return DEST_VIBES['default'];
+}
+
 function buildItinerary(opt,totalPts,cpp){
   var r=getRoute();
   var di=getDestInfo(r.d);
+  var vibe=getVibe(r.d);
   var showHotel=booking!=='flight';
   var fp=getFlightPts();var hp=getHotelPts();
   var cashVal=Math.round(fp*(cpp||0.022)+(showHotel?hp*0.016:0));
   var travStr=(adults+children)===1?'1 traveler':(adults+children)+' travelers';
   var tier=hotelTier||'upscale';
   var hd=di.hotels[tier]||di.hotels['upscale'];
-  var html='<div class="itin-card"><div class="itin-hdr"><div class="itin-title">Sample itinerary · '+travStr+'</div><div class="itin-disc">Illustrative · subject to change</div></div>';
-  html+='<div class="itin-leg"><div class="itin-ico" style="background:'+di.airlineColor+';color:#fff;">'+di.airlineCode+'</div><div class="itin-info"><div class="itin-l1">'+di.airline+' · '+(opt.cabin||di.cabin)+'</div><div class="itin-l2">'+r.o+' → '+r.d+' · '+di.route+'</div></div><div class="itin-pts">'+fp.toLocaleString()+' pts</div></div>';
-  if(showHotel)html+='<div class="itin-leg"><div class="itin-ico" style="background:'+hd.c+';color:#fff;">'+hd.code+'</div><div class="itin-info"><div class="itin-l1">'+hd.n+'</div><div class="itin-l2">'+hd.tier+' · '+hotelNights+' nights</div></div><div class="itin-pts">'+hp.toLocaleString()+' pts</div></div>';
-  html+='<div class="itin-foot"><span class="itin-foot-lbl">Total · est. cash value</span><span class="itin-foot-val">'+totalPts.toLocaleString()+' pts · ~$'+cashVal.toLocaleString()+'</span></div></div>';
+
+  var html='<div style="border:0.5px solid #ebebeb;border-radius:12px;overflow:hidden;">';
+
+  // Header with destination emoji and cash value comparison
+  html+='<div style="padding:12px 14px;background:linear-gradient(135deg,#1a1a1a 0%,#2d2d2d 100%);display:flex;justify-content:space-between;align-items:center;">';
+  html+='<div><div style="font-size:13px;font-weight:500;color:#fff;">'+vibe.emoji+' Sample itinerary · '+travStr+'</div>';
+  html+='<div style="font-size:11px;color:#aaa;margin-top:2px;">Illustrative · subject to availability</div></div>';
+  html+='<div style="text-align:right;"><div style="font-size:11px;color:#aaa;">Est. cash value</div>';
+  html+='<div style="font-size:16px;font-weight:500;color:#eaf5ea;">~$'+cashVal.toLocaleString()+'</div></div>';
+  html+='</div>';
+
+  // Flight leg
+  html+='<div style="padding:12px 14px;border-bottom:0.5px solid #ebebeb;background:#fff;">';
+  html+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">';
+  html+='<div style="width:32px;height:32px;border-radius:8px;background:'+di.airlineColor+';color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;">'+di.airlineCode+'</div>';
+  html+='<div style="flex:1;"><div style="font-size:13px;font-weight:500;color:#1a1a1a;">'+di.airline+' · '+(opt.cabin||di.cabin)+'</div>';
+  html+='<div style="font-size:12px;color:#888;margin-top:1px;">'+capDest(r.o)+' → '+capDest(r.d)+'</div></div>';
+  html+='<div style="text-align:right;"><div style="font-size:13px;font-weight:500;color:#2d7a2d;">'+fp.toLocaleString()+'</div><div style="font-size:10px;color:#888;">points</div></div>';
+  html+='</div>';
+  html+='<p style="margin:0;font-size:12px;color:#555;line-height:1.5;padding-left:42px;">'+vibe.flight+'</p>';
+  html+='</div>';
+
+  // Hotel leg
+  if(showHotel){
+    html+='<div style="padding:12px 14px;background:#fff;">';
+    html+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">';
+    html+='<div style="width:32px;height:32px;border-radius:8px;background:'+hd.c+';color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;">'+hd.code+'</div>';
+    html+='<div style="flex:1;"><div style="font-size:13px;font-weight:500;color:#1a1a1a;">'+hd.n+'</div>';
+    html+='<div style="font-size:12px;color:#888;margin-top:1px;">'+hd.tier+' · '+hotelNights+' night'+(hotelNights===1?'':'s')+'</div></div>';
+    html+='<div style="text-align:right;"><div style="font-size:13px;font-weight:500;color:#2d7a2d;">'+hp.toLocaleString()+'</div><div style="font-size:10px;color:#888;">points</div></div>';
+    html+='</div>';
+    html+='<p style="margin:0;font-size:12px;color:#555;line-height:1.5;padding-left:42px;">'+vibe.hotel+'</p>';
+    html+='</div>';
+  }
+
+  // Footer — total points, the key comparison
+  html+='<div style="padding:10px 14px;background:#f5f5f5;border-top:0.5px solid #ebebeb;display:flex;justify-content:space-between;align-items:center;">';
+  html+='<div style="font-size:12px;color:#555;"><strong>'+totalPts.toLocaleString()+' points</strong> total</div>';
+  html+='<div style="font-size:12px;color:#2d7a2d;font-weight:500;">vs ~$'+cashVal.toLocaleString()+' cash 💸</div>';
+  html+='</div>';
+
+  html+='</div>';
   return html;
 }
-function buildGate(group){var emailId='email-'+group+Math.random().toString(36).slice(2);var gateId='gcta-'+group+Math.random().toString(36).slice(2);return '<div class="gate-wrap"><div class="gate-proof"><div class="gate-stat"><div class="gate-stat-num">52k</div><div class="gate-stat-lbl">trips planned</div></div><div class="gate-stat"><div class="gate-stat-num">$2,100</div><div class="gate-stat-lbl">avg. value saved</div></div><div class="gate-stat"><div class="gate-stat-num">4 mo</div><div class="gate-stat-lbl">avg. time to goal</div></div></div><div class="gate-body"><p style="margin:0 0 4px;font-size:14px;font-weight:500;">Unlock your full plan — free</p><p style="margin:0 0 14px;font-size:12px;color:#555;">Transfer steps, which card to swipe, monthly breakdown, and booking guide — all in one email.</p><input class="big-input" type="email" placeholder="Your email" id="'+emailId+'" style="margin-bottom:10px;font-size:14px;" oninput="document.getElementById(\''+gateId+'\').disabled=!this.value.includes(\'@\')"><button class="cta" id="'+gateId+'" disabled onclick="go(6)">Unlock my free plan →</button><p class="social" style="margin-top:8px;">No spam. One email. Unsubscribe anytime.</p></div></div>';}
-function renderHasPanel(idx){var opt=BOOKING_OPTS[idx];var totalPts=getTotalPts(opt.ptsM);var youHave=getBestBalance();var gap=Math.max(0,totalPts-youHave);var mo=getMonthlyBudget();var userCards=getUserCards();var swipe=buildSwipeTable(userCards,mo);var gapCls=gap===0?'suc':(youHave>0?'hi':'');var gapTxt=youHave===0?'Enter balances':gap===0?'Covered ✓':gap.toLocaleString()+' short';var html='<div class="card">';if(opt.recommended){html+='<div style="margin-bottom:8px;"><span class="badge bg">★ Recommended</span></div><p style="margin:0 0 8px;font-size:12px;color:#555;">Best overall match based on your points and travel goal.</p>';}else{html+='<div style="margin-bottom:8px;"><span class="badge bb">'+opt.label+'</span></div>';}html+='<div class="gap-grid"><div class="gap-box"><div class="gap-val">'+totalPts.toLocaleString()+'</div><div class="gap-lbl">Points needed</div></div><div class="gap-box"><div class="gap-val">'+(youHave>0?youHave.toLocaleString():'—')+'</div><div class="gap-lbl">You have</div></div><div class="gap-box '+gapCls+'"><div class="gap-val">'+gapTxt+'</div><div class="gap-lbl">Gap</div></div></div></div>';html+=swipe.html;html+=buildMonthsBanner(swipe.ptsPerMo,gap);html+=buildItinerary(opt,totalPts,opt.cpp);html+=buildGate('a');document.getElementById('panel-a-'+idx).innerHTML=html;}
-function renderNoPanel(idx){var card=NEW_CARDS[idx];var mo=getMonthlyBudget();var totalPts=getTotalPts(1);var rows='';var totalPtsPerMo=0;CATEGORIES.forEach(function(cat){var spend=Math.round(mo*cat.w);var m=card.mults[cat.key]||1;var pts=Math.round(spend*m);totalPtsPerMo+=pts;rows+='<tr><td>'+cat.label+'</td><td class="c" style="color:#2d7a2d;font-weight:500;">'+m+'x</td><td>$'+spend.toLocaleString()+'</td><td class="r" style="font-weight:500;">'+pts.toLocaleString()+'</td></tr>';});var afterBonus=Math.max(0,totalPts-(card.bonus||0));var months=totalPtsPerMo>0?(afterBonus>0?Math.max(1,Math.ceil(afterBonus/totalPtsPerMo)):0):99;var html='<div class="cc-card featured">';if(card.recommended){html+='<div style="margin-bottom:8px;"><span class="badge bg">★ Recommended</span></div><p style="margin:0 0 8px;font-size:12px;color:#555;">Best combination of sign-up bonus, earn rates, and flexibility for most travelers.</p>';}else{html+='<div style="margin-bottom:8px;"><span class="badge bb">'+card.label+'</span></div>';}html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><p class="cc-name">'+card.name+'</p><p class="cc-bank">'+card.bank+'</p></div>';if(card.bonus>0){html+='<div style="text-align:right;flex-shrink:0;margin-left:12px;"><p style="margin:0;font-size:22px;font-weight:500;color:#2d7a2d;">'+Math.round(card.bonus/1000)+'k</p><p style="margin:0;font-size:11px;color:#555;">sign-up bonus</p></div>';}else{html+='<div style="text-align:right;flex-shrink:0;margin-left:12px;"><p style="margin:0;font-size:13px;font-weight:500;color:#555;">No sign-up bonus</p><p style="margin:2px 0 0;font-size:11px;color:#888;">Best for rent earners</p></div>';}html+='</div>';if(card.bonus>0)html+='<p style="margin:6px 0 0;font-size:11px;color:#888;">Earn '+card.bonus.toLocaleString()+' points after hitting the minimum spend in your first 3 months.</p>';html+='</div>';html+='<div class="card" style="background:#f5f5f5;padding:12px 14px;"><table class="spend-table"><thead><tr><th>Everyday category</th><th class="c">Earn</th><th>$/mo</th><th class="r">Pts/mo</th></tr></thead><tbody>'+rows+'</tbody></table><div class="totals-row cash-bg"><span style="font-size:12px;color:#555;">Total monthly card spend</span><span style="font-size:15px;font-weight:500;">$'+mo.toLocaleString()+'</span></div><div class="totals-row pts-bg"><span style="font-size:12px;color:#0070c9;">Points earned per month</span><span style="font-size:15px;font-weight:500;color:#0070c9;">'+totalPtsPerMo.toLocaleString()+' pts</span></div></div>';if(card.bonus>0&&months===0){html+='<div class="months-banner"><div class="months-label">Sign-up bonus alone covers your goal — apply and you\'re done</div></div>';}else if(card.bonus===0){html+='<div class="months-banner"><div class="months-lhs"><div class="months-label">Best paired with another card for sign-up bonus</div><div class="months-sub">Bilt earns on rent — stack with CSP for the full strategy</div></div></div>';}else{html+='<div class="months-banner"><div class="months-lhs"><div class="months-label">Time to reach your goal</div><div class="months-sub">'+card.bonus.toLocaleString()+' sign-up bonus + '+totalPtsPerMo.toLocaleString()+' pts/mo</div></div><div style="text-align:right;"><div class="months-num">'+months+'</div><div class="months-unit">months</div></div></div>';}html+=buildItinerary(card,totalPts,0.022);html+=buildGate('b');document.getElementById('panel-b-'+idx).innerHTML=html;}
-function buildResults(group){var r=getRoute();if(group==='a'){document.getElementById('r5a-headline').textContent='Your options — '+r.o+' to '+r.d;for(var i=0;i<BOOKING_OPTS.length;i++)renderHasPanel(i);renderTabStrip('a',BOOKING_OPTS);}else{document.getElementById('r5b-headline').textContent='Your fastest path — '+r.o+' to '+r.d;for(var i=0;i<NEW_CARDS.length;i++)renderNoPanel(i);renderTabStrip('b',NEW_CARDS);}}
+function buildGate(group){
+  var emailId='email-'+group+Math.random().toString(36).slice(2);
+  var gateId='gcta-'+group+Math.random().toString(36).slice(2);
+  var r=getRoute();
+  var dest=capDest(r.d)||'your destination';
+  return '<div class="gate-wrap">'+
+    '<div class="gate-body">'+
+      '<p style="margin:0 0 4px;font-size:16px;font-weight:500;color:#1a1a1a;">Save your '+dest+' plan — free</p>'+
+      '<p style="margin:0 0 12px;font-size:13px;color:#555;line-height:1.5;">We\'ll email you exactly what to do — which card, what to spend, how long it takes.</p>'+
+      '<input class="big-input" type="email" placeholder="Your email" id="'+emailId+'" style="margin-bottom:10px;font-size:15px;" oninput="document.getElementById(\''+gateId+'\').disabled=!this.value.includes(\'@\')">'+
+      '<button class="cta" id="'+gateId+'" disabled onclick="go(6)">Save my plan →</button>'+
+      '<p style="margin:8px 0 0;font-size:11px;color:#aaa;text-align:center;">No spam. One email. Unsubscribe anytime.</p>'+
+    '</div></div>';
+}
+
+function renderHasPanel(idx){} // legacy stub
+
+function buildWaitlistBlock(){
+  var wlId='wl-'+Math.random().toString(36).slice(2);
+  var rcId='rc-'+Math.random().toString(36).slice(2);
+  var html='<div style="border:1.5px solid #ddd;border-radius:12px;overflow:hidden;background:#fff;">';
+  html+='<div style="padding:14px 16px;background:#f5f5f5;border-bottom:0.5px solid #ddd;">';
+  html+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="font-size:16px;">🔔</span><p style="margin:0;font-size:14px;font-weight:500;color:#1a1a1a;">Real-time tracking — coming soon</p></div>';
+  html+='<p style="margin:0;font-size:12px;color:#555;line-height:1.5;">Connect your Chase, Amex, and airline accounts and easy. will automatically update your timeline as you spend — and alert you the moment a transfer bonus drops.</p>';
+  html+='</div>';
+  html+='<div style="padding:12px 14px;border-bottom:0.5px solid #ebebeb;">';
+  html+='<p style="margin:0 0 8px;font-size:11px;font-weight:500;color:#888;letter-spacing:.05em;">WHAT YOU\'D BE ALERTED TO</p>';
+  html+='<div style="display:flex;gap:10px;padding:6px 0;border-bottom:0.5px solid #ebebeb;"><div style="width:8px;height:8px;border-radius:50%;background:#E24B4A;flex-shrink:0;margin-top:4px;"></div><div><div style="font-size:12px;color:#1a1a1a;line-height:1.5;">Your Chase points just got <strong>30% more valuable</strong> for Air France — offer ends in 3 days</div><div style="font-size:11px;color:#888;margin-top:1px;">2 hours ago</div></div></div>';
+  html+='<div style="display:flex;gap:10px;padding:6px 0;"><div style="width:8px;height:8px;border-radius:50%;background:#BA7517;flex-shrink:0;margin-top:4px;"></div><div><div style="font-size:12px;color:#1a1a1a;line-height:1.5;">Amex Platinum sign-up bonus just <strong>increased to 120,000 points</strong> — limited time</div><div style="font-size:11px;color:#888;margin-top:1px;">Today</div></div></div>';
+  html+='</div>';
+  html+='<div style="padding:14px 16px;">';
+  html+='<p style="margin:0 0 10px;font-size:13px;font-weight:500;color:#1a1a1a;">Get early access</p>';
+  html+='<input class="big-input" type="email" placeholder="Your email — join the waitlist" id="'+wlId+'" style="margin-bottom:8px;font-size:14px;">';
+  html+='<button style="width:100%;padding:12px;font-size:14px;font-weight:500;border-radius:8px;border:none;cursor:pointer;background:#1a1a1a;color:#fff;margin-bottom:10px;" onclick="joinWaitlist(\''+wlId+'\',this)">Join the waitlist →</button>';
+  html+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><div style="flex:1;height:0.5px;background:#ddd;"></div><span style="font-size:11px;color:#888;">or</span><div style="flex:1;height:0.5px;background:#ddd;"></div></div>';
+  html+='<button style="width:100%;padding:10px;font-size:13px;font-weight:500;border-radius:8px;border:0.5px solid #ddd;cursor:pointer;background:#fff;color:#1a1a1a;" onclick="toggleReferral(\''+rcId+'\',this)">I have a referral code →</button>';
+  html+='<div id="'+rcId+'" style="display:none;margin-top:8px;"><input class="big-input" placeholder="Enter referral code" style="font-size:14px;letter-spacing:0.1em;text-transform:uppercase;"><p style="margin:6px 0 0;font-size:11px;color:#888;">Referral codes give you priority access when real-time tracking launches.</p></div>';
+  html+='<p style="margin:8px 0 0;font-size:11px;color:#888;text-align:center;">No spam. You\'ll only hear from us when this feature goes live.</p>';
+  html+='</div></div>';
+  return html;
+}
+
+function capDest(s){if(!s)return s;return s.split(' ').map(function(w){return w.charAt(0).toUpperCase()+w.slice(1);}).join(' ');}
+
+function buildHasMainPlan(){
+  var opt=BOOKING_OPTS[0];
+  var totalPts=getTotalPts(opt.ptsM);
+  var youHave=getBestBalance();
+  var gap=Math.max(0,totalPts-youHave);
+  var mo=getMonthlyBudget();
+  var userCards=getUserCards();
+  var swipe=buildSwipeTable(userCards,mo);
+  var r=getRoute();
+  var dest=capDest(r.d);
+  var di=getDestInfo(r.d);
+  var covered=gap<=0;
+  var months=covered?0:Math.max(1,Math.ceil(gap/swipe.ptsPerMo));
+  var cashVal=Math.round(getFlightPts()*0.022);
+
+  // Find best gap card for the teaser
+  var gapCards=GAP_CARDS.filter(function(c){
+    if(c.name.indexOf('Chase')>=0 && userCards.indexOf('chase')>=0) return false;
+    if(c.name.indexOf('Amex')>=0  && userCards.indexOf('amex')>=0)  return false;
+    if(c.name.indexOf('Capital One')>=0 && userCards.indexOf('cap1')>=0) return false;
+    return true;
+  });
+  var bestGapCard=gapCards[0];
+  var shortcutMonths=bestGapCard?Math.max(0,Math.ceil(Math.max(0,gap-bestGapCard.bonus)/swipe.ptsPerMo)):null;
+
+  var html='';
+
+  // ── Big number ──
+  html+='<div style="border:0.5px solid #ebebeb;border-radius:12px;padding:20px 16px;background:#fff;text-align:center;">';
+  if(covered){
+    html+='<div style="font-size:38px;font-weight:500;color:#2d7a2d;line-height:1;">You\'re covered ✓</div>';
+    html+='<p style="margin:8px 0 0;font-size:14px;color:#555;">Your current points are enough. Time to book.</p>';
+  } else {
+    html+='<div style="font-size:60px;font-weight:500;color:#1a1a1a;line-height:1;">'+months+'</div>';
+    html+='<div style="font-size:18px;color:#555;margin-top:2px;">months to '+dest+'</div>';
+    html+='<p style="margin:10px 0 0;font-size:13px;color:#555;line-height:1.5;">Keep spending on your card like normal and you\'ll have enough points in about '+months+' month'+(months===1?'':'s')+'.</p>';
+  }
+  html+='</div>';
+
+  // ── Gap shortcut teaser — right after the big number ──
+  if(!covered && bestGapCard){
+    var shortcutLabel=shortcutMonths===1?'1 month':shortcutMonths+'months';
+    var shortcutMsg=shortcutMonths===0?'One card application could cover this entire trip right now.':'Cut that to <strong>'+shortcutLabel+'</strong> instead of '+months+(months===1?' month':' months')+'.';
+    html+='<div style="border:1.5px solid #0070c9;border-radius:12px;padding:14px 16px;background:#e8f1fb;display:flex;justify-content:space-between;align-items:center;gap:12px;">';
+    html+='<div><p style="margin:0 0 3px;font-size:13px;font-weight:500;color:#0070c9;">⚡ There\'s a faster way</p>';
+    html+='<p style="margin:0;font-size:13px;color:#1a1a1a;line-height:1.4;">'+shortcutMsg+' The <strong>'+bestGapCard.name+'</strong> has a '+Math.round(bestGapCard.bonus/1000)+'k sign-up bonus.</p></div>';
+    html+='<a href="#gap-offers" onclick="document.getElementById(\'gap-offers\').scrollIntoView({behavior:\'smooth\'});return false;" style="flex-shrink:0;padding:8px 14px;background:#0070c9;color:#fff;border-radius:8px;font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap;">Show me the hack ↓</a>';
+    html+='</div>';
+  }
+
+  // ── Plain English routing ──
+  html+='<div style="border:0.5px solid #ebebeb;border-radius:12px;padding:14px 16px;background:#fff;">';
+  html+='<p style="margin:0 0 6px;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">HOW YOUR POINTS GET THERE</p>';
+  html+='<p style="margin:0 0 10px;font-size:14px;color:#1a1a1a;line-height:1.6;">Your <strong>Chase points</strong> transfer directly to <strong>'+di.airline+'</strong> — usually within minutes. You use those miles to book your flight at a fraction of the cash price.</p>';
+  html+='<div style="padding:10px 12px;background:#eaf5ea;border-radius:8px;font-size:13px;color:#2d7a2d;">'+getFlightPts().toLocaleString()+' points = a flight worth about <strong>$'+cashVal.toLocaleString()+' cash</strong></div>';
+  html+='</div>';
+
+  // ── Spend table ──
+  html+='<div style="border:0.5px solid #ebebeb;border-radius:12px;padding:14px 16px;background:#fff;">';
+  html+='<p style="margin:0 0 4px;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">WHAT TO PUT ON EACH CARD EVERY MONTH</p>';
+  html+='<p style="margin:0 0 10px;font-size:13px;color:#555;">Different cards earn more on different things. Use the right card for each purchase — no extra spending needed.</p>';
+  html+=swipe.html.replace('<div class="card" style="background:#f5f5f5;padding:12px 14px;">','<div>').replace('<p style="margin:0 0 8px;font-size:12px;font-weight:500;color:#1a1a1a;">Which card to swipe — by category</p>','');
+  html+='</div>';
+
+  // ── Gap card offers with anchor ──
+  html+='<div id="gap-offers">';
+  html+=buildGapCardSuggestion(gap, userCards, swipe.ptsPerMo);
+  html+='</div>';
+
+  html+=buildItinerary(opt,totalPts,opt.cpp);
+  html+=buildGate('a');
+  return html;
+}
+
+// Per-category monthly spend — editable by user on results screen
+var customSpend={groceries:null,dining:null,gas:null,streaming:null,other:null};
+var rentAmount=0;
+
+function setRentAmount(val){
+  rentAmount=Math.max(0,parseInt(val)||0);
+}
+
+function getSpendForCat(cat,mo){
+  if(cat==='rent') return rentAmount;
+  if(customSpend[cat]!==null) return customSpend[cat];
+  return Math.round(mo*({groceries:0.30,dining:0.22,gas:0.12,streaming:0.08,other:0.28}[cat]||0.1));
+}
+
+function recalcNoResults(){
+  var mo=getMonthlyBudget();
+  var totalPts=getTotalPts(1);
+  var card=pickBestCard(totalPts,mo);
+  var totalPtsPerMo=0;
+  CATEGORIES.forEach(function(cat){
+    var spend=getSpendForCat(cat.key,mo);
+    var m=card.mults[cat.key]||1;
+    totalPtsPerMo+=Math.round(spend*m);
+  });
+  // Always count rent points (Bilt = 1pt/$1 on rent)
+  if(rentAmount>0) totalPtsPerMo+=rentAmount;
+  var months=calcCardMonths(card,totalPts,totalPtsPerMo,mo);
+  var bonusCovers=months<=Math.ceil((card.minSpend||0)/mo);
+
+  var nb=document.getElementById('nb-months');
+  var ns=document.getElementById('nb-sub');
+  var nm=document.getElementById('nb-monthly');
+  if(nb){
+    nb.textContent=months;
+    nb.style.color=months<=4?'#2d7a2d':'#1a1a1a';
+    nb.style.fontSize='68px';
+  }
+  if(ns) ns.textContent='month'+(months===1?' ':'s ')+'to '+capDest(getRoute().d);
+  if(nm) nm.textContent=totalPtsPerMo.toLocaleString()+' pts';
+  var pf=document.getElementById('nb-pts-mo');
+  if(pf) pf.textContent=totalPtsPerMo.toLocaleString()+' pts/month';
+}
+
+function updateCatSpend(catKey,val){
+  customSpend[catKey]=Math.max(0,parseInt(val)||0);
+  var mo=getMonthlyBudget();
+  var totalPts=getTotalPts(1);
+  var card=pickBestCard(totalPts,mo);
+  var m=card.mults[catKey]||1;
+  var pts=Math.round(customSpend[catKey]*m);
+  var ptsEl=document.getElementById('pts-'+catKey);
+  if(ptsEl) ptsEl.textContent=pts.toLocaleString();
+  recalcNoResults();
+}
+
+// Returns the honest months-to-goal for a card, accounting for min spend requirement
+function calcCardMonths(c, totalPts, ptsPerMo, mo){
+  var bonus=c.bonus||0;
+  var minSpend=c.minSpend||0;
+  // How many months to hit the minimum spend?
+  var minSpendMonths=minSpend>0?Math.ceil(minSpend/mo):0;
+  // Points earned during the min spend period from regular card use
+  var ptsEarnedBeforeBonus=ptsPerMo*minSpendMonths;
+  // After bonus + regular earn during min spend period, what's still needed?
+  var remaining=totalPts-bonus-ptsEarnedBeforeBonus;
+  if(remaining<=0){
+    // Covered by bonus — just need to hit the min spend
+    return Math.max(1,minSpendMonths);
+  }
+  // Still need more — keep earning after min spend period
+  if(ptsPerMo<=0) return 9999;
+  return minSpendMonths+Math.ceil(remaining/ptsPerMo);
+}
+
+function pickBestCard(totalPts, mo){
+  var catWeights={groceries:0.30,dining:0.22,gas:0.12,streaming:0.08,other:0.28};
+  var best=NEW_CARDS[0];
+  var bestMonths=9999;
+  NEW_CARDS.forEach(function(c){
+    var ptsPerMo=0;
+    CATEGORIES.forEach(function(cat){
+      var spend=Math.round(mo*catWeights[cat.key]);
+      ptsPerMo+=Math.round(spend*(c.mults[cat.key]||1));
+    });
+    if(rentAmount>0 && c.mults['rent']) ptsPerMo+=Math.round(rentAmount*(c.mults['rent']||0));
+    var months=calcCardMonths(c,totalPts,ptsPerMo,mo);
+    if(months<bestMonths){bestMonths=months;best=c;}
+  });
+  return best;
+}
+
+function toggleLearnMore(id){
+  var el=document.getElementById(id);
+  var icon=document.getElementById(id+'-icon');
+  if(el.style.display==='none'){el.style.display='block';if(icon)icon.textContent='− Hide';}
+  else{el.style.display='none';if(icon)icon.textContent='+ Show';}
+}
+
+function switchTab(tab){
+  // legacy stub — tabs removed, kept for safety
+}
+
+var FEE_CARDS=[
+  {name:'Chase Sapphire Preferred',fee:95,credits:[{label:'$50 hotel credit/yr',val:50,note:'Book a hotel once through Chase Travel'},{label:'DoorDash DashPass ($120 value)',val:120,note:'Free delivery on orders through 2027'}],tagline:'Best starter travel card. The credits easily cover the fee.'},
+  {name:'Amex Platinum',fee:895,credits:[{label:'$300 streaming credit',val:300,note:'Disney+, Hulu, Peacock, YouTube Premium'},{label:'$200 Uber Cash',val:200,note:'$15/month on Uber rides or Uber Eats'},{label:'$400 Resy dining credit',val:400,note:'$100/quarter at restaurants on Resy'}],tagline:'Looks expensive. But if you stream and use Uber, the credits basically pay you back.'},
+  {name:'Amex Gold',fee:325,credits:[{label:'$120 dining credit',val:120,note:'$10/mo at Grubhub, Cheesecake Factory, Five Guys'},{label:'$120 Uber Cash',val:120,note:'$10/mo on Uber rides or Uber Eats'},{label:'$100 Resy credit',val:100,note:'$50 semi-annually at Resy restaurants'}],tagline:'If you eat out or order delivery, this card basically pays for itself.'},
+  {name:'Capital One Venture X',fee:395,credits:[{label:'$300 travel credit',val:300,note:'Applied automatically to any travel purchase'},{label:'10k anniversary bonus miles',val:100,note:'Worth ~$100 in travel, every year'}],tagline:'The $300 travel credit alone nearly covers the fee. Straightforward value.'},
+  {name:'Chase Sapphire Reserve',fee:795,credits:[{label:'$300 travel credit',val:300,note:'Gas, flights, hotels — almost any travel purchase'},{label:'$300 dining credit',val:300,note:'$150 semi-annually at Sapphire Exclusive Tables'},{label:'$300 DoorDash credit',val:300,note:'Up to $25/mo on DoorDash through 2027'}],tagline:'High fee, but the credits stack fast for anyone who eats out or travels regularly.'},
+  {name:'Chase Freedom Unlimited',fee:0,credits:[],tagline:'No annual fee, ever. A great card to keep forever.'},
+  {name:'Bilt Mastercard',fee:0,credits:[],tagline:'No annual fee. The only card that earns points on rent and mortgage.'}
+];
+
+function buildFeesPane(){
+  var html='<div style="display:flex;flex-direction:column;gap:12px;padding-top:4px;">';
+  html+='<div style="padding:14px 16px;background:#f5f5f5;border-radius:12px;">';
+  html+='<p style="margin:0 0 6px;font-size:14px;font-weight:500;color:#1a1a1a;">The real cost isn\'t what it says on the label.</p>';
+  html+='<p style="margin:0;font-size:13px;color:#555;line-height:1.6;">Every premium card gives you credits — money back on things like streaming, Uber, and dining. Most people pay for these anyway. The card reimburses you. Subtract those credits from the fee and the real cost is often near zero.</p>';
+  html+='</div>';
+  FEE_CARDS.forEach(function(c){
+    var totalCredits=0;
+    c.credits.forEach(function(cr){totalCredits+=cr.val;});
+    var effective=Math.max(0,c.fee-totalCredits);
+    var freeCard=c.fee===0;
+    html+='<div style="border:0.5px solid #ebebeb;border-radius:12px;overflow:hidden;background:#fff;">';
+    html+='<div style="padding:14px 16px;border-bottom:'+(c.credits.length>0?'0.5px solid #ebebeb':'none')+'">';
+    html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">';
+    html+='<p style="margin:0;font-size:14px;font-weight:500;color:#1a1a1a;">'+c.name+'</p>';
+    if(freeCard){
+      html+='<span style="padding:3px 10px;background:#eaf5ea;border-radius:20px;font-size:12px;color:#2d7a2d;font-weight:500;">No fee</span>';
+    } else {
+      html+='<div style="text-align:right;">';
+      html+='<div style="font-size:11px;color:#aaa;text-decoration:line-through;">$'+c.fee+'/yr</div>';
+      html+='<div style="font-size:13px;font-weight:500;color:'+(effective===0?'#2d7a2d':'#1a1a1a')+';">$'+effective+'/yr real cost</div>';
+      html+='</div>';
+    }
+    html+='</div>';
+    html+='<p style="margin:0;font-size:12px;color:#888;line-height:1.4;">'+c.tagline+'</p>';
+    html+='</div>';
+    if(c.credits.length>0){
+      html+='<div style="padding:10px 16px;background:#f9f9f9;">';
+      html+='<p style="margin:0 0 8px;font-size:11px;font-weight:500;color:#888;letter-spacing:.05em;">WHAT OFFSETS THE FEE</p>';
+      c.credits.forEach(function(cr){
+        html+='<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:7px;">';
+        html+='<span style="background:#eaf5ea;color:#2d7a2d;font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;flex-shrink:0;margin-top:1px;">−$'+cr.val+'</span>';
+        html+='<div><div style="font-size:13px;color:#1a1a1a;">'+cr.label+'</div>';
+        html+='<div style="font-size:11px;color:#888;margin-top:1px;">'+cr.note+'</div></div>';
+        html+='</div>';
+      });
+      if(totalCredits>0){
+        html+='<div style="display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:0.5px solid #ebebeb;margin-top:4px;">';
+        html+='<span style="font-size:12px;color:#555;">Total credits</span>';
+        html+='<span style="font-size:13px;font-weight:500;color:#2d7a2d;">$'+totalCredits+'/yr</span>';
+        html+='</div>';
+      }
+      html+='</div>';
+    }
+    html+='</div>';
+  });
+  html+='<p style="font-size:11px;color:#aaa;text-align:center;padding:0 8px;">Credits require enrollment. Values are approximate and subject to change.</p>';
+  html+='</div>';
+  return html;
+}
+
+function buildNoMainPlan(){
+  var mo=getMonthlyBudget();
+  var totalPts=getTotalPts(1);
+  var r=getRoute();
+  Object.keys(customSpend).forEach(function(k){customSpend[k]=null;});
+  var card=pickBestCard(totalPts,mo);
+  var totalPtsPerMo=0;
+  var spendRows='';
+  CATEGORIES.forEach(function(cat){
+    var spend=getSpendForCat(cat.key,mo);
+    var m=card.mults[cat.key]||1;
+    var pts=Math.round(spend*m);
+    totalPtsPerMo+=pts;
+    spendRows+='<tr>';
+    spendRows+='<td style="vertical-align:middle;">'+cat.label+'</td>';
+    spendRows+='<td class="c" style="color:#2d7a2d;font-weight:500;vertical-align:middle;">'+m+'x</td>';
+    spendRows+='<td style="vertical-align:middle;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:12px;color:#888;">$</span><input type="number" min="0" value="'+spend+'" data-cat="'+cat.key+'" onchange="updateCatSpend(this.dataset.cat,this.value)" style="width:64px;padding:4px 6px;border:0.5px solid #ddd;border-radius:6px;font-size:13px;color:#1a1a1a;text-align:right;"></div></td>';
+    spendRows+='<td class="r" style="font-weight:500;vertical-align:middle;" id="pts-'+cat.key+'">'+pts.toLocaleString()+'</td>';
+    spendRows+='</tr>';
+  });
+  var isMainCardBilt=card.name==='Bilt Mastercard';
+  if(rentAmount>0){
+    totalPtsPerMo+=rentAmount;
+    spendRows+='<tr style="background:#f0f7ff;">';
+    spendRows+='<td style="vertical-align:middle;">Rent / mortgage <span style="font-size:10px;color:#0070c9;font-weight:500;margin-left:4px;">BILT</span></td>';
+    spendRows+='<td class="c" style="color:#2d7a2d;font-weight:500;vertical-align:middle;">1x</td>';
+    spendRows+='<td style="vertical-align:middle;font-size:13px;">$'+rentAmount.toLocaleString()+'</td>';
+    spendRows+='<td class="r" style="font-weight:500;vertical-align:middle;" id="pts-rent">'+rentAmount.toLocaleString()+'</td>';
+    spendRows+='</tr>';
+  }
+  var afterBonus=Math.max(0,totalPts-(card.bonus||0));
+  var months=calcCardMonths(card,totalPts,totalPtsPerMo,mo);
+  var minSpendMonths=card.minSpend>0?Math.ceil(card.minSpend/mo):0;
+  var bonusPlusEarnCovers=months<=minSpendMonths;
+  var html='';
+
+  // ── Big number ──
+  html+='<div style="border:0.5px solid #ebebeb;border-radius:12px;padding:20px 16px;background:#fff;text-align:center;">';
+  html+='<div style="font-size:68px;font-weight:500;color:'+(months<=4?'#2d7a2d':'#1a1a1a')+';line-height:1;" id="nb-months">'+months+'</div>';
+  html+='<div style="font-size:17px;color:#555;margin-top:4px;" id="nb-sub">month'+(months===1?' ':'s ')+'to '+capDest(r.d)+'</div>';
+  // Clean stat list — replaces prose
+  html+='<div style="margin-top:14px;display:flex;flex-direction:column;gap:0;border:0.5px solid #ebebeb;border-radius:10px;overflow:hidden;text-align:left;" id="nb-stats">';
+  html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:0.5px solid #ebebeb;background:#fff;">';
+  html+='<span style="font-size:13px;color:#555;">Points you need for this trip</span>';
+  html+='<span style="font-size:13px;font-weight:500;color:#1a1a1a;">'+totalPts.toLocaleString()+' pts</span>';
+  html+='</div>';
+  html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:0.5px solid #ebebeb;background:#fff;">';
+  html+='<span style="font-size:13px;color:#555;">Sign-up bonus ('+card.name+')</span>';
+  html+='<span style="font-size:13px;font-weight:500;color:#2d7a2d;">+'+(card.bonus||0).toLocaleString()+' pts</span>';
+  html+='</div>';
+  if(!bonusPlusEarnCovers){
+    html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:0.5px solid #ebebeb;background:#fff;">';
+    html+='<span style="font-size:13px;color:#555;">Still need to earn on card</span>';
+    html+='<span style="font-size:13px;font-weight:500;color:#b45309;">'+afterBonus.toLocaleString()+' pts</span>';
+    html+='</div>';
+  }
+  html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:0.5px solid #ebebeb;background:#fff;">';
+  html+='<span style="font-size:13px;color:#555;">You\'d earn per month (at $'+mo.toLocaleString()+' spend)</span>';
+  html+='<span style="font-size:13px;font-weight:500;color:#0070c9;" id="nb-monthly">'+totalPtsPerMo.toLocaleString()+' pts</span>';
+  html+='</div>';
+  if(card.minSpend>0){
+    html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#f9f9f9;">';
+    html+='<span style="font-size:13px;color:#555;">Months to unlock sign-up bonus</span>';
+    html+='<span style="font-size:13px;font-weight:500;color:#1a1a1a;" id="nb-sub-months">'+minSpendMonths+' month'+(minSpendMonths===1?'':'s')+'</span>';
+    html+='</div>';
+  } else {
+    html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:'+( bonusPlusEarnCovers?'#eaf5ea':'#f9f9f9')+';">';
+    html+='<span style="font-size:13px;color:#555;">Estimated time to book</span>';
+    html+='<span style="font-size:13px;font-weight:500;color:'+(bonusPlusEarnCovers?'#2d7a2d':'#1a1a1a')+';">'+months+' month'+(months===1?'':'s')+'</span>';
+    html+='</div>';
+  }
+  html+='</div></div>';
+
+  // Card + step-by-step bullets
+  var step1Months=minSpendMonths||1;
+  html+='<div style="border:1.5px solid #a8cff0;border-radius:12px;padding:16px;background:#fff;">';
+  html+='<p style="margin:0 0 10px;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">THE CARD WE RECOMMEND</p>';
+  html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">';
+  html+='<div><p style="margin:0;font-size:15px;font-weight:500;color:#1a1a1a;">'+card.name+'</p><p style="margin:3px 0 0;font-size:12px;color:#888;">'+card.bank+'</p></div>';
+  html+='<div style="text-align:right;"><p style="margin:0;font-size:22px;font-weight:500;color:#2d7a2d;">'+Math.round((card.bonus||0)/1000)+'k</p><p style="margin:0;font-size:11px;color:#888;">sign-up bonus</p></div></div>';
+  var bullets=[];
+  bullets.push({icon:'1️⃣',text:'<strong>Apply for the '+card.name+'</strong> — takes 5 minutes online. No impact to your credit score until you accept.'});
+  if(card.minSpend>0) bullets.push({icon:'2️⃣',text:'<strong>Spend $'+card.minSpend.toLocaleString()+' over your first '+step1Months+' month'+(step1Months===1?'':'s')+'</strong> on groceries, gas, subscriptions — things you already buy.'});
+  if(card.minSpend>0) bullets.push({icon:'3️⃣',text:'<strong>Automatically get '+(card.bonus||0).toLocaleString()+' bonus points</strong> once you hit the spending amount.'});
+  if(!bonusPlusEarnCovers){
+    bullets.push({icon:'4️⃣',text:'<strong>Keep using the card for everything</strong> — you\'ll earn about '+totalPtsPerMo.toLocaleString()+' points per month on normal purchases.'});
+    bullets.push({icon:'5️⃣',text:'<strong>After '+months+' months you\'ll have enough points</strong> to book your trip to '+capDest(r.d)+'.'});
+  } else {
+    bullets.push({icon:'4️⃣',text:'<strong>The bonus alone covers your whole trip.</strong> Transfer your points and book '+capDest(r.d)+'.'});
+  }
+  html+='<div style="display:flex;flex-direction:column;gap:8px;">';
+  bullets.forEach(function(b){
+    html+='<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#f9f9f9;border-radius:8px;">';
+    html+='<span style="font-size:16px;flex-shrink:0;line-height:1.4;">'+b.icon+'</span>';
+    html+='<p style="margin:0;font-size:13px;color:#1a1a1a;line-height:1.5;">'+b.text+'</p>';
+    html+='</div>';
+  });
+  html+='</div></div>';
+
+  // Bilt stack
+  if(rentAmount>0 && !isMainCardBilt){
+    html+='<div style="border:1.5px solid #000;border-radius:12px;padding:14px 16px;background:#fff;">';
+    html+='<p style="margin:0 0 8px;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">ALSO ADD THIS — FREE</p>';
+    html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">';
+    html+='<div><p style="margin:0;font-size:15px;font-weight:500;color:#1a1a1a;">Bilt Mastercard</p><p style="margin:3px 0 0;font-size:12px;color:#888;">No annual fee</p></div>';
+    html+='<div style="text-align:right;"><p style="margin:0;font-size:14px;font-weight:500;color:#1a1a1a;">+'+rentAmount.toLocaleString()+'</p><p style="margin:0;font-size:11px;color:#888;">pts/month on rent</p></div></div>';
+    html+='<div style="display:flex;flex-direction:column;gap:6px;">';
+    html+='<div style="display:flex;gap:8px;align-items:flex-start;padding:8px 10px;background:#f9f9f9;border-radius:8px;"><span style="font-size:14px;flex-shrink:0;">🏠</span><p style="margin:0;font-size:13px;color:#1a1a1a;line-height:1.5;">Pay rent with Bilt, use '+card.name+' for everything else</p></div>';
+    html+='<div style="display:flex;gap:8px;align-items:flex-start;padding:8px 10px;background:#f9f9f9;border-radius:8px;"><span style="font-size:14px;flex-shrink:0;">🆓</span><p style="margin:0;font-size:13px;color:#1a1a1a;line-height:1.5;">No annual fee — earns points on rent at zero cost</p></div>';
+    html+='<div style="display:flex;gap:8px;align-items:flex-start;padding:8px 10px;background:#f9f9f9;border-radius:8px;"><span style="font-size:14px;flex-shrink:0;">📈</span><p style="margin:0;font-size:13px;color:#1a1a1a;line-height:1.5;"><strong>'+totalPtsPerMo.toLocaleString()+' pts/month</strong> combined</p></div>';
+    html+='</div></div>';
+  }
+
+  // Spend table
+  html+='<div style="border:0.5px solid #ebebeb;border-radius:12px;padding:14px 16px;background:#fff;">';
+  html+='<p style="margin:0 0 4px;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">ADJUST YOUR MONTHLY SPENDING</p>';
+  html+='<p style="margin:0 0 10px;font-size:13px;color:#555;">Edit any number — your timeline updates automatically.</p>';
+  html+='<table class="spend-table"><thead><tr><th>Category</th><th class="c">Earn</th><th>$/month</th><th class="r">Pts</th></tr></thead><tbody>'+spendRows+'</tbody></table>';
+  html+='<div class="totals-row pts-bg" style="margin-top:6px;"><span style="font-size:12px;color:#0070c9;">Points earned per month</span><span style="font-size:14px;font-weight:500;color:#0070c9;" id="nb-pts-mo">'+totalPtsPerMo.toLocaleString()+' pts/month</span></div>';
+  html+='</div>';
+  html+=buildItinerary(card,totalPts,0.022);
+  html+=buildGate('b');
+
+  // ── Learn more — collapsed by default, below everything ──
+  var learnId='learn-'+Math.random().toString(36).slice(2);
+  html+='<div style="border:0.5px solid #ebebeb;border-radius:12px;overflow:hidden;background:#fff;">';
+  html+='<button onclick="toggleLearnMore(\''+learnId+'\')" style="width:100%;padding:14px 16px;border:none;background:transparent;cursor:pointer;display:flex;justify-content:space-between;align-items:center;">';
+  html+='<span style="font-size:14px;font-weight:500;color:#1a1a1a;">Learn more about sign-up bonuses</span>';
+  html+='<span id="'+learnId+'-icon" style="font-size:13px;color:#888;">+ Show</span>';
+  html+='</button>';
+  html+='<div id="'+learnId+'" style="display:none;padding:0 16px 16px;">';
+  html+=buildFeesPane().replace('<div style="display:flex;flex-direction:column;gap:12px;padding-top:4px;">','<div style="display:flex;flex-direction:column;gap:12px;">');
+  html+='</div></div>';
+
+  return html;
+}
+
+
+function buildAltHasPlans(){
+  var alts=[
+    {icon:'✈',label:'Fly economy instead',desc:'Economy flights cost far fewer points — you could book sooner or use what you already have.'},
+    {icon:'💳',label:'Add a new card to get there faster',desc:'A sign-up bonus from a card you don\'t have yet could cut your timeline from months to weeks.'},
+    {icon:'🏨',label:'Use points for hotel only, pay cash for the flight',desc:'If your hotel points are strong, you can mix points and cash to stretch further.'}
+  ];
+  var html='<div style="border:0.5px solid #ebebeb;border-radius:12px;overflow:hidden;background:#fff;">';
+  html+='<div style="padding:10px 14px;background:#f5f5f5;border-bottom:0.5px solid #ebebeb;"><p style="margin:0;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">OTHER APPROACHES</p></div>';
+  alts.forEach(function(a,i){
+    html+='<div style="padding:12px 14px;'+(i<alts.length-1?'border-bottom:0.5px solid #ebebeb;':'')+'display:flex;align-items:flex-start;gap:12px;">';
+    html+='<div style="font-size:20px;flex-shrink:0;margin-top:1px;">'+a.icon+'</div>';
+    html+='<div><p style="margin:0;font-size:13px;font-weight:500;color:#1a1a1a;">'+a.label+'</p><p style="margin:3px 0 0;font-size:12px;color:#888;line-height:1.4;">'+a.desc+'</p></div>';
+    html+='</div>';
+  });
+  html+='</div>';
+  return html;
+}
+
+function buildAltNoPlans(){
+  var alts=[
+    {icon:'💎',name:'Amex Platinum',sub:'$695/yr · 100k sign-up bonus',desc:'Highest bonus available. Best if you want to fly business class or travel frequently.'},
+    {icon:'🆓',name:'Chase Freedom Unlimited',sub:'No annual fee · 20k bonus',desc:'No annual fee. Flat 1.5x on everything — the easiest card to manage.'},
+    {icon:'🏠',name:'Bilt Mastercard',sub:'No annual fee · earns on rent',desc:'The only card that earns points on rent payments. Great if you rent and want to start building points.'}
+  ];
+  var html='<div style="border:0.5px solid #ebebeb;border-radius:12px;overflow:hidden;background:#fff;">';
+  html+='<div style="padding:10px 14px;background:#f5f5f5;border-bottom:0.5px solid #ebebeb;"><p style="margin:0;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">OTHER CARD OPTIONS</p></div>';
+  alts.forEach(function(a,i){
+    html+='<div style="padding:12px 14px;'+(i<alts.length-1?'border-bottom:0.5px solid #ebebeb;':'')+'display:flex;align-items:flex-start;gap:12px;">';
+    html+='<div style="font-size:20px;flex-shrink:0;">'+a.icon+'</div>';
+    html+='<div><p style="margin:0;font-size:13px;font-weight:500;color:#1a1a1a;">'+a.name+'</p>';
+    html+='<p style="margin:2px 0 4px;font-size:11px;color:#888;">'+a.sub+'</p>';
+    html+='<p style="margin:0;font-size:12px;color:#555;line-height:1.4;">'+a.desc+'</p></div>';
+    html+='</div>';
+  });
+  html+='</div>';
+  return html;
+}
+
+function buildResults(group){
+  var r=getRoute();
+  if(group==='a'){
+    document.getElementById('r5a-headline').textContent='Here\'s how you get to '+capDest(r.d);
+    document.getElementById('main-plan-a').innerHTML=buildHasMainPlan();
+    document.getElementById('alt-plans-a').innerHTML='';
+    document.getElementById('waitlist-block-a').innerHTML='';
+  } else {
+    document.getElementById('r5b-headline').textContent='Here\'s your path to '+capDest(r.d);
+    document.getElementById('main-plan-b').innerHTML=buildNoMainPlan();
+    document.getElementById('alt-plans-b').innerHTML='';
+    document.getElementById('waitlist-block-b').innerHTML='';
+  }
+}
+
+function joinWaitlist(inputId,btn){
+  var val=document.getElementById(inputId).value;
+  if(!val||!val.includes('@')){document.getElementById(inputId).style.borderColor='#E24B4A';return;}
+  btn.textContent='✓ You\'re on the list';btn.style.background='#2d7a2d';btn.disabled=true;
+  document.getElementById(inputId).disabled=true;
+}
+function toggleReferral(id,btn){
+  var el=document.getElementById(id);
+  if(el.style.display==='none'){el.style.display='block';btn.textContent='Hide referral code ↑';}
+  else{el.style.display='none';btn.textContent='I have a referral code →';}
+}
 function go(n){if(n===1){showOnly('s1');}else if(n===2){setRoutePills();setupS2();showOnly('s2');}else if(n===3){showOnly('s3');}else if(n===4){showOnly(path==='has'?'s4a':'s4b');}else if(n==='thinking'){showOnly('s-thinking');['t1','t2','t3'].forEach(function(id){document.getElementById(id).style.color='#888';});var i=0;var tick=setInterval(function(){if(i<3){document.getElementById(['t1','t2','t3'][i]).style.color='#2d7a2d';i++;}else{clearInterval(tick);setTimeout(function(){var g=path==='has'?'a':'b';buildResults(g);showOnly('s5'+g);},400);}},600);}else if(n===6){showOnly('s6');}else if(n===7){showOnly('s7');}else if(n===8){updateConnectedTally();showOnly('s8');}}
 function toggleConnect(btn,key){connected[key]=!connected[key];btn.textContent=connected[key]?'Connected':'Connect';btn.className=connected[key]?'connect-btn connected':'connect-btn';updateConnectedTally();}
 function updateConnectedTally(){var keys=Object.keys(connected).filter(function(k){return connected[k];});var count=keys.length;var t=document.getElementById('connected-tally');if(t)t.textContent=count===0?'Connect at least one account to activate alerts':count+' account'+(count>1?'s':'')+' connected — alerts active';var c=document.getElementById('alert-count');if(c)c.textContent=count+' account'+(count===1?'':'s');var l=document.getElementById('connected-list');if(l)l.innerHTML=keys.length===0?'<p style="font-size:12px;color:#888;margin:0;">No accounts connected yet — <span style="color:#0070c9;cursor:pointer;" onclick="go(7)">connect now</span></p>':keys.map(function(k){return'<div style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:6px;"><span style="color:#2d7a2d;">✓</span><span>'+connNames[k]+'</span></div>';}).join('');var s=document.getElementById('hub-sub');if(s&&count>0)s.textContent='Alerts active on '+count+' account'+(count>1?'s':'')+'. easy. will ping you when a transfer bonus drops.';}
-function restart(){path='has';spendBand='$1k – $2.5k';whenBand='Within a year';spendSel=false;whenSel=false;adults=1;children=0;booking='flight';cabinSel=false;hotelSel=false;cabinTier='business';hotelTier='upscale';connected={};document.getElementById('origin').value='';document.getElementById('dest').value='';document.getElementById('adults-val').textContent='1';document.getElementById('children-val').textContent='0';document.getElementById('adults-minus').disabled=true;document.getElementById('children-minus').disabled=true;['flight','both','hotel'].forEach(function(t){document.getElementById('tog-'+t).classList.toggle('sel',t==='flight');});tog('s1cta',false);tog('s4acta',false);tog('s4bcta',false);spendSel=false;document.querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});document.querySelectorAll('.bal-input').forEach(function(i){i.value='';});document.getElementById('total-val').textContent='$0';showOnly('s1');}
+function pickTimeline(btn,val){
+  // Highlight selected
+  btn.closest('div').querySelectorAll('button').forEach(function(b){
+    b.style.background='#fff';b.style.borderColor='#ddd';b.style.color='#1a1a1a';
+  });
+  btn.style.background='#eaf5ea';btn.style.borderColor='#a3d4a3';btn.style.color='#2d7a2d';
+  // Store for analytics
+  window._easyTimeline=val;
+  // Short pause then reveal confirmation
+  setTimeout(function(){
+    document.getElementById('s6-question').style.display='none';
+    var c=document.getElementById('s6-confirm');c.style.display='flex';c.style.flexDirection='column';c.style.gap='14px';
+  },400);
+}
+function restart(){
+  // Reset S6 state
+  var q=document.getElementById('s6-question');if(q)q.style.display='';
+  var c=document.getElementById('s6-confirm');if(c)c.style.display='none';
+  window._easyTimeline=null;path='has';spendBand='$1k – $2.5k';whenBand='Within a year';spendSel=false;whenSel=false;adults=1;children=0;booking='flight';cabinSel=false;hotelSel=false;cabinTier='business';hotelTier='upscale';hotelNights=5;rentAmount=0;
+  var ra=document.getElementById('rent-amount');if(ra)ra.value='';
+  var nv=document.getElementById('nights-val');if(nv)nv.textContent='5';
+  var nm=document.getElementById('nights-minus');if(nm)nm.disabled=true;connected={};document.getElementById('origin').value='';document.getElementById('dest').value='';document.getElementById('adults-val').textContent='1';document.getElementById('children-val').textContent='0';document.getElementById('adults-minus').disabled=true;document.getElementById('children-minus').disabled=true;['flight','both','hotel'].forEach(function(t){document.getElementById('tog-'+t).classList.toggle('sel',t==='flight');});tog('s1cta',false);tog('s4acta',false);tog('s4bcta',false);spendSel=false;document.querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});document.querySelectorAll('.bal-input').forEach(function(i){i.value='';});document.getElementById('total-val').textContent='$0';showOnly('s1');}
 </script>
 </body>
 </html>

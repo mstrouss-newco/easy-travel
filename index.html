@@ -4,89 +4,113 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>easy. — plan the trip. we'll find the points.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --color-text-primary: #1a1a1a;
-  --color-text-secondary: #555;
-  --color-text-tertiary: #888;
-  --color-text-info: #0070c9;
-  --color-text-success: #2d7a2d;
-  --color-text-warning: #b45309;
+  --color-text-primary: #0f0f0f;
+  --color-text-secondary: #525252;
+  --color-text-tertiary: #8a8a8a;
+  --color-text-info: #0057a8;
+  --color-text-success: #1e6b2e;
+  --color-text-warning: #92400e;
   --color-background-primary: #ffffff;
-  --color-background-secondary: #f5f5f5;
-  --color-background-info: #e8f1fb;
-  --color-background-success: #eaf5ea;
+  --color-background-secondary: #f4f4f2;
+  --color-background-info: #e6f0fa;
+  --color-background-success: #e8f5eb;
   --color-background-warning: #fef3c7;
-  --color-border-primary: #aaa;
-  --color-border-secondary: #ddd;
-  --color-border-tertiary: #ebebeb;
-  --color-border-info: #a8cff0;
-  --color-border-success: #a3d4a3;
-  --border-radius-md: 8px;
-  --border-radius-lg: 12px;
+  --color-border-primary: #999;
+  --color-border-secondary: #e0e0e0;
+  --color-border-tertiary: #eeeeec;
+  --color-border-info: #9ec5e8;
+  --color-border-success: #96cfa4;
+  --border-radius-md: 10px;
+  --border-radius-lg: 14px;
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
 }
 *, *::before, *::after { box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; margin: 0; padding: 24px 16px 60px; color: var(--color-text-primary); }
+body { font-family: var(--font-body); background: #f2f1ed; margin: 0; padding: 24px 16px 60px; color: var(--color-text-primary); }
 @media(min-width:600px){
-  body { padding: 40px 24px 80px; background: #f0f0f0; }
+  body { padding: 40px 24px 80px; background: #e8e7e2; }
 }
+
+/* Entrance animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.screen.active { animation: fadeUp .3s ease both; }
+.screen.active > * { animation: fadeUp .3s ease both; }
+.screen.active > *:nth-child(2) { animation-delay: .05s; }
+.screen.active > *:nth-child(3) { animation-delay: .10s; }
+.screen.active > *:nth-child(4) { animation-delay: .15s; }
+.screen.active > *:nth-child(5) { animation-delay: .20s; }
+.screen.active > *:nth-child(6) { animation-delay: .25s; }
 
 .screen{display:none;flex-direction:column;gap:14px;}
 .screen.active{display:flex;}
-.prog{height:3px;background:var(--color-border-tertiary);border-radius:2px;overflow:hidden;}
-.prog-fill{height:100%;background:var(--color-text-info);border-radius:2px;transition:width .4s ease;}
-.step-lbl{font-size:12px;color:var(--color-text-tertiary);}
-.main-q{font-size:20px;font-weight:500;color:var(--color-text-primary);line-height:1.3;margin:0;}
-.sub-q{font-size:13px;color:var(--color-text-secondary);margin:0;line-height:1.5;}
-.pill-grid{display:flex;flex-wrap:wrap;gap:8px;}
-.pill{padding:9px 16px;border-radius:20px;border:0.5px solid var(--color-border-secondary);font-size:13px;color:var(--color-text-primary);cursor:pointer;transition:all .15s;background:var(--color-background-primary);}
-.pill:hover{border-color:var(--color-border-primary);background:var(--color-background-secondary);}
-.pill.sel{background:var(--color-background-info);border-color:var(--color-border-info);color:var(--color-text-info);}
+.prog{height:2px;background:var(--color-border-tertiary);border-radius:2px;overflow:hidden;margin-top:2px;}
+.prog-fill{height:100%;background:var(--color-text-primary);border-radius:2px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+.step-lbl{font-size:12px;color:var(--color-text-tertiary);letter-spacing:.02em;}
+.main-q{font-size:21px;font-weight:600;font-family:var(--font-display);color:var(--color-text-primary);line-height:1.25;margin:0;}
+.sub-q{font-size:13px;color:var(--color-text-secondary);margin:0;line-height:1.6;}
+.pill-grid{display:flex;flex-wrap:wrap;gap:7px;}
+.pill{padding:9px 16px;border-radius:20px;border:1px solid var(--color-border-secondary);font-size:13px;color:var(--color-text-primary);cursor:pointer;transition:all .18s ease;background:var(--color-background-primary);font-family:var(--font-body);}
+.pill:hover{border-color:var(--color-text-primary);background:var(--color-background-secondary);transform:translateY(-1px);}
+.pill.sel{background:var(--color-text-primary);border-color:var(--color-text-primary);color:#fff;}
 .input-wrap{display:flex;flex-direction:column;gap:4px;flex:1;}
-.input-lbl{font-size:12px;color:var(--color-text-secondary);font-weight:500;}
-.big-input{width:100%;padding:12px 14px;font-size:15px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);}
-.big-input:focus{outline:none;border-color:var(--color-border-info);}
+.input-lbl{font-size:11px;color:var(--color-text-tertiary);font-weight:500;letter-spacing:.04em;text-transform:uppercase;}
+.big-input{width:100%;padding:13px 14px;font-size:15px;border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-body);transition:border-color .15s;}
+.big-input:focus{outline:none;border-color:var(--color-text-primary);}
 .route-row{display:flex;align-items:flex-end;gap:10px;}
 .route-arrow{flex-shrink:0;font-size:18px;color:var(--color-text-tertiary);padding-bottom:13px;}
-.cta{width:100%;padding:14px;font-size:15px;font-weight:500;border-radius:var(--border-radius-md);border:none;cursor:pointer;transition:opacity .15s;background:var(--color-text-primary);color:var(--color-background-primary);}
-.cta:hover{opacity:.85;}
-.cta:disabled{opacity:.32;cursor:default;}
-.cta-sec{background:transparent;border:0.5px solid var(--color-border-secondary);color:var(--color-text-secondary);}
-.cta-ghost{background:transparent;border:none;color:var(--color-text-tertiary);font-size:13px;padding:6px;width:100%;cursor:pointer;text-align:center;}
-.back-btn{font-size:13px;color:var(--color-text-tertiary);cursor:pointer;background:none;border:none;padding:0;}
+.cta{width:100%;padding:15px;font-size:15px;font-weight:500;border-radius:var(--border-radius-md);border:none;cursor:pointer;transition:all .18s ease;background:var(--color-text-primary);color:#fff;font-family:var(--font-body);letter-spacing:.01em;}
+.cta:hover{background:#2a2a2a;transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,0.15);}
+.cta:disabled{opacity:.28;cursor:default;transform:none;box-shadow:none;}
+.cta-sec{background:transparent;border:1px solid var(--color-border-secondary);color:var(--color-text-secondary);}
+.cta-sec:hover{background:var(--color-background-secondary);transform:none;box-shadow:none;}
+.cta-ghost{background:transparent;border:none;color:var(--color-text-tertiary);font-size:13px;padding:6px;width:100%;cursor:pointer;text-align:center;font-family:var(--font-body);}
+.back-btn{font-size:13px;color:var(--color-text-tertiary);cursor:pointer;background:none;border:none;padding:0;font-family:var(--font-body);}
+.back-btn:hover{color:var(--color-text-primary);}
 .nav-row{display:flex;align-items:center;justify-content:space-between;}
-.social{font-size:11px;color:var(--color-text-tertiary);text-align:center;line-height:1.5;}
-.card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;background:var(--color-background-primary);}
+.social{font-size:12px;color:var(--color-text-tertiary);text-align:center;line-height:1.5;}
+.card{border:1px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;background:var(--color-background-primary);}
 .badge{font-size:11px;font-weight:500;padding:3px 9px;border-radius:10px;}
 .bg{background:var(--color-background-success);color:var(--color-text-success);}
 .bb{background:var(--color-background-info);color:var(--color-text-info);}
 .row{display:flex;justify-content:space-between;align-items:center;}
-.bal-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary);}
+.bal-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--color-border-tertiary);}
 .bal-row:last-child{border-bottom:none;}
 .bal-logo{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;}
 .bal-name{flex:1;font-size:13px;font-weight:500;color:var(--color-text-primary);}
 .bal-sub{font-size:11px;color:var(--color-text-secondary);}
-.bal-input{width:110px;padding:7px 10px;font-size:13px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary);text-align:right;}
-.bal-input:focus{outline:none;border-color:var(--color-border-info);background:var(--color-background-primary);}
-.hint{font-size:12px;color:var(--color-text-tertiary);line-height:1.5;}
-.section-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:.05em;margin:4px 0 0;}
+.bal-input{width:110px;padding:7px 10px;font-size:13px;border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary);text-align:right;font-family:var(--font-body);}
+.bal-input:focus{outline:none;border-color:var(--color-text-primary);background:var(--color-background-primary);}
+.hint{font-size:12px;color:var(--color-text-tertiary);line-height:1.6;}
+.section-label{font-size:10px;font-weight:600;color:var(--color-text-tertiary);letter-spacing:.1em;margin:4px 0 0;text-transform:uppercase;}
 .bilt-note{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:var(--color-background-info);border-radius:var(--border-radius-md);}
 .bilt-note-text{font-size:12px;color:var(--color-text-info);line-height:1.5;}
-.route-pill{display:inline-flex;flex-wrap:wrap;align-items:center;gap:5px;padding:6px 12px;border-radius:20px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);font-size:12px;color:var(--color-text-secondary);line-height:1.6;}
+.route-pill{display:inline-flex;flex-wrap:wrap;align-items:center;gap:5px;padding:6px 12px;border-radius:20px;background:var(--color-background-secondary);border:1px solid var(--color-border-tertiary);font-size:12px;color:var(--color-text-secondary);line-height:1.6;}
 .route-pill strong{color:var(--color-text-primary);font-weight:500;}
-.connect-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.5px solid var(--color-border-tertiary);}
+.connect-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--color-border-tertiary);}
 .connect-row:last-child{border-bottom:none;}
 .connect-logo{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;}
 .connect-info{flex:1;}
 .connect-name{font-size:13px;font-weight:500;color:var(--color-text-primary);}
 .connect-sub{font-size:11px;color:var(--color-text-secondary);margin-top:1px;}
-.connect-btn{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);white-space:nowrap;transition:all .15s;flex-shrink:0;}
+.connect-btn{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);white-space:nowrap;transition:all .15s;flex-shrink:0;font-family:var(--font-body);}
 .connect-btn.connected{background:var(--color-background-success);border-color:var(--color-border-success);color:var(--color-text-success);}
-.alert-preview{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px;background:var(--color-background-secondary);}
-.alert-item{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary);}
+.alert-preview{border:1px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px;background:var(--color-background-secondary);}
+.alert-item{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--color-border-tertiary);}
 .alert-item:last-child{border-bottom:none;}
 .alert-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
-.alert-dot.hot{background:#E24B4A;}.alert-dot.live{background:#639922;}.alert-dot.soon{background:#BA7517;}
+.alert-dot.hot{background:#d94040;}.alert-dot.live{background:#4a8c1c;}.alert-dot.soon{background:#b06010;}
 .alert-text{font-size:12px;color:var(--color-text-primary);line-height:1.5;}
 .alert-time{font-size:11px;color:var(--color-text-tertiary);margin-top:1px;}
 .trust-row{display:flex;align-items:flex-start;gap:8px;}
@@ -95,25 +119,28 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .dots span{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--color-border-secondary);margin:0 3px;animation:blink 1.2s ease-in-out infinite;}
 .dots span:nth-child(2){animation-delay:.2s;}.dots span:nth-child(3){animation-delay:.4s;}
 @keyframes blink{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
-.counter-row{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.counter-row{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);}
 .counter-ctrl{display:flex;align-items:center;gap:14px;}
-.counter-btn{width:30px;height:30px;border-radius:50%;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;flex-shrink:0;padding:0;}
+.counter-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;flex-shrink:0;padding:0;transition:all .15s;}
+.counter-btn:hover:not(:disabled){border-color:var(--color-text-primary);}
 .counter-btn:disabled{opacity:.3;cursor:default;}
 .counter-val{font-size:16px;font-weight:500;color:var(--color-text-primary);min-width:20px;text-align:center;}
-.toggle-group{display:flex;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);overflow:hidden;}
-.toggle-opt{flex:1;padding:10px 8px;font-size:13px;font-weight:500;text-align:center;cursor:pointer;color:var(--color-text-secondary);background:var(--color-background-primary);transition:all .15s;border:none;}
-.toggle-opt.sel{background:var(--color-text-primary);color:var(--color-background-primary);}
-.tab-strip{display:flex;border-radius:var(--border-radius-md);overflow:hidden;border:0.5px solid var(--color-border-secondary);}
-.tab-btn{flex:1;padding:11px 6px;font-size:12px;font-weight:500;text-align:center;cursor:pointer;border:none;border-right:0.5px solid var(--color-border-secondary);transition:none;}
+.toggle-group{display:flex;border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);overflow:hidden;}
+.toggle-opt{flex:1;padding:10px 8px;font-size:13px;font-weight:500;text-align:center;cursor:pointer;color:var(--color-text-secondary);background:var(--color-background-primary);transition:all .15s;border:none;font-family:var(--font-body);}
+.toggle-opt.sel{background:var(--color-text-primary);color:#fff;}
+.tab-strip{display:flex;border-radius:var(--border-radius-md);overflow:hidden;border:1px solid var(--color-border-secondary);}
+.tab-btn{flex:1;padding:11px 6px;font-size:12px;font-weight:500;text-align:center;cursor:pointer;border:none;border-right:1px solid var(--color-border-secondary);transition:none;font-family:var(--font-body);}
 .tab-btn:last-child{border-right:none;}
 .tab-panel{display:none;flex-direction:column;gap:10px;}
 .spend-table{width:100%;border-collapse:collapse;}
-.spend-table th{font-size:11px;color:var(--color-text-tertiary);font-weight:500;padding:0 0 6px;text-align:left;}
+.spend-table th{font-size:11px;color:var(--color-text-tertiary);font-weight:500;padding:0 0 6px;text-align:left;letter-spacing:.04em;text-transform:uppercase;}
 .spend-table th.r,.spend-table td.r{text-align:right;}
 .spend-table th.c,.spend-table td.c{text-align:center;}
-.spend-table td{font-size:12px;color:var(--color-text-primary);padding:6px 0;border-top:0.5px solid var(--color-border-tertiary);vertical-align:middle;}
+.spend-table td{font-size:12px;color:var(--color-text-primary);padding:6px 0;border-top:1px solid var(--color-border-tertiary);vertical-align:middle;}
 .card-pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;white-space:nowrap;}
 .cp-chase{background:#e8ecff;color:#1a1f71;}
+.cp-citi{background:#e8f0ff;color:#003087;}
 .cp-amex{background:#e3f0fb;color:#005b8e;}
 .cp-cap1{background:#e8edf5;color:#003580;}
 .cp-bilt{background:#ebebeb;color:#222;}
@@ -134,75 +161,72 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .gap-box.hi .gap-val{color:var(--color-text-info);}
 .gap-box.suc .gap-val{color:var(--color-text-success);}
 .gap-lbl{font-size:11px;color:var(--color-text-secondary);margin-top:2px;}
-.itin-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;}
+.itin-card{border:1px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;}
 .itin-hdr{padding:10px 14px;background:var(--color-background-secondary);display:flex;justify-content:space-between;align-items:center;}
 .itin-title{font-size:12px;font-weight:500;color:var(--color-text-primary);}
 .itin-disc{font-size:11px;color:var(--color-text-tertiary);}
-.itin-leg{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:0.5px solid var(--color-border-tertiary);}
+.itin-leg{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--color-border-tertiary);}
 .itin-leg:last-of-type{border-bottom:none;}
 .itin-ico{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;}
 .itin-info{flex:1;}
 .itin-l1{font-size:13px;font-weight:500;color:var(--color-text-primary);}
 .itin-l2{font-size:12px;color:var(--color-text-secondary);margin-top:1px;}
 .itin-pts{font-size:12px;font-weight:500;color:var(--color-text-success);flex-shrink:0;}
-.itin-foot{display:flex;justify-content:space-between;padding:8px 14px;background:var(--color-background-secondary);border-top:0.5px solid var(--color-border-tertiary);}
+.itin-foot{display:flex;justify-content:space-between;padding:8px 14px;background:var(--color-background-secondary);border-top:1px solid var(--color-border-tertiary);}
 .itin-foot-lbl{font-size:11px;color:var(--color-text-secondary);}
 .itin-foot-val{font-size:13px;font-weight:500;color:var(--color-text-primary);}
-.cc-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;background:var(--color-background-primary);}
+.cc-card{border:1px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;background:var(--color-background-primary);}
 .cc-card.featured{border:1.5px solid var(--color-border-info);}
 .cc-name{font-size:14px;font-weight:500;color:var(--color-text-primary);margin:0;}
 .cc-bank{font-size:12px;color:var(--color-text-secondary);margin:2px 0 0;}
 .hub-upsell{border:1.5px solid var(--color-border-info);border-radius:var(--border-radius-lg);padding:16px;}
 .hub-upsell-hdr{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;}
 .hub-icon{width:36px;height:36px;border-radius:10px;background:var(--color-background-info);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.gate-wrap{border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary);}
-.gate-proof{display:flex;border-bottom:0.5px solid var(--color-border-tertiary);}
+.gate-wrap{border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary);}
+.gate-proof{display:flex;border-bottom:1px solid var(--color-border-tertiary);}
 .gate-stat{flex:1;text-align:center;padding:12px 8px;}
-.gate-stat:not(:last-child){border-right:0.5px solid var(--color-border-tertiary);}
+.gate-stat:not(:last-child){border-right:1px solid var(--color-border-tertiary);}
 .gate-stat-num{font-size:17px;font-weight:500;color:var(--color-text-primary);}
 .gate-stat-lbl{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
 .gate-body{padding:16px;}
 .steps{display:flex;align-items:flex-start;position:relative;}
 .step{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 4px;position:relative;}
-.step-num{width:26px;height:26px;border-radius:50%;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--color-text-secondary);position:relative;z-index:1;}
-.step-line{position:absolute;top:13px;left:50%;right:-50%;height:0.5px;background:var(--color-border-tertiary);z-index:0;}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--color-background-secondary);border:1px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--color-text-secondary);position:relative;z-index:1;}
+.step-line{position:absolute;top:13px;left:50%;right:-50%;height:1px;background:var(--color-border-tertiary);z-index:0;}
 .step:last-child .step-line{display:none;}
 .step-lbl-text{font-size:12px;color:var(--color-text-secondary);line-height:1.4;margin-top:7px;}
 .step-lbl-text strong{display:block;font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px;}
 </style>
 </head>
 <body>
-<div style="max-width:520px;margin:0 auto;background:#fafafa;border-radius:16px;">
+<div style="max-width:520px;margin:0 auto;background:#fafaf8;border-radius:20px;">
 <style>
 @media(min-width:600px){
-  body > div { background:#fff; box-shadow:0 4px 32px rgba(0,0,0,0.10); padding:32px 32px 48px; }
-  .screen { gap:16px; }
+  body > div { background:#fff; box-shadow:0 8px 48px rgba(0,0,0,0.08),0 2px 8px rgba(0,0,0,0.04); padding:36px 36px 52px; border-radius:20px; }
+  .screen { gap:18px; }
 }
 </style>
 
 <!-- S1 -->
 <div id="s1" class="screen active">
   <div>
-    <div style="font-size:34px;font-weight:500;letter-spacing:-0.5px;color:var(--color-text-primary);line-height:1;">easy.</div>
-    <div style="font-size:13px;color:var(--color-text-tertiary);margin-top:5px;">plan the trip. we'll find the points.</div>
+    <div style="font-size:32px;font-weight:400;letter-spacing:-0.5px;color:var(--color-text-primary);line-height:1;font-family:var(--font-display);">easy.</div>
   </div>
-  <div style="display:flex;flex-direction:column;gap:8px;">
-    <p style="font-size:23px;font-weight:500;color:var(--color-text-primary);line-height:1.2;margin:0;">Your next trip, paid for with your everyday life.</p>
-    <p style="font-size:14px;color:var(--color-text-secondary);line-height:1.6;margin:0;">Already have points or miles? We'll make them go further. Starting fresh? We'll show you exactly how to earn them on what you're already buying.</p>
+
+  <!-- Hero: destination-first copy -->
+  <div style="padding:16px 0 4px;">
+    <p id="hero-headline" style="font-size:30px;font-weight:400;font-family:var(--font-display);color:var(--color-text-primary);line-height:1.2;margin:0 0 10px;white-space:pre-line;">Where do you want to go next?</p>
+    <p id="hero-sub" style="font-size:14px;color:var(--color-text-secondary);line-height:1.65;margin:0;">Tell us the destination. We'll show you exactly how to get there on points — using money you're already spending.</p>
   </div>
-  <div class="steps">
-    <div class="step"><div class="step-num">1</div><div class="step-line"></div><div class="step-lbl-text"><strong>Your trip</strong>Destination, cabin, travelers</div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-line"></div><div class="step-lbl-text"><strong>Your points</strong>Have some or starting at zero</div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-line"></div><div class="step-lbl-text"><strong>Your plan</strong>Best route, which card, how long</div></div>
-  </div>
-  <div style="height:0.5px;background:var(--color-border-tertiary);"></div>
+
+  <div style="height:1px;background:var(--color-border-tertiary);"></div>
   <div class="nav-row"><span class="step-lbl">Step 1 of 5</span></div>
   <div class="prog"><div class="prog-fill" style="width:20%"></div></div>
-  <p class="main-q">Where do you want to go?</p>
+  <p class="main-q">Where are you headed?</p>
   <!-- Mode toggle: know where / explore -->
-  <div style="display:flex;gap:8px;margin-bottom:2px;">
-    <button id="mode-know" onclick="setDestMode('know')" style="flex:1;padding:9px;border-radius:8px;border:1.5px solid #1a1a1a;background:#1a1a1a;color:#fff;font-size:13px;font-weight:500;cursor:pointer;">I know where I'm going</button>
-    <button id="mode-explore" onclick="setDestMode('explore')" style="flex:1;padding:9px;border-radius:8px;border:0.5px solid #ddd;background:#fff;color:#555;font-size:13px;cursor:pointer;">Help me explore ✨</button>
+  <div style="display:flex;gap:6px;margin-bottom:2px;">
+    <button id="mode-know" onclick="setDestMode('know')" style="flex:1;padding:10px;border-radius:10px;border:1.5px solid #0f0f0f;background:#0f0f0f;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-body);transition:all .15s;">I know where I'm going</button>
+    <button id="mode-explore" onclick="setDestMode('explore')" style="flex:1;padding:10px;border-radius:10px;border:1px solid #e0e0e0;background:#fff;color:#525252;font-size:13px;cursor:pointer;font-family:var(--font-body);transition:all .15s;">Show me what's possible</button>
   </div>
 
   <!-- Know mode: manual inputs -->
@@ -214,11 +238,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   </div>
   </div>
 
-  <!-- Explore mode: category tiles -->
+  <!-- Explore mode: destination inspiration cards -->
   <div id="dest-explore" style="display:none;">
-    <input class="big-input" id="origin-explore" placeholder="Flying from (city or airport)" style="margin-bottom:10px;" oninput="document.getElementById('origin').value=this.value;checkS1();">
-    <p style="margin:0 0 8px;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">PICK A VIBE</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;" id="explore-cats"></div>
+    <input class="big-input" id="origin-explore" placeholder="Flying from (city or airport)" style="margin-bottom:12px;" oninput="document.getElementById('origin').value=this.value;checkS1();">
+    <p style="margin:0 0 10px;font-size:11px;font-weight:600;color:var(--color-text-tertiary);letter-spacing:.08em;text-transform:uppercase;">Dream a little.</p>
+    <div id="explore-cats" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"></div>
     <div id="explore-dests" style="display:none;margin-top:10px;"></div>
   </div>
   <span class="input-lbl" style="margin-top:2px;">Travelers</span>
@@ -232,8 +256,21 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     <div class="toggle-opt" id="tog-both" onclick="setBooking('both')">Flight + hotel</div>
     <div class="toggle-opt" id="tog-hotel" onclick="setBooking('hotel')">Hotel only</div>
   </div>
-  <button class="cta" id="s1cta" disabled onclick="go(2)">Find the best way to book →</button>
-  <p class="social">No account needed · Free · Takes 2 minutes</p>
+  <span class="input-lbl" style="margin-top:2px;">When do you want to go? <span style="color:#bbb;font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></span>
+  <div style="display:flex;gap:8px;">
+    <div style="flex:1;">
+      <span class="input-lbl" style="font-size:11px;color:#aaa;margin-bottom:3px;display:block;">Departure</span>
+      <input type="date" id="trip-depart" onchange="checkS1();setTripDate()" style="width:100%;padding:11px 12px;border:1px solid #e0e0e0;border-radius:10px;font-size:14px;color:#1a1a1a;background:#fff;box-sizing:border-box;font-family:var(--font-body);">
+    </div>
+    <div style="flex:1;">
+      <span class="input-lbl" style="font-size:11px;color:#aaa;margin-bottom:3px;display:block;">Return <span style="color:#bbb;">(optional)</span></span>
+      <input type="date" id="trip-return" onchange="setTripDate()" style="width:100%;padding:11px 12px;border:1px solid #e0e0e0;border-radius:10px;font-size:14px;color:#1a1a1a;background:#fff;box-sizing:border-box;font-family:var(--font-body);">
+    </div>
+  </div>
+  <div id="date-error" style="display:none;padding:8px 12px;background:#fff5f5;border:1px solid #fcc;border-radius:8px;font-size:12px;color:#d94040;"></div>
+  <button class="cta" id="s1cta" onclick="tryGoS1()">Show me how to get there →</button>
+  <div id="s1-error" style="display:none;padding:10px 14px;background:#fff5f5;border:1px solid #fcc;border-radius:10px;font-size:13px;color:#d94040;line-height:1.5;"></div>
+  <p class="social">No account needed · Free · 2 minutes</p>
 </div>
 
 <!-- S2 -->
@@ -246,6 +283,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     <p class="main-q">Hotel tier?</p>
     <div class="pill-grid"><div class="pill" onclick="pickS2(this,'hotel')">Budget</div><div class="pill" onclick="pickS2(this,'hotel')">Mid-range</div><div class="pill" onclick="pickS2(this,'hotel')">Upscale</div><div class="pill" onclick="pickS2(this,'hotel')">Luxury</div></div>
     <p class="hint" style="margin-top:4px;">Points hotels: Hyatt, Marriott, Hilton, IHG — matched to your programs.</p>
+    <div id="nights-counter-block">
     <p style="font-size:16px;font-weight:500;color:#1a1a1a;margin:10px 0 6px;">How many nights?</p>
     <div class="counter-row">
       <div><div style="font-size:13px;color:#1a1a1a;">Nights</div><div style="font-size:11px;color:#888;">Hotel stay length</div></div>
@@ -255,8 +293,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
         <button class="counter-btn" onclick="changeNights(1)">+</button>
       </div>
     </div>
+    </div>
   </div>
-  <button class="cta" id="s2cta" disabled onclick="go(3)">Continue</button>
+  <button class="cta" id="s2cta" onclick="tryGoS2()">Continue</button>
+  <div id="s2-error" style="display:none;padding:10px 14px;background:#fff5f5;border:1px solid #fcc;border-radius:10px;font-size:13px;color:#d94040;line-height:1.5;"></div>
 </div>
 
 <!-- S3 -->
@@ -264,15 +304,31 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   <div class="nav-row"><button class="back-btn" onclick="go(2)">← Back</button><span class="step-lbl">Step 3 of 5</span></div>
   <div class="prog"><div class="prog-fill" style="width:60%"></div></div>
   <div class="route-pill" id="s3-route"></div>
-  <p class="main-q">Where are you starting from?</p>
-  <p class="sub-q">There's no wrong answer — all paths lead to the same destination.</p>
-  <div class="pill-grid">
-    <div class="pill" onclick="pick(this,'pts');setPath('none')">I don't have points yet</div>
-    <div class="pill" onclick="pick(this,'pts');setPath('has')">I have credit card points</div>
-    <div class="pill" onclick="pick(this,'pts');setPath('has')">I have airline miles</div>
-    <div class="pill" onclick="pick(this,'pts');setPath('has')">I have both</div>
+  <p class="main-q">Do you have a credit card that earns rewards?</p>
+  <p class="sub-q" style="margin-top:2px;">Think Chase, Amex, Capital One, Delta, United — any card where you earn points or miles on purchases.</p>
+
+  <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+    <button onclick="pickS3('has')" id="s3-yes"
+      style="padding:18px 20px;border-radius:12px;border:1px solid var(--color-border-secondary);background:#fff;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:all .18s;font-family:var(--font-body);"
+      onmouseover="this.style.borderColor='#0f0f0f'" onmouseout="if(!this.classList.contains('s3-sel'))this.style.borderColor='var(--color-border-secondary)'">
+      <div>
+        <div style="font-size:15px;font-weight:500;color:var(--color-text-primary);">Yes — I have rewards cards</div>
+        <div style="font-size:13px;color:var(--color-text-tertiary);margin-top:3px;">We'll show how far your current points can take you</div>
+      </div>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0;margin-left:12px;"><path d="M7 10l2.5 2.5 4-4" stroke="#1e6b2e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0"/></svg>
+    </button>
+    <button onclick="pickS3('none')" id="s3-no"
+      style="padding:18px 20px;border-radius:12px;border:1px solid var(--color-border-secondary);background:#fff;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:all .18s;font-family:var(--font-body);"
+      onmouseover="this.style.borderColor='#0f0f0f'" onmouseout="if(!this.classList.contains('s3-sel'))this.style.borderColor='var(--color-border-secondary)'">
+      <div>
+        <div style="font-size:15px;font-weight:500;color:var(--color-text-primary);">Not yet — I'm starting fresh</div>
+        <div style="font-size:13px;color:var(--color-text-tertiary);margin-top:3px;">We'll find the best first card and show your exact timeline</div>
+      </div>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0;margin-left:12px;"><path d="M7 10l2.5 2.5 4-4" stroke="#1e6b2e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0"/></svg>
+    </button>
   </div>
-  <button class="cta" id="s3cta" disabled onclick="go(4)">Continue</button>
+  <button class="cta" id="s3cta" onclick="tryGoS3()">Continue</button>
+  <div id="s3-error" style="display:none;padding:10px 14px;background:#fff5f5;border:1px solid #fcc;border-radius:10px;font-size:13px;color:#d94040;line-height:1.5;"></div>
 </div>
 
 <!-- S4a -->
@@ -287,7 +343,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     <div class="bal-row"><div class="bal-logo" style="background:#1a1f71;color:#fff;">CSR</div><div><div class="bal-name">Chase Sapphire / UR</div><div class="bal-sub">Ultimate Rewards</div></div><input class="bal-input" placeholder="0 pts" id="b_chase" oninput="updateTotal()"></div>
     <div class="bal-row"><div class="bal-logo" style="background:#007dc5;color:#fff;">AMEX</div><div><div class="bal-name">Amex (Gold / Platinum)</div><div class="bal-sub">Membership Rewards</div></div><input class="bal-input" placeholder="0 pts" id="b_amex" oninput="updateTotal()"></div>
     <div class="bal-row"><div class="bal-logo" style="background:#003580;color:#fff;">Cap1</div><div><div class="bal-name">Capital One</div><div class="bal-sub">Venture Miles</div></div><input class="bal-input" placeholder="0 pts" id="b_cap1" oninput="updateTotal()"></div>
-    <div class="bal-row"><div class="bal-logo" style="background:#000;color:#fff;">BLT</div><div><div class="bal-name">Bilt Rewards</div><div class="bal-sub">Earns on rent</div></div><input class="bal-input" placeholder="0 pts" id="b_bilt" oninput="updateTotal()"></div>
+    <div class="bal-row"><div class="bal-logo" style="background:#003087;color:#fff;">CITI</div><div><div class="bal-name">Citi (Premier / Double Cash)</div><div class="bal-sub">ThankYou Points</div></div><input class="bal-input" placeholder="0 pts" id="b_citi" oninput="updateTotal()"></div>
     <div class="bal-row"><div class="bal-logo" style="background:#e31837;color:#fff;">DAL</div><div><div class="bal-name">Delta SkyMiles</div></div><input class="bal-input" placeholder="0 miles" id="b_delta" oninput="updateTotal()"></div>
     <div class="bal-row"><div class="bal-logo" style="background:#0033a0;color:#fff;">UAL</div><div><div class="bal-name">United MileagePlus</div></div><input class="bal-input" placeholder="0 miles" id="b_united" oninput="updateTotal()"></div>
     <div class="bal-row"><div class="bal-logo" style="background:#1a5276;color:#fff;">HYT</div><div><div class="bal-name">World of Hyatt</div></div><input class="bal-input" placeholder="0 pts" id="b_hyatt" oninput="updateTotal()"></div>
@@ -295,15 +351,16 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     <div class="bal-row"><div class="bal-logo" style="background:#1e8449;color:#fff;">HLT</div><div><div class="bal-name">Hilton Honors</div></div><input class="bal-input" placeholder="0 pts" id="b_hilton" oninput="updateTotal()"></div>
   </div>
   <div class="row" style="padding:4px;"><span style="font-size:13px;color:var(--color-text-secondary);">Estimated total value</span><span style="font-size:15px;font-weight:500;color:var(--color-text-success);" id="total-val">$0</span></div>
-  <p class="section-label" style="margin-top:4px;">YOUR MONTHLY CREDIT CARD SPEND</p>
-  <p class="hint" style="margin-top:4px;">Think: groceries, dining, gas, subscriptions — not rent or mortgage.</p>
+  <p class="section-label" style="margin-top:4px;">YOUR MONTHLY SPENDING</p>
+  <p class="hint" style="margin-top:4px;">Groceries, dining, gas, subscriptions — money you spend regardless.</p>
   <div class="pill-grid">
     <div class="pill" onclick="pickSpend(this)">Under $1k</div>
     <div class="pill" onclick="pickSpend(this)">$1k – $2.5k</div>
     <div class="pill" onclick="pickSpend(this)">$2.5k – $5k</div>
     <div class="pill" onclick="pickSpend(this)">$5k+</div>
   </div>
-  <button class="cta" id="s4acta" disabled onclick="go('thinking')">See my options →</button>
+  <button class="cta" id="s4acta" onclick="tryGoS4a()">Build my plan →</button>
+  <div id="s4a-error" style="display:none;padding:10px 14px;background:#fff5f5;border:1px solid #fcc;border-radius:10px;font-size:13px;color:#d94040;line-height:1.5;"></div>
   <p class="social">Leave blank any programs you don't have</p>
 </div>
 
@@ -312,60 +369,65 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   <div class="nav-row"><button class="back-btn" onclick="go(3)">← Back</button><span class="step-lbl">Step 4 of 5</span></div>
   <div class="prog"><div class="prog-fill" style="width:80%"></div></div>
   <div class="route-pill" id="s4b-route"></div>
-  <p class="main-q">A couple quick questions</p>
-  <div><p style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px;">What's your monthly credit card spend?</p><p class="hint">Groceries, dining, gas, streaming, subscriptions — not rent or mortgage.</p></div>
+  <p class="main-q">One quick question.</p>
+  <div>
+    <p style="font-size:15px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px;">What's your monthly spending on everyday things?</p>
+    <p class="hint">Groceries, dining, gas, subscriptions — money you're already spending regardless.</p>
+  </div>
   <div class="pill-grid">
     <div class="pill" onclick="pickSpend(this)">Under $1k</div>
     <div class="pill" onclick="pickSpend(this)">$1k – $2.5k</div>
     <div class="pill" onclick="pickSpend(this)">$2.5k – $5k</div>
     <div class="pill" onclick="pickSpend(this)">$5k+</div>
   </div>
-  <!-- Rent/mortgage capture -->
-  <div style="border:0.5px solid #a8cff0;border-radius:10px;padding:12px 14px;background:#e8f1fb;">
-    <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:2px;"><circle cx="7" cy="7" r="6" stroke="#0070c9" stroke-width="1.2"/><path d="M7 6v4M7 4.5v.5" stroke="#0070c9" stroke-width="1.2" stroke-linecap="round"/></svg>
-      <div>
-        <p style="margin:0 0 2px;font-size:13px;font-weight:500;color:#0070c9;">Pay rent or mortgage?</p>
-        <p style="margin:0;font-size:12px;color:#555;line-height:1.4;">Bilt Rewards is the only card that earns points on rent and mortgage — with no fee. We'll factor it into your plan if you add it.</p>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px;">
-      <span style="font-size:13px;color:#555;white-space:nowrap;">Monthly rent/mortgage</span>
-      <div style="display:flex;align-items:center;gap:4px;flex:1;">
-        <span style="font-size:13px;color:#888;">$</span>
-        <input type="number" id="rent-amount" min="0" placeholder="optional" oninput="setRentAmount(this.value)" style="flex:1;padding:7px 10px;border:0.5px solid #a8cff0;border-radius:6px;font-size:14px;color:#1a1a1a;background:#fff;">
-      </div>
-    </div>
-  </div>
-  <p style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:4px 0 4px;">When do you want to travel?</p>
-  <div class="pill-grid">
-    <div class="pill" onclick="pickWhen(this)">3 months</div>
-    <div class="pill" onclick="pickWhen(this)">6 months</div>
-    <div class="pill" onclick="pickWhen(this)">Within a year</div>
-    <div class="pill" onclick="pickWhen(this)">No rush</div>
-  </div>
-  <button class="cta" id="s4bcta" disabled onclick="go('thinking')">Build my plan →</button>
+  <button class="cta" id="s4bcta" onclick="tryGoS4b()">Build my plan →</button>
+  <div id="s4b-error" style="display:none;padding:10px 14px;background:#fff5f5;border:1px solid #fcc;border-radius:10px;font-size:13px;color:#d94040;line-height:1.5;"></div>
+  <p class="social">We'll find the best card and show your exact timeline to get there.</p>
 </div>
 
 <!-- Thinking -->
 <div id="s-thinking" class="screen">
   <div class="prog"><div class="prog-fill" style="width:92%"></div></div>
-  <div style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:28px 0;">
-    <div class="dots"><span></span><span></span><span></span></div>
-    <div style="display:flex;flex-direction:column;gap:8px;width:100%;max-width:290px;">
-      <div style="font-size:13px;color:var(--color-text-tertiary);" id="t1">Checking award availability...</div>
-      <div style="font-size:13px;color:var(--color-text-tertiary);" id="t2">Comparing transfer partners &amp; portals...</div>
-      <div style="font-size:13px;color:var(--color-text-tertiary);" id="t3">Matching sign-up bonus offers...</div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:20px;padding:32px 0;">
+    <div style="width:48px;height:48px;margin:0 auto;">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation:spin 2.5s linear infinite;width:48px;height:48px;">
+        <circle cx="24" cy="24" r="20" stroke="#e0e0e0" stroke-width="2"/>
+        <path d="M24 4a20 20 0 0 1 20 20" stroke="#0f0f0f" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M18 24l3 3 8-8" stroke="#0f0f0f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.3"/>
+      </svg>
+    </div>
+    <div style="text-align:center;">
+      <p style="font-size:18px;font-weight:400;font-family:var(--font-display);color:var(--color-text-primary);margin:0 0 6px;" id="thinking-dest-label">Building your plan...</p>
+      <p style="font-size:13px;color:var(--color-text-tertiary);margin:0;">This takes about 3 seconds</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:300px;">
+      <div style="display:flex;align-items:center;gap:10px;" id="t1-row">
+        <div style="width:16px;height:16px;border-radius:50%;border:1.5px solid #ddd;flex-shrink:0;" id="t1-dot"></div>
+        <div style="font-size:13px;color:var(--color-text-tertiary);" id="t1">Checking award availability...</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;" id="t2-row">
+        <div style="width:16px;height:16px;border-radius:50%;border:1.5px solid #ddd;flex-shrink:0;" id="t2-dot"></div>
+        <div style="font-size:13px;color:var(--color-text-tertiary);" id="t2">Comparing transfer partners &amp; portals...</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;" id="t3-row">
+        <div style="width:16px;height:16px;border-radius:50%;border:1.5px solid #ddd;flex-shrink:0;" id="t3-dot"></div>
+        <div style="font-size:13px;color:var(--color-text-tertiary);" id="t3">Matching sign-up bonus offers...</div>
+      </div>
     </div>
   </div>
 </div>
+<style>
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes checkPop { 0%{transform:scale(0.5);opacity:0} 60%{transform:scale(1.2)} 100%{transform:scale(1);opacity:1} }
+.t-check { animation: checkPop .3s ease both; }
+</style>
 
 <!-- S5a: Has points -->
 <div id="s5a" class="screen">
   <div class="nav-row"><button class="back-btn" onclick="go(4)">← Edit answers</button><span class="step-lbl">Your plan</span></div>
   <div class="prog"><div class="prog-fill" style="width:100%"></div></div>
   <div class="route-pill" id="s5a-route"></div>
-  <p class="main-q" style="font-size:17px;" id="r5a-headline">Here's how you get there</p>
+  <p class="main-q" style="font-size:22px;" id="r5a-headline">Here's how you get to Paris</p>
   <!-- Main recommendation — full breakdown -->
   <div id="main-plan-a"></div>
   <!-- Compact alternatives -->
@@ -379,8 +441,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   <div class="nav-row"><button class="back-btn" onclick="go(4)">← Edit answers</button><span class="step-lbl">Your plan</span></div>
   <div class="prog"><div class="prog-fill" style="width:100%"></div></div>
   <div class="route-pill" id="s5b-route"></div>
-  <p class="main-q" style="font-size:17px;" id="r5b-headline">Here's your path</p>
-  <p class="sub-q">You don't have points yet — no problem. Here's exactly what to do.</p>
+  <p class="main-q" style="font-size:22px;" id="r5b-headline">Your path to Paris</p>
+  <p class="sub-q">You don't have points yet — that's fine. Here's exactly what to do.</p>
   <div id="main-plan-b"></div>
   <div id="alt-plans-b"></div>
   <div id="waitlist-block-b"></div>
@@ -390,42 +452,42 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 <div id="s6" class="screen">
   <!-- Step 1: timeline question — shown first -->
   <div id="s6-question">
-    <div style="text-align:center;padding:10px 0 4px;">
-      <div style="width:44px;height:44px;border-radius:50%;background:#eaf5ea;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10l4.5 4.5 7.5-9" stroke="#2d7a2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <p style="font-size:18px;font-weight:500;color:#1a1a1a;margin:0;">Your plan is saved.</p>
-      <p style="font-size:14px;color:#555;margin:6px 0 0;">One quick question before we send it.</p>
+    <div style="padding:10px 0 4px;">
+      <div style="width:44px;height:44px;border-radius:12px;background:#0f0f0f;display:flex;align-items:center;justify-content:center;margin:0 0 14px;"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 11l5 5 9-10" stroke="#7dff9a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <p style="font-size:22px;font-weight:400;font-family:var(--font-display);color:var(--color-text-primary);margin:0 0 6px;">Plan saved.</p>
+      <p style="font-size:14px;color:var(--color-text-secondary);margin:0;">One quick question so we can personalize what we send you.</p>
     </div>
-    <div style="border:0.5px solid #ebebeb;border-radius:12px;padding:20px;background:#fff;">
-      <p style="margin:0 0 16px;font-size:15px;font-weight:500;color:#1a1a1a;">How soon are you thinking about this trip?</p>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <button onclick="pickTimeline(this,'3mo')" style="padding:13px 16px;border-radius:8px;border:0.5px solid #ddd;background:#fff;font-size:14px;color:#1a1a1a;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;">Within 3 months <span style="color:#888;font-size:12px;">I'm ready to book</span></button>
-        <button onclick="pickTimeline(this,'6mo')" style="padding:13px 16px;border-radius:8px;border:0.5px solid #ddd;background:#fff;font-size:14px;color:#1a1a1a;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;">6 months out <span style="color:#888;font-size:12px;">Saving up points now</span></button>
-        <button onclick="pickTimeline(this,'year')" style="padding:13px 16px;border-radius:8px;border:0.5px solid #ddd;background:#fff;font-size:14px;color:#1a1a1a;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;">Within a year <span style="color:#888;font-size:12px;">Planning ahead</span></button>
-        <button onclick="pickTimeline(this,'explore')" style="padding:13px 16px;border-radius:8px;border:0.5px solid #ddd;background:#fff;font-size:14px;color:#1a1a1a;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;">Just exploring <span style="color:#888;font-size:12px;">Seeing what's possible</span></button>
+    <div style="border:1px solid var(--color-border-secondary);border-radius:14px;padding:20px;background:#fff;">
+      <p style="margin:0 0 16px;font-size:15px;font-weight:500;color:var(--color-text-primary);">How soon are you thinking about this trip?</p>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <button onclick="pickTimeline(this,'3mo')" style="padding:13px 16px;border-radius:10px;border:1px solid var(--color-border-secondary);background:#fff;font-size:14px;font-family:var(--font-body);color:var(--color-text-primary);cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:all .15s;" onmouseover="this.style.borderColor='#0f0f0f'" onmouseout="this.style.borderColor='var(--color-border-secondary)'">Within 3 months <span style="color:var(--color-text-tertiary);font-size:12px;">I'm ready to move</span></button>
+        <button onclick="pickTimeline(this,'6mo')" style="padding:13px 16px;border-radius:10px;border:1px solid var(--color-border-secondary);background:#fff;font-size:14px;font-family:var(--font-body);color:var(--color-text-primary);cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:all .15s;" onmouseover="this.style.borderColor='#0f0f0f'" onmouseout="this.style.borderColor='var(--color-border-secondary)'">6 months out <span style="color:var(--color-text-tertiary);font-size:12px;">Building points now</span></button>
+        <button onclick="pickTimeline(this,'year')" style="padding:13px 16px;border-radius:10px;border:1px solid var(--color-border-secondary);background:#fff;font-size:14px;font-family:var(--font-body);color:var(--color-text-primary);cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:all .15s;" onmouseover="this.style.borderColor='#0f0f0f'" onmouseout="this.style.borderColor='var(--color-border-secondary)'">Within a year <span style="color:var(--color-text-tertiary);font-size:12px;">Planning ahead</span></button>
+        <button onclick="pickTimeline(this,'explore')" style="padding:13px 16px;border-radius:10px;border:1px solid var(--color-border-secondary);background:#fff;font-size:14px;font-family:var(--font-body);color:var(--color-text-primary);cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:all .15s;" onmouseover="this.style.borderColor='#0f0f0f'" onmouseout="this.style.borderColor='var(--color-border-secondary)'">Just exploring <span style="color:var(--color-text-tertiary);font-size:12px;">Seeing what's possible</span></button>
       </div>
     </div>
   </div>
 
   <!-- Step 2: confirmation — shown after timeline pick -->
   <div id="s6-confirm" style="display:none;flex-direction:column;gap:14px;">
-    <div style="text-align:center;padding:10px 0 4px;">
-      <p style="font-size:18px;font-weight:500;color:#1a1a1a;margin:0;">You're all set.</p>
-      <p style="font-size:14px;color:#555;margin:6px 0 0;">Your plan is on its way — check your inbox.</p>
+    <div style="padding:10px 0 4px;">
+      <p style="font-size:22px;font-weight:400;font-family:var(--font-display);color:var(--color-text-primary);margin:0 0 6px;">You're all set.</p>
+      <p style="font-size:14px;color:var(--color-text-secondary);margin:0;">Your plan is headed to your inbox.</p>
     </div>
-    <div style="border:0.5px solid #ebebeb;border-radius:12px;padding:16px;background:#fff;">
-      <p style="margin:0 0 12px;font-size:13px;font-weight:500;">What's in your plan</p>
+    <div style="border:1px solid var(--color-border-tertiary);border-radius:14px;padding:16px;background:#fff;">
+      <p style="margin:0 0 12px;font-size:13px;font-weight:500;">What to expect</p>
       <div style="display:flex;flex-direction:column;gap:10px;">
-        <div style="font-size:13px;color:#555;display:flex;gap:10px;"><span style="color:#2d7a2d;flex-shrink:0;">✓</span>Step-by-step transfer guide for your route</div>
-        <div style="font-size:13px;color:#555;display:flex;gap:10px;"><span style="color:#2d7a2d;flex-shrink:0;">✓</span>Which card to swipe for every spending category</div>
-        <div style="font-size:13px;color:#555;display:flex;gap:10px;"><span style="color:#2d7a2d;flex-shrink:0;">✓</span>Monthly earn breakdown + exact timeline</div>
-        <div style="font-size:13px;color:#555;display:flex;gap:10px;"><span style="color:#2d7a2d;flex-shrink:0;">✓</span>Current sign-up bonus links (refreshed weekly)</div>
+        <div style="font-size:13px;color:var(--color-text-secondary);display:flex;gap:10px;"><span style="color:var(--color-text-success);flex-shrink:0;">✓</span>Step-by-step transfer guide for your route</div>
+        <div style="font-size:13px;color:var(--color-text-secondary);display:flex;gap:10px;"><span style="color:var(--color-text-success);flex-shrink:0;">✓</span>Which card to use for each spending category</div>
+        <div style="font-size:13px;color:var(--color-text-secondary);display:flex;gap:10px;"><span style="color:var(--color-text-success);flex-shrink:0;">✓</span>Monthly earn breakdown + exact timeline</div>
+        <div style="font-size:13px;color:var(--color-text-secondary);display:flex;gap:10px;"><span style="color:var(--color-text-success);flex-shrink:0;">✓</span>Current sign-up bonus links (refreshed weekly)</div>
       </div>
     </div>
-    <div style="border:1.5px solid #a8cff0;border-radius:12px;padding:16px;background:#fff;">
-      <p style="margin:0 0 4px;font-size:14px;font-weight:500;color:#1a1a1a;">Want alerts when transfer bonuses drop?</p>
-      <p style="margin:0 0 12px;font-size:12px;color:#555;">Connect your accounts and easy. will watch your balances and ping you when there's an opportunity.</p>
+    <div style="border:1.5px solid var(--color-text-primary);border-radius:14px;padding:16px;background:#fff;">
+      <p style="margin:0 0 4px;font-size:15px;font-weight:500;color:var(--color-text-primary);">Want real-time alerts when transfer bonuses drop?</p>
+      <p style="margin:0 0 14px;font-size:13px;color:var(--color-text-secondary);line-height:1.55;">Connect your accounts and easy. will watch your balances and ping you the moment an opportunity hits.</p>
       <button class="cta" onclick="go(7)">Connect my accounts →</button>
-      <button class="cta-ghost" style="margin-top:4px;" onclick="restart()">Plan another trip</button>
+      <button class="cta-ghost" style="margin-top:6px;" onclick="restart()">Plan another trip</button>
     </div>
   </div>
 </div>
@@ -481,7 +543,112 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 </div>
 <script>
+// ── Messaging A/B test tracking ──────────────────────────────────────────
+// utm_content param selects which ad creative variant drove the visit.
+// Track conversion (email capture) per variant in your analytics.
+// Variants:
+//   v1 = destination-first (default): "Where do you want to go next?"
+//   v2 = intimidation-ack: "Points feel complicated. Here's the shortcut."
+//   v3 = money-reframe: "You're already earning free flights. You just don't know it yet."
+//   v4 = specificity: "Your morning coffee is paying for flights. Let's find out how."
+//   v5 = identity: "For people who want to travel more without spending more."
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var v=params.get('utm_content')||'v1';
+  window._easyVariant=v;
+  var headlines={
+    v1:'Where do you want to go next?',
+    v2:'Points feel complicated.\nHere\'s the shortcut.',
+    v3:'You\'re already earning free flights.\nYou just don\'t know it yet.',
+    v4:'Your everyday spending is worth a free trip.\nLet\'s find out where.',
+    v5:'Travel more. Spend the same.'
+  };
+  var sublines={
+    v1:'Tell us the destination. We\'ll show you exactly how to get there on points — using money you\'re already spending.',
+    v2:'Skip the blogs, the Reddit threads, the spreadsheets. Enter your trip and we\'ll show you exactly what to do.',
+    v3:'Every coffee, grocery run, and dinner out is earning you points. We\'ll show you how far they can take you.',
+    v4:'Tell us where you want to go and we\'ll reverse-engineer exactly how your current spending gets you there.',
+    v5:'Same money. Better card. Points that actually take you somewhere. We\'ll show you how.'
+  };
+  document.addEventListener('DOMContentLoaded',function(){
+    var h=document.getElementById('hero-headline');
+    var s=document.getElementById('hero-sub');
+    if(h&&headlines[v]) h.textContent=headlines[v];
+    if(s&&sublines[v]) s.textContent=sublines[v];
+    // Set minimum dates to today so past dates can't be picked
+    var todayStr=new Date().toISOString().split('T')[0];
+    var dep=document.getElementById('trip-depart');
+    var ret=document.getElementById('trip-return');
+    if(dep) dep.min=todayStr;
+    if(ret) ret.min=todayStr;
+  });
+})();
+
 var path='has',spendBand='$1k – $2.5k',whenBand='Within a year';
+var tripDepartDate=null,tripReturnDate=null;
+
+function setTripDate(){
+  var dVal=document.getElementById('trip-depart').value;
+  var rVal=document.getElementById('trip-return').value;
+  var today=new Date(); today.setHours(0,0,0,0);
+  var todayStr=today.toISOString().split('T')[0];
+
+  // Enforce future-only on both inputs
+  document.getElementById('trip-depart').min=todayStr;
+  document.getElementById('trip-return').min=todayStr;
+
+  tripDepartDate=dVal?new Date(dVal+'T12:00:00'):null;
+  tripReturnDate=rVal?new Date(rVal+'T12:00:00'):null;
+
+  // Validate departure is in the future
+  if(tripDepartDate&&tripDepartDate<today){
+    tripDepartDate=null;
+    document.getElementById('trip-depart').value='';
+    showError('date-error','Departure date needs to be in the future.');
+    return;
+  }
+
+  // Validate return is after departure
+  if(tripDepartDate&&tripReturnDate){
+    if(tripReturnDate<=tripDepartDate){
+      tripReturnDate=null;
+      document.getElementById('trip-return').value='';
+      showError('date-error','Return date needs to be after your departure date.');
+      return;
+    }
+  }
+
+  clearError('date-error');
+
+  // Auto-fill hotel nights from date range — and hide the nights counter in S2
+  if(tripDepartDate&&tripReturnDate&&tripReturnDate>tripDepartDate){
+    var nights=Math.round((tripReturnDate-tripDepartDate)/(1000*60*60*24));
+    if(nights>0&&nights<=30){
+      hotelNights=nights;
+      var nv=document.getElementById('nights-val'); if(nv) nv.textContent=nights;
+      var nm=document.getElementById('nights-minus'); if(nm) nm.disabled=nights<=1;
+      // Hide the nights picker — we already know
+      var nightsBlock=document.getElementById('nights-counter-block');
+      if(nightsBlock) nightsBlock.style.display='none';
+    }
+  } else {
+    // No date range — show nights picker
+    var nightsBlock=document.getElementById('nights-counter-block');
+    if(nightsBlock) nightsBlock.style.display='';
+  }
+}
+
+function getTripUrgency(){
+  if(!tripDepartDate) return null;
+  var now=new Date(); now.setHours(0,0,0,0);
+  var depart=new Date(tripDepartDate); depart.setHours(0,0,0,0);
+  var diffDays=Math.round((depart-now)/(1000*60*60*24));
+  var diffMonths=Math.round(diffDays/30.5);
+  var months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var departLabel=months[tripDepartDate.getMonth()]+' '+tripDepartDate.getDate()+', '+tripDepartDate.getFullYear();
+  var tripLength=tripReturnDate?Math.round((tripReturnDate-tripDepartDate)/(1000*60*60*24)):null;
+  return{days:diffDays,months:diffMonths,label:departLabel,past:diffDays<0,tripLength:tripLength};
+}
 var spendSel=false,whenSel=false;
 var adults=1,children=0,booking='flight';
 var cabinSel=false,hotelSel=false,cabinTier='business',hotelTier='upscale';
@@ -499,38 +666,61 @@ function changeNights(delta){
 // Cards to suggest when a has-points user still has a gap
 // mults = per-category earn rates for everyday spending
 var GAP_CARDS=[
-  {name:'Chase Sapphire Reserve', bank:'Chase', bonus:125000, bg:'#1a1f71',
+  {name:'Chase Sapphire Reserve', bank:'Chase', bonus:125000, minSpend:6000, bg:'#1a1f71',
    cls:'cp-chase', shortName:'Chase Reserve',
    note:'125k pts after $6k spend in 3 months. Best premium Chase card — 3x dining, 4x flights & hotels.',
    mults:{groceries:3,dining:3,gas:2,streaming:3,other:1}},
-  {name:'Amex Platinum',          bank:'American Express', bonus:175000, bg:'#007dc5',
+  {name:'Amex Platinum',          bank:'American Express', bonus:175000, minSpend:12000, bg:'#007dc5',
    cls:'cp-amex', shortName:'Amex Platinum',
    note:'Up to 175k pts after $12k spend in 6 months. Highest bonus available.',
    mults:{groceries:1,dining:1,gas:1,streaming:1,other:1}},
-  {name:'Amex Gold',              bank:'American Express', bonus:100000, bg:'#b8860b',
+  {name:'Amex Gold',              bank:'American Express', bonus:100000, minSpend:6000, bg:'#b8860b',
    cls:'cp-amex', shortName:'Amex Gold',
    note:'Up to 100k pts after $6k spend in 6 months. 4x groceries & dining — best everyday earner.',
    mults:{groceries:4,dining:4,gas:1,streaming:1,other:1}},
-  {name:'Capital One Venture X',  bank:'Capital One', bonus:75000, bg:'#003580',
+  {name:'Citi Strata Premier',    bank:'Citi', bonus:75000, minSpend:4000, bg:'#003087',
+   cls:'cp-citi', shortName:'Citi Premier',
+   note:'75k pts after $4k spend in 3 months. 3x groceries, dining, gas, flights & hotels.',
+   mults:{groceries:3,dining:3,gas:3,streaming:1,other:1}},
+  {name:'Capital One Venture X',  bank:'Capital One', bonus:75000, minSpend:4000, bg:'#003580',
    cls:'cp-cap1', shortName:'Capital One',
    note:'75k miles after $4k spend in 3 months. Simple 2x on everything.',
    mults:{groceries:2,dining:2,gas:2,streaming:2,other:2}},
-  {name:'Chase Sapphire Preferred',bank:'Chase', bonus:75000, bg:'#2d3a8c',
+  {name:'Chase Sapphire Preferred',bank:'Chase', bonus:75000, minSpend:5000, bg:'#2d3a8c',
    cls:'cp-chase', shortName:'Chase Sapphire',
    note:'75k pts after $5k spend in 3 months. Best value travel card under $100/yr.',
    mults:{groceries:3,dining:3,gas:2,streaming:3,other:1}}
 ];
 
 
+// Looks up a card's fee, credits, and effective cost from FEE_CARDS
+function getFeeInfo(cardName){
+  for(var i=0;i<FEE_CARDS.length;i++){
+    if(FEE_CARDS[i].name===cardName){
+      var fc=FEE_CARDS[i];
+      var total=0;fc.credits.forEach(function(cr){total+=cr.val;});
+      return{fee:fc.fee,credits:fc.credits,effective:Math.max(0,fc.fee-total)};
+    }
+  }
+  return{fee:0,credits:[],effective:0};
+}
+
 function buildGapCardSuggestion(gap, userCards, ptsPerMo){
   if(gap<=0) return '';
   var mo=getMonthlyBudget();
   var haveKeys=userCards;
+
   var suggestions=GAP_CARDS.filter(function(c){
+    // Exclude cards the user already has
     if(c.name.indexOf('Chase')>=0    && haveKeys.indexOf('chase')>=0) return false;
     if(c.name.indexOf('Amex')>=0     && haveKeys.indexOf('amex')>=0)  return false;
     if(c.name.indexOf('Capital One')>=0 && haveKeys.indexOf('cap1')>=0) return false;
     if(c.name.indexOf('Bilt')>=0     && haveKeys.indexOf('bilt')>=0)  return false;
+    // Exclude cards where min spend requirement is unreachable at their monthly budget
+    // Bonus window is typically 3 months for most cards, 6 for Amex
+    var bonusWindowMonths = c.name.indexOf('Amex')>=0 ? 6 : 3;
+    var requiredPerMonth = c.minSpend / bonusWindowMonths;
+    if(requiredPerMonth > mo * 1.1) return false; // 20% buffer — some people can stretch
     return true;
   }).slice(0,2);
 
@@ -540,21 +730,29 @@ function buildGapCardSuggestion(gap, userCards, ptsPerMo){
 
   var html='<div style="border:1.5px solid #a8cff0;border-radius:12px;overflow:hidden;margin-top:4px;">';
   html+='<div style="padding:12px 14px;background:#e8f1fb;border-bottom:0.5px solid #a8cff0;">';
-  html+='<p style="margin:0;font-size:13px;font-weight:500;color:#0070c9;">⚡ Close your gap faster with a new card</p>';
-  html+='<p style="margin:4px 0 0;font-size:12px;color:#555;">At your current earn rate you\'re <strong>'+slowLabel+'</strong> away. A sign-up bonus could get you there much faster.</p>';
+  html+='<p style="margin:0;font-size:13px;font-weight:500;color:#0057a8;display:flex;align-items:center;gap:6px;"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M7.5 1.5L3 7.5h3.5L5 11.5l5-6H7L7.5 1.5z" fill="#0057a8" stroke="#0057a8" stroke-width=".5" stroke-linejoin="round"/></svg> Get there faster with a sign-up bonus</p>';
+  html+='<p style="margin:4px 0 0;font-size:12px;color:#555;">At your current earn rate you\'re <strong>'+slowLabel+'</strong> away. A sign-up bonus could cut that dramatically.</p>';
   html+='</div>';
 
   suggestions.forEach(function(c){
-    var bonusCoversGap = c.bonus >= gap;
-    var monthsWithBonus = bonusCoversGap ? 0 : Math.max(1, Math.ceil((gap-c.bonus)/ptsPerMo));
-    var withBonusLabel = monthsWithBonus===1 ? '1 month' : monthsWithBonus+' months';
+    var bonusWindowMonths = c.name.indexOf('Amex')>=0 ? 6 : 3;
+    // Honest months: time to hit min spend + any remaining gap after bonus
+    var minSpendMonths = Math.ceil(c.minSpend / mo);
+    var ptsEarnedDuringMinSpend = ptsPerMo * minSpendMonths;
+    var remaining = Math.max(0, gap - c.bonus - ptsEarnedDuringMinSpend);
+    var monthsWithBonus = minSpendMonths + (remaining > 0 ? Math.ceil(remaining / ptsPerMo) : 0);
+    var withBonusLabel = monthsWithBonus === 0 ? 'right away' : monthsWithBonus === 1 ? '~1 month' : '~' + monthsWithBonus + ' months';
+    var bonusCoversGap = (c.bonus + ptsEarnedDuringMinSpend) >= gap;
 
-    // Build optimized wallet table: existing cards + this new card
+    // Is this a bonus-only card (1x on everything)?
+    var maxMult = Math.max.apply(null, Object.values(c.mults));
+    var isBonusOnlyCard = maxMult <= 1;
+
+    // Build optimized wallet table only if the card has meaningful earn rates
     var walletCards = haveKeys.map(function(k){ return CARD_PROFILES[k]; });
     var newCardProfile = {name:c.name, shortName:c.shortName, cls:c.cls, mults:c.mults};
     var allCards = walletCards.concat([newCardProfile]);
-
-    var rows=''; var newTotalPtsPerMo=0;
+    var rows=''; var newTotalPtsPerMo=0; var anyNewCard=false;
     CATEGORIES.forEach(function(cat){
       var spend=Math.round(mo*cat.w);
       var bestCard=allCards[0], bestMult=0;
@@ -565,9 +763,10 @@ function buildGapCardSuggestion(gap, userCards, ptsPerMo){
       var pts=Math.round(spend*bestMult);
       newTotalPtsPerMo+=pts;
       var isNew=(bestCard.name===c.name);
+      if(isNew) anyNewCard=true;
       rows+='<tr>';
       rows+='<td>'+cat.label+'</td>';
-      rows+='<td><span class="card-pill '+bestCard.cls+'"'+(isNew?' style="outline:2px solid #0070c9;outline-offset:1px;"':'')+'>'+bestCard.shortName+(isNew?' ✦':'')+'</span></td>';
+      rows+='<td><span class="card-pill '+bestCard.cls+'"'+(isNew?' style="outline:2px solid #0057a8;outline-offset:1px;"':'')+'>'+bestCard.shortName+(isNew?' <span style="font-size:9px;vertical-align:middle;">NEW</span>':'')+'</span></td>';
       rows+='<td class="c" style="color:#2d7a2d;font-weight:500;">'+bestMult+'x</td>';
       rows+='<td>$'+spend.toLocaleString()+'</td>';
       rows+='<td class="r" style="font-weight:500;">'+pts.toLocaleString()+'</td>';
@@ -575,42 +774,72 @@ function buildGapCardSuggestion(gap, userCards, ptsPerMo){
     });
 
     html+='<div style="padding:14px;border-bottom:0.5px solid #ebebeb;background:#fff;">';
-    // Card header
-    html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">';
+    var feeInfo=getFeeInfo(c.name);
+    var whyId='why-'+Math.random().toString(36).slice(2);
+    html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">';
     html+='<div style="display:flex;align-items:center;gap:10px;">';
-    html+='<div style="width:32px;height:32px;border-radius:8px;background:'+c.bg+';color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;flex-shrink:0;">NEW</div>';
-    html+='<div><p style="margin:0;font-size:13px;font-weight:500;color:#1a1a1a;">'+c.name+'</p>';
-    html+='<p style="margin:2px 0 0;font-size:11px;color:#888;">'+c.bank+'</p></div></div>';
+    html+='<div style="width:36px;height:36px;border-radius:8px;background:'+c.bg+';color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;">';
+    html+='<svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect x="1" y="1" width="16" height="12" rx="2" stroke="rgba(255,255,255,0.9)" stroke-width="1.2"/><path d="M1 5h16" stroke="rgba(255,255,255,0.9)" stroke-width="1.2"/><path d="M4 9h3M9 9h2" stroke="rgba(255,255,255,0.7)" stroke-width="1" stroke-linecap="round"/></svg>';
+    html+='</div>';
+    html+='<div><p style="margin:0;font-size:14px;font-weight:500;color:#1a1a1a;">'+c.name+'</p>';
+    html+='<p style="margin:2px 0 0;font-size:12px;color:#888;">'+c.bank+'</p></div></div>';
     html+='<div style="text-align:right;flex-shrink:0;margin-left:10px;">';
-    html+='<p style="margin:0;font-size:20px;font-weight:500;color:#2d7a2d;">'+Math.round(c.bonus/1000)+'k</p>';
+    html+='<p style="margin:0;font-size:22px;font-weight:500;color:#1e6b2e;">'+Math.round(c.bonus/1000)+'k pts</p>';
     html+='<p style="margin:0;font-size:11px;color:#888;">sign-up bonus</p></div></div>';
+
+    // Fee row
+    if(feeInfo.fee>0){
+      html+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">';
+      html+='<span style="font-size:12px;color:#aaa;text-decoration:line-through;">$'+feeInfo.fee+'/yr annual fee</span>';
+      html+='<span style="font-size:12px;color:#888;">→</span>';
+      html+='<span style="font-size:13px;font-weight:500;color:#1e6b2e;">$'+feeInfo.effective+'/yr after credits</span>';
+      if(feeInfo.effective===0){
+        html+='<button onclick="toggleLearnMore(\''+whyId+'\')" style="margin-left:4px;padding:2px 8px;border:1px solid #1e6b2e;background:transparent;border-radius:20px;font-size:11px;color:#1e6b2e;cursor:pointer;">Why $0? ↓</button>';
+      }
+      html+='</div>';
+      html+='<div id="'+whyId+'" style="display:none;margin-bottom:10px;padding:10px 12px;background:#f0f9f0;border-radius:8px;border:1px solid #c3e6c3;">';
+      html+='<p style="margin:0 0 6px;font-size:12px;font-weight:500;color:#1e6b2e;">Credits that offset the $'+feeInfo.fee+' annual fee:</p>';
+      feeInfo.credits.forEach(function(cr){
+        html+='<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:5px;">';
+        html+='<span style="background:#1e6b2e;color:#fff;font-size:10px;font-weight:600;padding:1px 6px;border-radius:4px;flex-shrink:0;margin-top:1px;">−$'+cr.val+'</span>';
+        html+='<div><div style="font-size:12px;color:#1a1a1a;">'+cr.label+'</div>';
+        html+='<div style="font-size:11px;color:#888;">'+cr.note+'</div></div>';
+        html+='</div>';
+      });
+      html+='<div style="margin-top:6px;padding-top:6px;border-top:1px solid #c3e6c3;font-size:12px;color:#1e6b2e;font-weight:500;">Net cost: $'+feeInfo.effective+'/yr</div>';
+      html+='</div>';
+    }
     html+='<p style="margin:0 0 8px;font-size:12px;color:#555;">'+c.note+'</p>';
 
-    // Gap shortcut callout
+    // Honest timeline callout
+    html+='<div style="padding:10px 12px;background:#e8f5eb;border-radius:8px;font-size:13px;color:#1e6b2e;font-weight:500;margin-bottom:10px;">';
     if(bonusCoversGap){
-      html+='<div style="padding:8px 10px;background:#eaf5ea;border-radius:6px;font-size:12px;color:#2d7a2d;font-weight:500;margin-bottom:10px;">Sign-up bonus alone covers your entire gap — you could book in ~3 months.</div>';
+      html+='Cuts your wait from <strong>'+slowLabel+'</strong> to <strong>'+withBonusLabel+'</strong> — sign-up bonus covers the gap.';
     } else {
-      html+='<div style="padding:8px 10px;background:#eaf5ea;border-radius:6px;font-size:12px;color:#2d7a2d;margin-bottom:10px;">With this bonus + your earn rate: <strong>'+withBonusLabel+'</strong> instead of '+slowLabel+'.</div>';
+      html+='Cuts your wait from <strong>'+slowLabel+'</strong> down to <strong>'+withBonusLabel+'</strong>.';
     }
-
-    // Optimized wallet spend table
-    html+='<div style="background:#f5f5f5;border-radius:8px;padding:10px 12px;">';
-    html+='<p style="margin:0 0 6px;font-size:12px;font-weight:500;color:#1a1a1a;">Your optimized wallet with this card</p>';
-    html+='<p style="margin:0 0 8px;font-size:11px;color:#888;">✦ = switch to the new card for this category</p>';
-    html+='<table class="spend-table"><thead><tr><th>Category</th><th>Best card</th><th class="c">Earn</th><th>$/mo</th><th class="r">Pts/mo</th></tr></thead><tbody>'+rows+'</tbody></table>';
-    html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0 0;border-top:0.5px solid #ddd;margin-top:6px;">';
-    html+='<span style="font-size:12px;color:#0070c9;">Total points/month with this card added</span>';
-    html+='<span style="font-size:14px;font-weight:500;color:#0070c9;">'+newTotalPtsPerMo.toLocaleString()+' pts</span>';
+    html+='<div style="font-size:11px;color:#1e6b2e;opacity:0.7;margin-top:4px;font-weight:400;">Based on spending $'+mo.toLocaleString()+'/mo · '+c.minSpend.toLocaleString()+' pts minimum spend over '+bonusWindowMonths+' months</div>';
     html+='</div>';
-    if(newTotalPtsPerMo>ptsPerMo){
-      var uplift=newTotalPtsPerMo-ptsPerMo;
-      html+='<div style="font-size:11px;color:#2d7a2d;margin-top:4px;">+'+uplift.toLocaleString()+' pts/month more than your current cards alone</div>';
+
+    // Wallet section — skip if bonus-only card (user should keep using existing cards)
+    html+='<div style="background:#f5f5f3;border-radius:8px;padding:10px 12px;">';
+    if(isBonusOnlyCard || !anyNewCard){
+      html+='<p style="margin:0 0 4px;font-size:13px;font-weight:500;color:#0f0f0f;">How to use it</p>';
+      html+='<p style="margin:0;font-size:12px;color:#525252;line-height:1.6;">Apply for the <strong>'+c.name+'</strong> to earn the sign-up bonus. Once you have it, keep using your existing cards for daily spending — they earn more points per dollar on groceries and dining.</p>';
+    } else {
+      html+='<p style="margin:0 0 2px;font-size:13px;font-weight:500;color:#0f0f0f;">Your optimized wallet</p>';
+      html+='<p style="margin:0 0 8px;font-size:12px;color:#525252;">After getting this card, use it where it earns the most:</p>';
+      html+='<table class="spend-table"><thead><tr><th>Category</th><th>Best card</th><th class="c">Earn</th><th>$/mo</th><th class="r">Pts/mo</th></tr></thead><tbody>'+rows+'</tbody></table>';
+      html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0 0;border-top:1px solid #e0e0e0;margin-top:6px;">';
+      html+='<span style="font-size:12px;color:#0057a8;">Total pts/month with this card</span>';
+      html+='<span style="font-size:14px;font-weight:500;color:#0057a8;">'+newTotalPtsPerMo.toLocaleString()+'</span>';
+      html+='</div>';
     }
     html+='</div></div>';
   });
 
-  html+='<div style="padding:10px 14px;background:#f5f5f5;">';
-  html+='<p style="margin:0;font-size:11px;color:#888;">Recommendations are illustrative. Approval not guaranteed. Save your plan to get current application links.</p>';
+  html+='<div style="padding:10px 14px;background:#f5f5f3;">';
+  html+='<p style="margin:0;font-size:11px;color:#8a8a8a;">Recommendations are illustrative. Approval not guaranteed. Bonus windows and minimum spend requirements vary — confirm on the card\'s application page.</p>';
   html+='</div></div>';
   return html;
 }
@@ -650,12 +879,18 @@ function buildFeeBlock(cardName){
 
 // ── Explore destination data ──
 var EXPLORE_CATS=[
-  {id:'beach',emoji:'🏖',label:'Beach & Islands',dests:['Maldives','Bali','Hawaii']},
-  {id:'ski',emoji:'⛷',label:'Ski & Alps',dests:['Aspen','Zermatt','Hokkaido']},
-  {id:'europe',emoji:'🏛',label:'European Classic',dests:['Paris','Rome','Barcelona']},
-  {id:'asia',emoji:'🌏',label:'Asia & Pacific',dests:['Tokyo','Bangkok','Singapore']},
-  {id:'caribbean',emoji:'🌴',label:'Mexico & Caribbean',dests:['Cancun','Tulum','Turks & Caicos']},
-  {id:'city',emoji:'🌆',label:'City Splurge',dests:['Dubai','London','New York']}
+  {id:'beach',label:'Beach & Islands',dests:['Maldives','Bali','Hawaii'],
+   svg:'<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2 15c2-4 6-6 10-5M4 17c1-3 4-5 8-4M10 8c0 0-1-4 3-6" stroke="#0057a8" stroke-width="1.4" stroke-linecap="round"/><circle cx="13" cy="5" r="2.5" fill="#fbbf24" opacity=".8"/></svg>'},
+  {id:'ski',label:'Ski & Alps',dests:['Aspen','Zermatt','Hokkaido'],
+   svg:'<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 16L9 4l3 5 3-3 2 10" stroke="#525252" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="4" r="1.2" fill="#525252"/></svg>'},
+  {id:'europe',label:'European Classic',dests:['Paris','Rome','Barcelona'],
+   svg:'<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2v3M7 5h6l1 9H6L7 5z" stroke="#525252" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 14h8M8 11h4" stroke="#525252" stroke-width="1.2" stroke-linecap="round"/></svg>'},
+  {id:'asia',label:'Asia & Pacific',dests:['Tokyo','Bangkok','Singapore'],
+   svg:'<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 13c2-1 4-1.5 7-1s5 1 7 0" stroke="#d94040" stroke-width="1.4" stroke-linecap="round"/><path d="M5 13V9c0-2 2-4 5-4s5 2 5 4v4" stroke="#525252" stroke-width="1.3" stroke-linecap="round"/></svg>'},
+  {id:'caribbean',label:'Mexico & Caribbean',dests:['Cancun','Tulum','Turks & Caicos'],
+   svg:'<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3c0 0-1 5 0 8s3 5 3 5" stroke="#1e6b2e" stroke-width="1.4" stroke-linecap="round"/><path d="M10 7c-2-1-4-1-5 0M10 10c2-1 4-1 5 0" stroke="#1e6b2e" stroke-width="1.3" stroke-linecap="round"/><path d="M4 17h12" stroke="#0057a8" stroke-width="1.4" stroke-linecap="round"/></svg>'},
+  {id:'city',label:'City Splurge',dests:['Dubai','London','New York'],
+   svg:'<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2 17V9l4-4v12M6 17V7l4-3v13M10 17V6l4-2v13M14 17V8l4-3v12" stroke="#525252" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>'}
 ];
 var DEST_BG={'Maldives':'linear-gradient(160deg,#0077b6,#00b4d8)','Bali':'linear-gradient(160deg,#2d6a4f,#52b788)','Hawaii':'linear-gradient(160deg,#0096c7,#48cae4)','Aspen':'linear-gradient(160deg,#4a90c4,#a8d8ea)','Zermatt':'linear-gradient(160deg,#2c3e50,#4a90c4)','Hokkaido':'linear-gradient(160deg,#457b9d,#a8dadc)','Paris':'linear-gradient(160deg,#6c3483,#a569bd)','Rome':'linear-gradient(160deg,#b7410e,#e07b54)','Barcelona':'linear-gradient(160deg,#c0392b,#f39c12)','Tokyo':'linear-gradient(160deg,#c0392b,#e74c3c)','Bangkok':'linear-gradient(160deg,#d4a017,#f39c12)','Singapore':'linear-gradient(160deg,#1a252f,#2e86ab)','Cancun':'linear-gradient(160deg,#1a7a4a,#52b788)','Tulum':'linear-gradient(160deg,#2d6a4f,#b5e48c)','Turks & Caicos':'linear-gradient(160deg,#0096c7,#90e0ef)','Dubai':'linear-gradient(160deg,#b8860b,#f1c40f)','London':'linear-gradient(160deg,#2c3e50,#4a4e69)','New York':'linear-gradient(160deg,#1a252f,#2c3e50)'};
 var DEST_TAGLINE={'Maldives':'Overwater bungalows & turquoise atolls','Bali':'Rice terraces, temples & jungle villas','Hawaii':'Volcanoes, surf & the aloha spirit','Aspen':'World-class powder & mountain luxury','Zermatt':'The Matterhorn at your doorstep','Hokkaido':'Japan\'s powder paradise','Paris':'Art, fashion & the world\'s best croissants','Rome':'2,800 years of history on every corner','Barcelona':'Gaudí, tapas & beach in one city','Tokyo':'Neon, ramen, shrines & bullet trains','Bangkok':'Street food capital of the world','Singapore':'Where futurism meets hawker culture','Cancun':'All-inclusive done right on the Caribbean','Tulum':'Boutique jungle cenotes & white sand','Turks & Caicos':'The clearest water in the Atlantic','Dubai':'Skyline that defies gravity','London':'History, theatre & the world\'s best pubs','New York':'The city that never sleeps, for good reason'};
@@ -669,35 +904,35 @@ function setDestMode(mode){
   eb.style.background=ex?'#1a1a1a':'#fff';eb.style.color=ex?'#fff':'#555';eb.style.border=ex?'1.5px solid #1a1a1a':'0.5px solid #ddd';
   if(ex) buildExploreCats();
 }
+// Featured destinations for explore/inspire mode — shown as image cards
+var INSPIRE_DESTS=[
+  {dest:'Tokyo',   img:'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=600&q=70', tag:''},
+  {dest:'Bali',    img:'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=70', tag:''},
+  {dest:'Paris',   img:'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=600&q=70', tag:''},
+  {dest:'Maldives',img:'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=600&q=70', tag:''},
+  {dest:'Rome',    img:'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=600&q=70', tag:''},
+  {dest:'Hawaii',  img:'https://images.unsplash.com/photo-1505852679233-d9fd70aff56d?auto=format&fit=crop&w=600&q=70', tag:''}
+];
+
 function buildExploreCats(){
   document.getElementById('explore-dests').style.display='none';
   document.getElementById('explore-cats').style.display='grid';
   var html='';
-  EXPLORE_CATS.forEach(function(c){
-    html+='<button onclick="showExploreDests(\''+c.id+'\')" style="padding:10px 4px;border-radius:10px;border:0.5px solid #ddd;background:#fff;cursor:pointer;text-align:center;">';
-    html+='<div style="font-size:20px;margin-bottom:4px;">'+c.emoji+'</div>';
-    html+='<div style="font-size:11px;font-weight:500;color:#1a1a1a;line-height:1.3;">'+c.label+'</div>';
+  INSPIRE_DESTS.forEach(function(d){
+    html+='<button onclick="pickExploreDest(\''+d.dest+'\')" style="position:relative;height:110px;border-radius:12px;overflow:hidden;border:none;cursor:pointer;padding:0;background:linear-gradient(160deg,#1a2a4a,#2d4a6e);transition:transform .15s;" onmouseover="this.style.transform=\'scale(1.02)\'" onmouseout="this.style.transform=\'scale(1)\'">';
+    html+='<img src="'+d.img+'" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s;" onload="this.style.opacity=0.85" onerror="this.style.display=\'none\'">';
+    html+='<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.1) 60%);"></div>';
+    html+='<div style="position:absolute;bottom:0;left:0;right:0;padding:10px 12px;text-align:left;">';
+    html+='<div style="font-size:15px;font-weight:600;color:#fff;line-height:1.2;">'+d.dest+'</div>';
+    if(d.tag) html+='<div style="font-size:10px;color:rgba(255,255,255,0.7);margin-top:3px;">'+d.tag+'</div>';
+    html+='</div>';
     html+='</button>';
   });
   document.getElementById('explore-cats').innerHTML=html;
 }
 function showExploreDests(catId){
-  var cat=null;for(var i=0;i<EXPLORE_CATS.length;i++){if(EXPLORE_CATS[i].id===catId){cat=EXPLORE_CATS[i];break;}}
-  if(!cat)return;
-  document.getElementById('explore-cats').style.display='none';
-  var html='<p style="margin:0 0 8px;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">PICK YOUR DESTINATION</p>';
-  html+='<div style="display:flex;flex-direction:column;gap:8px;">';
-  cat.dests.forEach(function(d){
-    var bg=DEST_BG[d]||'linear-gradient(160deg,#2c3e50,#4a90c4)';
-    html+='<button onclick="pickExploreDest(\''+d+'\')" style="padding:14px 16px;border-radius:12px;border:none;background:'+bg+';color:#fff;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;">';
-    html+='<div><div style="font-size:15px;font-weight:500;">'+d+'</div><div style="font-size:12px;opacity:0.8;margin-top:2px;">'+(DEST_TAGLINE[d]||'')+'</div></div>';
-    html+='<span style="font-size:18px;opacity:0.7;">→</span>';
-    html+='</button>';
-  });
-  html+='</div>';
-  html+='<button onclick="buildExploreCats()" style="margin-top:8px;width:100%;padding:8px;border:0.5px solid #ddd;background:#fff;border-radius:8px;font-size:12px;color:#888;cursor:pointer;">← All categories</button>';
-  var el=document.getElementById('explore-dests');
-  el.innerHTML=html;el.style.display='';
+  // Legacy — no longer used in new flow
+  buildExploreCats();
 }
 function pickExploreDest(dest){
   document.getElementById('dest').value=dest;
@@ -711,7 +946,8 @@ var CARD_PROFILES={
   chase:{name:'Chase Sapphire Preferred',shortName:'Chase Sapphire',cls:'cp-chase',mults:{groceries:3,dining:3,gas:2,streaming:3,other:1}},
   amex:{name:'Amex Gold',shortName:'Amex Gold',cls:'cp-amex',mults:{groceries:4,dining:4,gas:1,streaming:1,other:1}},
   cap1:{name:'Capital One Venture',shortName:'Capital One',cls:'cp-cap1',mults:{groceries:2,dining:2,gas:2,streaming:2,other:2}},
-  bilt:{name:'Bilt Rewards',shortName:'Bilt Rewards',cls:'cp-bilt',mults:{groceries:3,dining:3,gas:2,streaming:1,other:1}}
+  bilt:{name:'Bilt Rewards',shortName:'Bilt',cls:'cp-bilt',mults:{groceries:3,dining:3,gas:2,streaming:1,other:1}},
+  citi:{name:'Citi Premier',shortName:'Citi Premier',cls:'cp-citi',mults:{groceries:3,dining:3,gas:3,streaming:1,other:1}}
 };
 var CATEGORIES=[
   {key:'groceries',label:'Groceries',w:0.30},
@@ -732,31 +968,167 @@ var NEW_CARDS=[
   {label:'Big bonus',  recommended:false, name:'Amex Platinum',           bank:'American Express',bonus:175000, minSpend:12000, mults:{groceries:1,dining:1,gas:1,streaming:1,other:1}},
   {label:'Everyday',   recommended:false, name:'Amex Gold',               bank:'American Express',bonus:100000, minSpend:6000,  mults:{groceries:4,dining:4,gas:1,streaming:1,other:1}},
   {label:'Simple',     recommended:false, name:'Capital One Venture X',   bank:'Capital One',     bonus:75000,  minSpend:4000,  mults:{groceries:2,dining:2,gas:2,streaming:2,other:2}},
-  {label:'No fee',     recommended:false, name:'Chase Freedom Unlimited', bank:'Chase',           bonus:20000,  minSpend:500,   mults:{groceries:1.5,dining:3,gas:1.5,streaming:1.5,other:1.5}},
-  {label:'Rent earner',recommended:false, name:'Bilt Mastercard',         bank:'Wells Fargo',     bonus:0,      minSpend:0,     mults:{groceries:2,dining:3,gas:2,streaming:1,other:1,rent:1}}
+  {label:'No fee',     recommended:false, name:'Chase Freedom Unlimited', bank:'Chase',           bonus:20000,  minSpend:500,   mults:{groceries:1.5,dining:3,gas:1.5,streaming:1.5,other:1.5}}
+  // Bilt intentionally excluded from primary recommendations — no sign-up bonus
+  // It is added as a stack suggestion separately when user has rent
 ];
+function pickS3(choice){
+  path = (choice === 'has') ? 'has' : 'none';
+  ['s3-yes','s3-no'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    el.classList.remove('s3-sel');
+    el.style.background = '#fff';
+    el.style.borderColor = 'var(--color-border-secondary)';
+    var chk = el.querySelector('svg path'); if(chk) chk.setAttribute('opacity','0');
+  });
+  var sel = document.getElementById(choice === 'has' ? 's3-yes' : 's3-no');
+  if(sel){
+    sel.classList.add('s3-sel');
+    sel.style.background = '#f8fdf9';
+    sel.style.borderColor = '#1e6b2e';
+    var chk = sel.querySelector('svg path'); if(chk) chk.setAttribute('opacity','1');
+  }
+  var cta = document.getElementById('s3cta'); if(cta) cta.disabled = false;
+}
 function tog(id,en){var e=document.getElementById(id);if(e)e.disabled=!en;}
 function showOnly(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
-function checkS1(){var o=document.getElementById('origin').value.trim();var d=document.getElementById('dest').value.trim();tog('s1cta',o.length>1&&d.length>1);}
+function checkS1(){
+  // Clear error as user types
+  var o=document.getElementById('origin').value.trim();
+  var d=document.getElementById('dest').value.trim();
+  if(o.length>1) clearError('s1-error');
+  if(d.length>1) clearError('s1-error');
+}
+function checkS2(){
+  // No longer gates button — tryGoS2 handles validation
+}
+
+// ── Validation helpers ────────────────────────────────────────────────────
+function showError(id,msg){
+  var el=document.getElementById(id);
+  if(!el) return;
+  el.textContent=msg;
+  el.style.display='block';
+  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+  clearTimeout(el._t);
+  el._t=setTimeout(function(){el.style.display='none';},5000);
+}
+function clearError(id){
+  var el=document.getElementById(id);
+  if(el){el.style.display='none';el.textContent='';}
+}
+function shakeField(id){
+  var el=document.getElementById(id);
+  if(!el) return;
+  el.style.borderColor='#d94040';
+  el.style.transition='border-color .15s';
+  setTimeout(function(){el.style.borderColor='';},1500);
+}
+
+function tryGoS1(){
+  var o=document.getElementById('origin').value.trim();
+  var d=document.getElementById('dest').value.trim();
+  clearError('s1-error');
+  if(!o&&!d){
+    showError('s1-error','Add where you\'re flying from and where you want to go to get started.');
+    shakeField('origin'); shakeField('dest'); return;
+  }
+  if(!o){
+    showError('s1-error','Add your departure city — where are you flying from?');
+    shakeField('origin'); return;
+  }
+  if(!d){
+    showError('s1-error','Add your destination — where do you want to go?');
+    shakeField('dest'); return;
+  }
+  go(2);
+}
+
+function tryGoS2(){
+  clearError('s2-error');
+  var needCabin=booking==='flight'||booking==='both';
+  var needHotel=booking==='hotel'||booking==='both';
+  if(needCabin&&!cabinSel){
+    showError('s2-error','Pick a cabin class to continue — economy is totally fine.');
+    return;
+  }
+  if(needHotel&&!hotelSel){
+    showError('s2-error','Pick a hotel tier to continue.');
+    return;
+  }
+  go(3);
+}
+
+function tryGoS3(){
+  clearError('s3-error');
+  if(!document.querySelector('#s3-yes.s3-sel')&&!document.querySelector('#s3-no.s3-sel')){
+    showError('s3-error','Tap one of the options above — no wrong answer here.');
+    return;
+  }
+  go(4);
+}
+
+function tryGoS4a(){
+  clearError('s4a-error');
+  if(!spendSel){
+    showError('s4a-error','Pick your approximate monthly spend — a rough estimate works great.');
+    return;
+  }
+  go('thinking');
+}
+
+function tryGoS4b(){
+  clearError('s4b-error');
+  if(!spendSel){
+    showError('s4b-error','Pick your approximate monthly spend — a rough estimate works great.');
+    return;
+  }
+  go('thinking');
+}
+
 function changeCount(type,delta){if(type==='adults'){adults=Math.max(1,adults+delta);document.getElementById('adults-val').textContent=adults;document.getElementById('adults-minus').disabled=adults<=1;}else{children=Math.max(0,children+delta);document.getElementById('children-val').textContent=children;document.getElementById('children-minus').disabled=children<=0;}}
 function setBooking(type){booking=type;['flight','both','hotel'].forEach(function(t){document.getElementById('tog-'+t).classList.toggle('sel',t===type);});}
 function getRoute(){return{o:document.getElementById('origin').value.trim()||'your origin',d:document.getElementById('dest').value.trim()||'your destination'};}
-function setRoutePills(){var r=getRoute();var total=adults+children;var travStr=total===1?'1 traveler':total+' travelers';var bookStr=booking==='flight'?'Flight':booking==='hotel'?'Hotel':'Flight + hotel';var h='<strong>'+r.o+'</strong> → <strong>'+r.d+'</strong> · '+travStr+' · '+bookStr;['s2-route','s3-route','s4a-route','s4b-route','s5a-route','s5b-route'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=h;});}
-function setupS2(){var sf=booking==='flight'||booking==='both';var sh=booking==='hotel'||booking==='both';document.getElementById('s2-flight-block').style.display=sf?'':'none';document.getElementById('s2-hotel-block').style.display=sh?'':'none';cabinSel=!sf;hotelSel=!sh;document.querySelectorAll('#s2 .pill').forEach(function(p){p.classList.remove('sel');});checkS2();}
-function pickS2(el,group){el.closest('.pill-grid').querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});el.classList.add('sel');if(group==='cabin'){cabinSel=true;cabinTier=el.textContent.trim().toLowerCase();}if(group==='hotel'){hotelSel=true;hotelTier=el.textContent.trim().toLowerCase();}checkS2();}
-function checkS2(){var nc=booking==='flight'||booking==='both';var nh=booking==='hotel'||booking==='both';tog('s2cta',((!nc)||cabinSel)&&((!nh)||hotelSel));}
-function pick(el,group){el.closest('.pill-grid').querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});el.classList.add('sel');var btn=el.closest('.screen').querySelector('button.cta');if(btn)btn.disabled=false;}
+function setRoutePills(){
+  var r=getRoute();var total=adults+children;
+  var travStr=total===1?'1 traveler':total+' travelers';
+  var bookStr=booking==='flight'?'Flight':booking==='hotel'?'Hotel':'Flight + hotel';
+  var dateStr='';
+  if(tripDepartDate){
+    var mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var d=tripDepartDate;
+    dateStr=' · '+mo[d.getMonth()]+' '+d.getDate();
+    if(tripReturnDate){var r2=tripReturnDate;dateStr+='–'+mo[r2.getMonth()]+' '+r2.getDate()+', '+r2.getFullYear();}
+    else{dateStr+=', '+d.getFullYear();}
+  }
+  var h='<strong>'+r.o+'</strong> → <strong>'+r.d+'</strong> · '+travStr+' · '+bookStr+dateStr;
+  ['s2-route','s3-route','s4a-route','s4b-route','s5a-route','s5b-route'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=h;});
+}
+function setupS2(){
+  var sf=booking==='flight'||booking==='both';
+  var sh=booking==='hotel'||booking==='both';
+  document.getElementById('s2-flight-block').style.display=sf?'':'none';
+  document.getElementById('s2-hotel-block').style.display=sh?'':'none';
+  cabinSel=!sf; hotelSel=!sh;
+  document.querySelectorAll('#s2 .pill').forEach(function(p){p.classList.remove('sel');});
+  // Hide nights counter if we already know from dates
+  var nb=document.getElementById('nights-counter-block');
+  if(nb) nb.style.display=(tripDepartDate&&tripReturnDate&&tripReturnDate>tripDepartDate)?'none':'';
+}
+function pickS2(el,group){el.closest('.pill-grid').querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});el.classList.add('sel');if(group==='cabin'){cabinSel=true;cabinTier=el.textContent.trim().toLowerCase();}if(group==='hotel'){hotelSel=true;hotelTier=el.textContent.trim().toLowerCase();}}
+function pick(el,group){el.closest('.pill-grid').querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});el.classList.add('sel');}
 function setPath(p){path=p;}
-function pickSpend(el){el.closest('.pill-grid').querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});el.classList.add('sel');spendBand=el.textContent.trim();spendSel=true;tog('s4acta',true);if(whenSel)tog('s4bcta',true);}
-function pickWhen(el){el.closest('.pill-grid').querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});el.classList.add('sel');whenBand=el.textContent.trim();whenSel=true;if(spendSel)tog('s4bcta',true);}
+function pickSpend(el){el.closest('.pill-grid').querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});el.classList.add('sel');spendBand=el.textContent.trim();spendSel=true;clearError('s4a-error');clearError('s4b-error');}
+function pickWhen(el){el.closest('.pill-grid').querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});el.classList.add('sel');whenBand=el.textContent.trim();whenSel=true;}
 function parseNum(id){var e=document.getElementById(id);return(e&&e.value)?(parseInt(e.value.replace(/[^0-9]/g,''))||0):0;}
-function updateTotal(){var v=Math.round(parseNum('b_chase')*.02+parseNum('b_amex')*.02+parseNum('b_cap1')*.018+parseNum('b_bilt')*.018+parseNum('b_delta')*.012+parseNum('b_united')*.014+parseNum('b_hyatt')*.02+parseNum('b_marriott')*.007+parseNum('b_hilton')*.005);document.getElementById('total-val').textContent='$'+v.toLocaleString();}
+function updateTotal(){var v=Math.round(parseNum('b_chase')*.02+parseNum('b_amex')*.02+parseNum('b_cap1')*.018+parseNum('b_citi')*.018+parseNum('b_delta')*.012+parseNum('b_united')*.014+parseNum('b_hyatt')*.02+parseNum('b_marriott')*.007+parseNum('b_hilton')*.005);document.getElementById('total-val').textContent='$'+v.toLocaleString();}
 function getFlightPts(){return(flightPtsMap[cabinTier]||87500)*adults;}
 function getHotelPts(){if(booking==='flight')return 0;return(hotelPtsPerNight[hotelTier]||25000)*hotelNights;}
 function getTotalPts(mult){return Math.round((getFlightPts()+getHotelPts())*(mult||1));}
 function getMonthlyBudget(){return{'Under $1k':700,'$1k – $2.5k':1800,'$2.5k – $5k':3500,'$5k+':6000}[spendBand]||1800;}
-function getBestBalance(){return Math.max(parseNum('b_chase'),parseNum('b_amex'),parseNum('b_cap1'),parseNum('b_bilt'));}
-function getUserCards(){var c=[];if(parseNum('b_chase')>0)c.push('chase');if(parseNum('b_amex')>0)c.push('amex');if(parseNum('b_cap1')>0)c.push('cap1');if(parseNum('b_bilt')>0)c.push('bilt');if(c.length===0)c=['chase','amex'];return c;}
+function getBestBalance(){return Math.max(parseNum('b_chase'),parseNum('b_amex'),parseNum('b_cap1'),parseNum('b_citi'));}
+function getUserCards(){var c=[];if(parseNum('b_chase')>0)c.push('chase');if(parseNum('b_amex')>0)c.push('amex');if(parseNum('b_cap1')>0)c.push('cap1');if(parseNum('b_citi')>0)c.push('citi');return c.length>0?c:['chase'];}
 function renderTabStrip(group,tabs){var strip=document.getElementById('tabstrip-'+group);strip.innerHTML='';tabs.forEach(function(tab,idx){var btn=document.createElement('button');btn.className='tab-btn';btn.textContent=tab.recommended?'★ '+tab.label:tab.label;btn.onclick=(function(i){return function(){selectTab(group,i);};})(idx);strip.appendChild(btn);});selectTab(group,0);}
 function selectTab(group,idx){var strip=document.getElementById('tabstrip-'+group);var btns=Array.from(strip.querySelectorAll('button'));btns.forEach(function(btn,i){btn.style.flex='1';btn.style.padding='11px 6px';btn.style.fontSize='12px';btn.style.fontWeight='500';btn.style.textAlign='center';btn.style.cursor='pointer';btn.style.border='none';btn.style.borderRight=i<btns.length-1?'0.5px solid #ddd':'none';btn.style.background=i===idx?'#1a1a1a':'transparent';btn.style.color=i===idx?'#ffffff':'#888';});for(var i=0;i<4;i++){var p=document.getElementById('panel-'+group+'-'+i);if(p)p.style.display=(i===idx)?'flex':'none';}}
 function buildSwipeTable(userCards,mo){var rows='';var totalPtsPerMo=0;CATEGORIES.forEach(function(cat){var spend=Math.round(mo*cat.w);var bestKey=userCards[0],bestMult=0;userCards.forEach(function(k){var m=CARD_PROFILES[k].mults[cat.key]||1;if(m>bestMult){bestMult=m;bestKey=k;}});var pts=Math.round(spend*bestMult);totalPtsPerMo+=pts;var profile=CARD_PROFILES[bestKey];rows+='<tr><td>'+cat.label+'</td><td><span class="card-pill '+profile.cls+'">'+profile.shortName+'</span></td><td class="c" style="color:#2d7a2d;font-weight:500;">'+bestMult+'x</td><td>$'+spend.toLocaleString()+'</td><td class="r" style="font-weight:500;">'+pts.toLocaleString()+'</td></tr>';});var html='<div class="card" style="background:#f5f5f5;padding:12px 14px;"><p style="margin:0 0 8px;font-size:12px;font-weight:500;">Which card to swipe — by category</p><table class="spend-table"><thead><tr><th>Category</th><th>Card</th><th class="c">Earn</th><th>$/mo</th><th class="r">Pts/mo</th></tr></thead><tbody>'+rows+'</tbody></table><div class="totals-row cash-bg"><span style="font-size:12px;color:#555;">Total monthly card spend</span><span style="font-size:15px;font-weight:500;">$'+mo.toLocaleString()+'</span></div><div class="totals-row pts-bg"><span style="font-size:12px;color:#0070c9;">Total points earned per month</span><span style="font-size:15px;font-weight:500;color:#0070c9;">'+totalPtsPerMo.toLocaleString()+' pts</span></div></div>';return{html:html,ptsPerMo:totalPtsPerMo};}
@@ -781,7 +1153,7 @@ var DEST_DB=[
    'upscale':{n:'London Marriott Hotel County Hall',c:'#c0392b',code:'MAR',tier:'Upscale · Marriott Bonvoy'},
    'luxury':{n:'Hyatt Regency London',c:'#1a5276',code:'HYT',tier:'Luxury · Hyatt Cat 7'}}},
   {keys:['rome','italy','fco','milan','florence','venice'],
-   airline:'ITA Airways',airlineCode:'AZ',airlineColor:'#009246',cabin:'Business',route:'Amex → Avios',
+   airline:'Air France',airlineCode:'AF',airlineColor:'#002157',cabin:'Business',route:'Amex MR → Flying Blue (via Paris CDG)',
    hotels:{'budget':{n:'Ibis Roma Tiburtina',c:'#888',code:'HTL',tier:'Budget'},
    'mid-range':{n:'Hilton Rome Airport',c:'#1e8449',code:'HLT',tier:'Mid-range · Hilton Honors'},
    'upscale':{n:'Rome Marriott Grand Hotel Flora',c:'#c0392b',code:'MAR',tier:'Upscale · Marriott Bonvoy'},
@@ -805,7 +1177,7 @@ var DEST_DB=[
    'upscale':{n:'W Dubai Mina Seyahi',c:'#c0392b',code:'MAR',tier:'Upscale · Marriott Bonvoy'},
    'luxury':{n:'Park Hyatt Dubai',c:'#1a5276',code:'HYT',tier:'Luxury · Hyatt Cat 7'}}},
   {keys:['bangkok','thailand','bkk','suvarnabhumi','phuket'],
-   airline:'Thai Airways',airlineCode:'TG',airlineColor:'#6d2b8c',cabin:'Business',route:'Chase UR → United → Star Alliance',
+   airline:'Thai Airways',airlineCode:'TG',airlineColor:'#6d2b8c',cabin:'Business',route:'Chase UR → United (Star Alliance)',
    hotels:{'budget':{n:'Ibis Bangkok Sukhumvit',c:'#888',code:'HTL',tier:'Budget'},
    'mid-range':{n:'Hilton Bangkok Grande Asoke',c:'#1e8449',code:'HLT',tier:'Mid-range · Hilton Honors'},
    'upscale':{n:'Bangkok Marriott Marquis Queens Park',c:'#c0392b',code:'MAR',tier:'Upscale · Marriott Bonvoy'},
@@ -823,7 +1195,7 @@ var DEST_DB=[
    'upscale':{n:'Westin Maui Resort & Spa',c:'#c0392b',code:'MAR',tier:'Upscale · Marriott Bonvoy'},
    'luxury':{n:'Park Hyatt Maui',c:'#1a5276',code:'HYT',tier:'Luxury · Hyatt Cat 7'}}},
   {keys:['barcelona','spain','bcn','madrid'],
-   airline:'Iberia',airlineCode:'IB',airlineColor:'#c0392b',cabin:'Business',route:'Amex → Iberia Plus',
+   airline:'Iberia',airlineCode:'IB',airlineColor:'#c0392b',cabin:'Business',route:'Amex → Iberia Plus  ·  Chase UR → BA Avios',
    hotels:{'budget':{n:'Ibis Barcelona',c:'#888',code:'HTL',tier:'Budget'},
    'mid-range':{n:'Hilton Barcelona',c:'#1e8449',code:'HLT',tier:'Mid-range · Hilton Honors'},
    'upscale':{n:'Barcelona Marriott Hotel',c:'#c0392b',code:'MAR',tier:'Upscale · Marriott Bonvoy'},
@@ -835,11 +1207,17 @@ var DEST_DB=[
    'upscale':{n:'Amsterdam Marriott Hotel',c:'#c0392b',code:'MAR',tier:'Upscale · Marriott Bonvoy'},
    'luxury':{n:'Conservatorium Hotel (Hyatt)',c:'#1a5276',code:'HYT',tier:'Luxury · Hyatt Cat 6'}}},
   {keys:['cancun','mexico','cun','tulum','playa del carmen'],
-   airline:'Aeromexico',airlineCode:'AM',airlineColor:'#006daa',cabin:'Business',route:'Chase UR → Delta SkyTeam',
+   airline:'United Airlines',airlineCode:'UA',airlineColor:'#0033a0',cabin:'Business',route:'Chase UR → United MileagePlus',
    hotels:{'budget':{n:'Ibis Cancun Centro',c:'#888',code:'HTL',tier:'Budget'},
    'mid-range':{n:'Hilton Cancun, an All-Inclusive Resort',c:'#1e8449',code:'HLT',tier:'Mid-range · Hilton Honors'},
    'upscale':{n:'Marriott Cancun Resort',c:'#c0392b',code:'MAR',tier:'Upscale · Marriott Bonvoy'},
    'luxury':{n:'Hyatt Zilara Cancun',c:'#1a5276',code:'HYT',tier:'Luxury · Hyatt Cat 7'}}},
+  {keys:['turks','caicos','providenciales','pls'],
+   airline:'American Airlines',airlineCode:'AA',airlineColor:'#0078d2',cabin:'Business',route:'Chase UR → British Airways Avios',
+   hotels:{'budget':{n:'Comfort Suites Turks & Caicos',c:'#888',code:'HTL',tier:'Budget'},
+   'mid-range':{n:'Hilton Turks & Caicos',c:'#1e8449',code:'HLT',tier:'Mid-range · Hilton Honors'},
+   'upscale':{n:'Wymara Resort & Villas',c:'#c0392b',code:'MAR',tier:'Upscale · Marriott Bonvoy'},
+   'luxury':{n:'Grace Bay Club',c:'#1a5276',code:'HYT',tier:'Luxury · Hyatt Cat 7'}}},
   {keys:['sydney','australia','syd','melbourne'],
    airline:'Qantas',airlineCode:'QF',airlineColor:'#e40000',cabin:'Business',route:'Amex → Qantas Points',
    hotels:{'budget':{n:'Ibis Sydney Airport',c:'#888',code:'HTL',tier:'Budget'},
@@ -847,7 +1225,7 @@ var DEST_DB=[
    'upscale':{n:'Sydney Marriott Hotel at Circular Quay',c:'#c0392b',code:'MAR',tier:'Upscale · Marriott Bonvoy'},
    'luxury':{n:'Park Hyatt Sydney',c:'#1a5276',code:'HYT',tier:'Luxury · Hyatt Cat 7'}}},
   {keys:['new york','nyc','jfk','lga','ewr','manhattan'],
-   airline:'Delta',airlineCode:'DL',airlineColor:'#e31837',cabin:'Business',route:'Chase UR → Delta SkyMiles',
+   airline:'Delta',airlineCode:'DL',airlineColor:'#e31837',cabin:'Business',route:'Amex → Delta SkyMiles  ·  Chase UR → United',
    hotels:{'budget':{n:'Hilton Garden Inn Midtown Park Ave',c:'#888',code:'HTL',tier:'Budget'},
    'mid-range':{n:'Hilton Midtown New York',c:'#1e8449',code:'HLT',tier:'Mid-range · Hilton Honors'},
    'upscale':{n:'New York Marriott Marquis',c:'#c0392b',code:'MAR',tier:'Upscale · Marriott Bonvoy'},
@@ -880,17 +1258,51 @@ var DEST_VIBES={
   'bangkok':{emoji:'🛺',hotel:'Bangkok\'s most storied address, on the river. Market and temples at your doorstep.',flight:'Thai Airways business class — generous, comfortable, and genuinely underrated.'},
   'singapore':{emoji:'🌿',hotel:'Iconic terrace overlooking the skyline and Marina Bay Sands.',flight:'Singapore Airlines Suites — the most private business class seat ever built.'},
   'hawaii': {emoji:'🌺',hotel:'The original Maui beach hotel. Whales breach right offshore in winter.',flight:'Direct from the mainland — one of the easiest long-haul award redemptions you can make.'},
-  'barcelona':{emoji:'🌞',hotel:'Converted into a hotel overlooking the sea. Frank Gehry\'s fish sculpture out front.',flight:'Iberia business class is a quiet gem — comfortable and often wide open for award seats.'},
+  'barcelona':{emoji:'🌞',hotel:'Converted into a hotel overlooking the sea. Frank Gehry\'s fish sculpture out front.',flight:'Iberia business class via Madrid — comfortable, often wide-open award seats. Book with Chase points via BA Avios.'},
+  'rome':    {emoji:'🏛️',hotel:'Converted 19th-century palace in the Parioli district. Wake up without jet lag.',flight:'Air France business class — fly to Paris CDG, then connect to Rome. Transfer Amex MR or Chase UR to Flying Blue and book both legs as one award.'},
+  'italy':   {emoji:'🏛️',hotel:'Park Hyatt Milano in a converted 1870 palazzo. The spa is extraordinary.',flight:'Air France business class via Paris CDG — transfer Amex MR or Chase UR to Flying Blue. Flying Blue runs monthly promo awards that can cut the cost significantly.'},
   'amsterdam':{emoji:'🚲',hotel:'Restored 19th-century building. Concertgebouw across the street.',flight:'KLM business class is underrated. Good food, great service, and easy to book with Chase points.'},
-  'cancun': {emoji:'🌴',hotel:'All-inclusive done properly. The pool bar is excellent.',flight:'Easy award redemption. Great value relative to the cash price.'},
+  'cancun':  {emoji:'🌴',hotel:'All-inclusive done properly. The pool bar is excellent.',flight:'United direct to Cancun — easy award availability and great value in the Chase network.'},
+  'turks':  {emoji:'🏝️',hotel:'Grace Bay is consistently rated one of the best beaches in the world. The water is that color.',flight:'American Airlines business class — direct from most major US cities. Easy to book with Chase or Avios points.'},
+  'caicos':  {emoji:'🏝️',hotel:'Turquoise water, powder sand, no crowds. Grace Bay Club is as close to perfect as hotels get.',flight:'Short hop from the mainland. One of the best value business class redemptions in the Caribbean.'},
   'sydney': {emoji:'🦘',hotel:'On the harbor, Opera House framed in every window. Wake up to the best view in Australia.',flight:'Qantas business class — Australia\'s finest, and the points requirement is often lower than you\'d expect.'},
-  'new york':{emoji:'🗽',hotel:'Central Park view from the 51st floor. The breakfast is legendary.',flight:'Delta One business class — lie-flat, direct, and often available.'},
+  'new york':{emoji:'🗽',hotel:'Central Park view from the 51st floor. The breakfast is legendary.',flight:'Delta One business class — lie-flat, direct, and Amex transfers directly to Delta SkyMiles. One of the easiest redemptions available.'},
   'default': {emoji:'✈',hotel:'A hotel that matches the adventure. Points stay mean you arrive refreshed.',flight:'Business class on points — the same seat, fraction of the cash price.'}
 };
 function getVibe(dest){
   var d=(dest||'').toLowerCase();
   for(var k in DEST_VIBES){if(d.indexOf(k)>=0)return DEST_VIBES[k];}
   return DEST_VIBES['default'];
+}
+
+// Destination hero images from Unsplash (free, no auth needed)
+var DEST_IMAGES={
+  'paris':    'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=70',
+  'france':   'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=70',
+  'tokyo':    'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=800&q=70',
+  'japan':    'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?auto=format&fit=crop&w=800&q=70',
+  'maldives': 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=800&q=70',
+  'bali':     'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=70',
+  'london':   'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=70',
+  'rome':     'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=70',
+  'italy':    'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=70',
+  'barcelona':'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=800&q=70',
+  'dubai':    'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=70',
+  'hawaii':   'https://images.unsplash.com/photo-1505852679233-d9fd70aff56d?auto=format&fit=crop&w=800&q=70',
+  'cancun':   'https://images.unsplash.com/photo-1552537376-3abf35237215?auto=format&fit=crop&w=800&q=70',
+  'turks':    'https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&w=800&q=70',
+  'caicos':   'https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&w=800&q=70',
+  'bangkok':  'https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=800&q=70',
+  'singapore':'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=70',
+  'amsterdam':'https://images.unsplash.com/photo-1534351590666-13e3e96b5702?auto=format&fit=crop&w=800&q=70',
+  'sydney':   'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=800&q=70',
+  'new york': 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=800&q=70',
+  'default':  'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=70'
+};
+function getDestImage(dest){
+  var d=(dest||'').toLowerCase();
+  for(var k in DEST_IMAGES){if(d.indexOf(k)>=0)return DEST_IMAGES[k];}
+  return DEST_IMAGES['default'];
 }
 
 function buildItinerary(opt,totalPts,cpp){
@@ -903,45 +1315,56 @@ function buildItinerary(opt,totalPts,cpp){
   var travStr=(adults+children)===1?'1 traveler':(adults+children)+' travelers';
   var tier=hotelTier||'upscale';
   var hd=di.hotels[tier]||di.hotels['upscale'];
+  var imgSrc=getDestImage(r.d);
+  var destName=capDest(r.d);
 
   var html='<div style="border:0.5px solid #ebebeb;border-radius:12px;overflow:hidden;">';
 
-  // Header with destination emoji and cash value comparison
-  html+='<div style="padding:12px 14px;background:linear-gradient(135deg,#1a1a1a 0%,#2d2d2d 100%);display:flex;justify-content:space-between;align-items:center;">';
-  html+='<div><div style="font-size:13px;font-weight:500;color:#fff;">'+vibe.emoji+' Sample itinerary · '+travStr+'</div>';
-  html+='<div style="font-size:11px;color:#aaa;margin-top:2px;">Illustrative · subject to availability</div></div>';
-  html+='<div style="text-align:right;"><div style="font-size:11px;color:#aaa;">Est. cash value</div>';
-  html+='<div style="font-size:16px;font-weight:500;color:#eaf5ea;">~$'+cashVal.toLocaleString()+'</div></div>';
+  // Hero image
+  html+='<div style="position:relative;height:180px;overflow:hidden;background:linear-gradient(160deg,#1a2a4a,#2d4a6e);">';
+  html+='<img src="'+imgSrc+'" alt="'+destName+'" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;transition:opacity .3s;" onload="this.style.opacity=1" onerror="this.style.display=\'none\'" loading="lazy">';
+  html+='<div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.55) 100%);"></div>';
+  html+='<div style="position:absolute;bottom:0;left:0;right:0;padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-end;">';
+  html+='<div>';
+  html+='<div style="font-size:20px;font-weight:600;color:#fff;line-height:1;">'+destName+'</div>';
+  html+='<div style="font-size:12px;color:rgba(255,255,255,0.8);margin-top:3px;">'+travStr+' · Sample itinerary</div>';
   html+='</div>';
+  html+='<div style="text-align:right;">';
+  html+='<div style="font-size:11px;color:rgba(255,255,255,0.7);">Cash value</div>';
+  html+='<div style="font-size:18px;font-weight:600;color:#7dff9a;">~$'+cashVal.toLocaleString()+'</div>';
+  html+='</div></div></div>';
 
   // Flight leg
   html+='<div style="padding:12px 14px;border-bottom:0.5px solid #ebebeb;background:#fff;">';
   html+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">';
-  html+='<div style="width:32px;height:32px;border-radius:8px;background:'+di.airlineColor+';color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;">'+di.airlineCode+'</div>';
+  html+='<div style="width:36px;height:36px;border-radius:8px;background:'+di.airlineColor+';color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;">'+di.airlineCode+'</div>';
   html+='<div style="flex:1;"><div style="font-size:13px;font-weight:500;color:#1a1a1a;">'+di.airline+' · '+(opt.cabin||di.cabin)+'</div>';
-  html+='<div style="font-size:12px;color:#888;margin-top:1px;">'+capDest(r.o)+' → '+capDest(r.d)+'</div></div>';
-  html+='<div style="text-align:right;"><div style="font-size:13px;font-weight:500;color:#2d7a2d;">'+fp.toLocaleString()+'</div><div style="font-size:10px;color:#888;">points</div></div>';
+  html+='<div style="font-size:12px;color:#888;margin-top:1px;">'+capDest(r.o)+' → '+destName+'</div></div>';
+  html+='<div style="text-align:right;"><div style="font-size:14px;font-weight:500;color:#2d7a2d;">'+fp.toLocaleString()+'</div><div style="font-size:10px;color:#888;">points</div></div>';
   html+='</div>';
-  html+='<p style="margin:0;font-size:12px;color:#555;line-height:1.5;padding-left:42px;">'+vibe.flight+'</p>';
+  html+='<p style="margin:0;font-size:12px;color:#555;line-height:1.5;padding-left:46px;">'+vibe.flight+'</p>';
   html+='</div>';
 
   // Hotel leg
   if(showHotel){
     html+='<div style="padding:12px 14px;background:#fff;">';
     html+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">';
-    html+='<div style="width:32px;height:32px;border-radius:8px;background:'+hd.c+';color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;">'+hd.code+'</div>';
+    html+='<div style="width:36px;height:36px;border-radius:8px;background:'+hd.c+';color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;">'+hd.code+'</div>';
     html+='<div style="flex:1;"><div style="font-size:13px;font-weight:500;color:#1a1a1a;">'+hd.n+'</div>';
     html+='<div style="font-size:12px;color:#888;margin-top:1px;">'+hd.tier+' · '+hotelNights+' night'+(hotelNights===1?'':'s')+'</div></div>';
-    html+='<div style="text-align:right;"><div style="font-size:13px;font-weight:500;color:#2d7a2d;">'+hp.toLocaleString()+'</div><div style="font-size:10px;color:#888;">points</div></div>';
+    html+='<div style="text-align:right;"><div style="font-size:14px;font-weight:500;color:#2d7a2d;">'+hp.toLocaleString()+'</div><div style="font-size:10px;color:#888;">points</div></div>';
     html+='</div>';
-    html+='<p style="margin:0;font-size:12px;color:#555;line-height:1.5;padding-left:42px;">'+vibe.hotel+'</p>';
+    html+='<p style="margin:0;font-size:12px;color:#555;line-height:1.5;padding-left:46px;">'+vibe.hotel+'</p>';
     html+='</div>';
   }
 
-  // Footer — total points, the key comparison
+  // Footer
   html+='<div style="padding:10px 14px;background:#f5f5f5;border-top:0.5px solid #ebebeb;display:flex;justify-content:space-between;align-items:center;">';
   html+='<div style="font-size:12px;color:#555;"><strong>'+totalPts.toLocaleString()+' points</strong> total</div>';
-  html+='<div style="font-size:12px;color:#2d7a2d;font-weight:500;">vs ~$'+cashVal.toLocaleString()+' cash 💸</div>';
+  html+='<div style="font-size:12px;color:#1e6b2e;font-weight:500;">vs ~$'+cashVal.toLocaleString()+' in cash</div>';
+  html+='</div>';
+  html+='<div style="padding:8px 14px;background:#f5f5f5;border-top:0.5px solid #ebebeb;">';
+  html+='<p style="margin:0;font-size:10px;color:#bbb;">Illustrative · Subject to availability · Points costs vary by date and cabin</p>';
   html+='</div>';
 
   html+='</div>';
@@ -952,14 +1375,24 @@ function buildGate(group){
   var gateId='gcta-'+group+Math.random().toString(36).slice(2);
   var r=getRoute();
   var dest=capDest(r.d)||'your destination';
-  return '<div class="gate-wrap">'+
-    '<div class="gate-body">'+
-      '<p style="margin:0 0 4px;font-size:16px;font-weight:500;color:#1a1a1a;">Save your '+dest+' plan — free</p>'+
-      '<p style="margin:0 0 12px;font-size:13px;color:#555;line-height:1.5;">We\'ll email you exactly what to do — which card, what to spend, how long it takes.</p>'+
-      '<input class="big-input" type="email" placeholder="Your email" id="'+emailId+'" style="margin-bottom:10px;font-size:15px;" oninput="document.getElementById(\''+gateId+'\').disabled=!this.value.includes(\'@\')">'+
-      '<button class="cta" id="'+gateId+'" disabled onclick="go(6)">Save my plan →</button>'+
-      '<p style="margin:8px 0 0;font-size:11px;color:#aaa;text-align:center;">No spam. One email. Unsubscribe anytime.</p>'+
-    '</div></div>';
+  return '<div style="border-radius:16px;overflow:hidden;background:var(--color-text-primary);">'+
+    '<div style="padding:20px 20px 0;">'+
+      '<p style="margin:0 0 4px;font-size:22px;font-weight:400;font-family:\'DM Serif Display\',serif;color:#fff;line-height:1.2;">Your '+dest+' plan is ready.</p>'+
+      '<p style="margin:0 0 16px;font-size:13px;color:rgba(255,255,255,0.6);line-height:1.5;">Enter your email and we\'ll send exactly what to do — which card, what to spend, your timeline.</p>'+
+      '<input style="width:100%;padding:13px 14px;font-size:15px;border:1px solid rgba(255,255,255,0.2);border-radius:10px;background:rgba(255,255,255,0.1);color:#fff;font-family:\'DM Sans\',sans-serif;margin-bottom:10px;outline:none;" type="email" placeholder="Your email" id="'+emailId+'" oninput="document.getElementById(\''+gateId+'\').disabled=!this.value.includes(\'@\')" style="color:#fff;" onfocus="this.style.borderColor=\'rgba(255,255,255,0.6)\'" onblur="this.style.borderColor=\'rgba(255,255,255,0.2)\'" >'+
+      '<button style="width:100%;padding:15px;font-size:15px;font-weight:500;border-radius:10px;border:none;cursor:pointer;background:#fff;color:#0f0f0f;font-family:\'DM Sans\',sans-serif;letter-spacing:.01em;transition:all .18s;" id="'+gateId+'" disabled onclick="go(6)" onmouseover="if(!this.disabled)this.style.background=\'#f0f0f0\'" onmouseout="this.style.background=\'#fff\'">Send me my '+dest+' plan →</button>'+
+      '<p style="margin:10px 0 0;font-size:11px;color:rgba(255,255,255,0.35);text-align:center;">Free. No spam. Unsubscribe with one click.</p>'+
+    '</div>'+
+    '<div style="padding:16px 20px 20px;margin-top:14px;border-top:1px solid rgba(255,255,255,0.08);">'+
+      '<p style="margin:0 0 10px;font-size:11px;font-weight:500;color:rgba(255,255,255,0.4);letter-spacing:.08em;text-transform:uppercase;">What\'s in your plan</p>'+
+      '<div style="display:flex;flex-direction:column;gap:8px;">'+
+        '<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.7);"><span style="color:#7dff9a;flex-shrink:0;">✓</span>Best card for your spending + current bonus</div>'+
+        '<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.7);"><span style="color:#7dff9a;flex-shrink:0;">✓</span>Exact timeline + monthly points breakdown</div>'+
+        '<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.7);"><span style="color:#7dff9a;flex-shrink:0;">✓</span>Transfer guide for your specific route</div>'+
+        '<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.7);"><span style="color:#7dff9a;flex-shrink:0;">✓</span>Application links (refreshed weekly)</div>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
 }
 
 function renderHasPanel(idx){} // legacy stub
@@ -967,25 +1400,34 @@ function renderHasPanel(idx){} // legacy stub
 function buildWaitlistBlock(){
   var wlId='wl-'+Math.random().toString(36).slice(2);
   var rcId='rc-'+Math.random().toString(36).slice(2);
-  var html='<div style="border:1.5px solid #ddd;border-radius:12px;overflow:hidden;background:#fff;">';
-  html+='<div style="padding:14px 16px;background:#f5f5f5;border-bottom:0.5px solid #ddd;">';
-  html+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="font-size:16px;">🔔</span><p style="margin:0;font-size:14px;font-weight:500;color:#1a1a1a;">Real-time tracking — coming soon</p></div>';
-  html+='<p style="margin:0;font-size:12px;color:#555;line-height:1.5;">Connect your Chase, Amex, and airline accounts and easy. will automatically update your timeline as you spend — and alert you the moment a transfer bonus drops.</p>';
+  var html='<div style="border-radius:16px;overflow:hidden;background:#fafaf8;border:1px solid var(--color-border-tertiary);">';
+  html+='<div style="padding:18px 18px 14px;border-bottom:1px solid var(--color-border-tertiary);">';
+  html+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">';
+  html+='<div style="width:8px;height:8px;border-radius:50%;background:#d94040;animation:blink2 1.5s ease-in-out infinite;flex-shrink:0;"></div>';
+  html+='<p style="margin:0;font-size:13px;font-weight:500;color:var(--color-text-primary);">Real-time tracking — coming soon</p></div>';
+  html+='<p style="margin:0;font-size:13px;color:var(--color-text-secondary);line-height:1.6;">Connect your Chase and Amex accounts and easy. will auto-track your balances — and alert you the moment a transfer bonus drops that affects your trip.</p>';
   html+='</div>';
-  html+='<div style="padding:12px 14px;border-bottom:0.5px solid #ebebeb;">';
-  html+='<p style="margin:0 0 8px;font-size:11px;font-weight:500;color:#888;letter-spacing:.05em;">WHAT YOU\'D BE ALERTED TO</p>';
-  html+='<div style="display:flex;gap:10px;padding:6px 0;border-bottom:0.5px solid #ebebeb;"><div style="width:8px;height:8px;border-radius:50%;background:#E24B4A;flex-shrink:0;margin-top:4px;"></div><div><div style="font-size:12px;color:#1a1a1a;line-height:1.5;">Your Chase points just got <strong>30% more valuable</strong> for Air France — offer ends in 3 days</div><div style="font-size:11px;color:#888;margin-top:1px;">2 hours ago</div></div></div>';
-  html+='<div style="display:flex;gap:10px;padding:6px 0;"><div style="width:8px;height:8px;border-radius:50%;background:#BA7517;flex-shrink:0;margin-top:4px;"></div><div><div style="font-size:12px;color:#1a1a1a;line-height:1.5;">Amex Platinum sign-up bonus just <strong>increased to 120,000 points</strong> — limited time</div><div style="font-size:11px;color:#888;margin-top:1px;">Today</div></div></div>';
+  html+='<div style="padding:14px 18px;border-bottom:1px solid var(--color-border-tertiary);">';
+  html+='<p style="margin:0 0 8px;font-size:10px;font-weight:600;color:var(--color-text-tertiary);letter-spacing:.1em;text-transform:uppercase;">Recent alerts you\'d have gotten</p>';
+  html+='<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--color-border-tertiary);">';
+  html+='<div style="width:8px;height:8px;border-radius:50%;background:#d94040;flex-shrink:0;margin-top:4px;"></div>';
+  html+='<div><div style="font-size:13px;color:var(--color-text-primary);line-height:1.5;">Chase → Air France <strong>30% transfer bonus</strong> — worth ~$480 extra</div>';
+  html+='<div style="font-size:11px;color:var(--color-text-tertiary);margin-top:2px;">Expired 3 days ago</div></div></div>';
+  html+='<div style="display:flex;gap:10px;padding:8px 0;">';
+  html+='<div style="width:8px;height:8px;border-radius:50%;background:#b06010;flex-shrink:0;margin-top:4px;"></div>';
+  html+='<div><div style="font-size:13px;color:var(--color-text-primary);line-height:1.5;">Amex Platinum sign-up bonus raised to <strong>120,000 points</strong></div>';
+  html+='<div style="font-size:11px;color:var(--color-text-tertiary);margin-top:2px;">Active today</div></div></div>';
   html+='</div>';
-  html+='<div style="padding:14px 16px;">';
-  html+='<p style="margin:0 0 10px;font-size:13px;font-weight:500;color:#1a1a1a;">Get early access</p>';
-  html+='<input class="big-input" type="email" placeholder="Your email — join the waitlist" id="'+wlId+'" style="margin-bottom:8px;font-size:14px;">';
-  html+='<button style="width:100%;padding:12px;font-size:14px;font-weight:500;border-radius:8px;border:none;cursor:pointer;background:#1a1a1a;color:#fff;margin-bottom:10px;" onclick="joinWaitlist(\''+wlId+'\',this)">Join the waitlist →</button>';
-  html+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><div style="flex:1;height:0.5px;background:#ddd;"></div><span style="font-size:11px;color:#888;">or</span><div style="flex:1;height:0.5px;background:#ddd;"></div></div>';
-  html+='<button style="width:100%;padding:10px;font-size:13px;font-weight:500;border-radius:8px;border:0.5px solid #ddd;cursor:pointer;background:#fff;color:#1a1a1a;" onclick="toggleReferral(\''+rcId+'\',this)">I have a referral code →</button>';
-  html+='<div id="'+rcId+'" style="display:none;margin-top:8px;"><input class="big-input" placeholder="Enter referral code" style="font-size:14px;letter-spacing:0.1em;text-transform:uppercase;"><p style="margin:6px 0 0;font-size:11px;color:#888;">Referral codes give you priority access when real-time tracking launches.</p></div>';
-  html+='<p style="margin:8px 0 0;font-size:11px;color:#888;text-align:center;">No spam. You\'ll only hear from us when this feature goes live.</p>';
+  html+='<div style="padding:16px 18px;">';
+  html+='<p style="margin:0 0 10px;font-size:14px;font-weight:500;color:var(--color-text-primary);">Get early access</p>';
+  html+='<input class="big-input" type="email" placeholder="your@email.com" id="'+wlId+'" style="margin-bottom:8px;font-size:14px;">';
+  html+='<button style="width:100%;padding:13px;font-size:14px;font-weight:500;border-radius:10px;border:none;cursor:pointer;background:var(--color-text-primary);color:#fff;font-family:var(--font-body);transition:all .18s;" onclick="joinWaitlist(\''+wlId+'\',this)" onmouseover="this.style.background=\'#2a2a2a\'" onmouseout="this.style.background=\'var(--color-text-primary)\'">Join the waitlist →</button>';
+  html+='<div style="display:flex;align-items:center;gap:8px;margin:10px 0 8px;"><div style="flex:1;height:1px;background:var(--color-border-tertiary);"></div><span style="font-size:11px;color:var(--color-text-tertiary);">or</span><div style="flex:1;height:1px;background:var(--color-border-tertiary);"></div></div>';
+  html+='<button style="width:100%;padding:11px;font-size:13px;font-weight:500;border-radius:10px;border:1px solid var(--color-border-secondary);cursor:pointer;background:#fff;color:var(--color-text-primary);font-family:var(--font-body);transition:all .15s;" onclick="toggleReferral(\''+rcId+'\',this)">I have a referral code →</button>';
+  html+='<div id="'+rcId+'" style="display:none;margin-top:8px;"><input class="big-input" placeholder="Enter referral code" style="font-size:14px;letter-spacing:0.1em;text-transform:uppercase;"><p style="margin:6px 0 0;font-size:11px;color:var(--color-text-tertiary);">Referral codes give priority access when real-time tracking launches.</p></div>';
+  html+='<p style="margin:10px 0 0;font-size:11px;color:var(--color-text-tertiary);text-align:center;">No spam. We\'ll only reach out when this feature goes live.</p>';
   html+='</div></div>';
+  html+='<style>@keyframes blink2{0%,100%{opacity:.4}50%{opacity:1}}</style>';
   return html;
 }
 
@@ -998,72 +1440,184 @@ function buildHasMainPlan(){
   var gap=Math.max(0,totalPts-youHave);
   var mo=getMonthlyBudget();
   var userCards=getUserCards();
-  var swipe=buildSwipeTable(userCards,mo);
   var r=getRoute();
   var dest=capDest(r.d);
   var di=getDestInfo(r.d);
   var covered=gap<=0;
-  var months=covered?0:Math.max(1,Math.ceil(gap/swipe.ptsPerMo));
   var cashVal=Math.round(getFlightPts()*0.022);
 
-  // Find best gap card for the teaser
+  // Build spend table
+  Object.keys(customSpend).forEach(function(k){customSpend[k]=null;});
+  var totalPtsPerMo=0;
+  var spendRows='';
+  CATEGORIES.forEach(function(cat){
+    var spend=getSpendForCat(cat.key,mo);
+    var bestKey=userCards[0]||'chase';
+    var bestMult=0;
+    userCards.forEach(function(k){
+      var m=(CARD_PROFILES[k]&&CARD_PROFILES[k].mults[cat.key])||1;
+      if(m>bestMult){bestMult=m;bestKey=k;}
+    });
+    var pts=Math.round(spend*bestMult);
+    totalPtsPerMo+=pts;
+    spendRows+='<tr>';
+    spendRows+='<td style="vertical-align:middle;">'+cat.label+'</td>';
+    spendRows+='<td class="c" style="color:#1e6b2e;font-weight:500;vertical-align:middle;">'+bestMult+'x</td>';
+    spendRows+='<td style="vertical-align:middle;"><div style="display:flex;align-items:center;gap:4px;"><span style="font-size:12px;color:#8a8a8a;">$</span><input type="number" min="0" value="'+spend+'" data-cat="'+cat.key+'" onchange="updateCatSpendHas(this.dataset.cat,this.value)" style="width:64px;padding:4px 6px;border:1px solid #e0e0e0;border-radius:6px;font-size:13px;color:#0f0f0f;text-align:right;font-family:var(--font-body);"></div></td>';
+    spendRows+='<td class="r" style="font-weight:500;vertical-align:middle;" id="hpts-'+cat.key+'">'+pts.toLocaleString()+'</td>';
+    spendRows+='</tr>';
+  });
+
+  var months=covered?0:Math.max(1,Math.ceil(gap/totalPtsPerMo));
+
+  // Find best gap card — only cards the user can actually hit the spend requirement on
   var gapCards=GAP_CARDS.filter(function(c){
     if(c.name.indexOf('Chase')>=0 && userCards.indexOf('chase')>=0) return false;
     if(c.name.indexOf('Amex')>=0  && userCards.indexOf('amex')>=0)  return false;
     if(c.name.indexOf('Capital One')>=0 && userCards.indexOf('cap1')>=0) return false;
+    if(c.name.indexOf('Citi')>=0  && userCards.indexOf('citi')>=0)  return false;
+    // Filter out cards where monthly spend can't hit min spend in the bonus window
+    var bonusWindowMonths = c.name.indexOf('Amex')>=0 ? 6 : 3;
+    var requiredPerMonth = c.minSpend / bonusWindowMonths;
+    if(requiredPerMonth > mo * 1.1) return false;
     return true;
   });
   var bestGapCard=gapCards[0];
-  var shortcutMonths=bestGapCard?Math.max(0,Math.ceil(Math.max(0,gap-bestGapCard.bonus)/swipe.ptsPerMo)):null;
+  // Honest shortcut: time to hit min spend + any remaining gap after bonus
+  var shortcutMonths=null;
+  if(bestGapCard){
+    var scMinSpendMo=Math.ceil(bestGapCard.minSpend/mo);
+    var scPtsEarned=totalPtsPerMo*scMinSpendMo;
+    var scRemaining=Math.max(0,gap-bestGapCard.bonus-scPtsEarned);
+    shortcutMonths=scMinSpendMo+(scRemaining>0?Math.ceil(scRemaining/totalPtsPerMo):0);
+  }
 
   var html='';
 
-  // ── Big number ──
-  html+='<div style="border:0.5px solid #ebebeb;border-radius:12px;padding:20px 16px;background:#fff;text-align:center;">';
+  // ── 1. Destination image card — lead with the dream ──
+  html+=buildItinerary(opt,totalPts,opt.cpp);
+
+  // ── 2. Status block — problem first, then solution ──
+  html+='<div style="border:1px solid #eeeeec;border-radius:14px;padding:20px 16px;background:#fff;text-align:center;">';
   if(covered){
-    html+='<div style="font-size:38px;font-weight:500;color:#2d7a2d;line-height:1;">You\'re covered ✓</div>';
-    html+='<p style="margin:8px 0 0;font-size:14px;color:#555;">Your current points are enough. Time to book.</p>';
+    html+='<div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px;"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" fill="#dcfce7" stroke="#1e6b2e" stroke-width="1.5"/><path d="M9 16l5 5 9-10" stroke="#1e6b2e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><div style="font-size:28px;font-weight:400;font-family:var(--font-display);color:#1e6b2e;line-height:1;">You\'re covered</div></div>';
+    html+='<p style="margin:0;font-size:14px;color:#525252;">Your current points are enough for this trip. Time to book.</p>';
   } else {
-    html+='<div style="font-size:60px;font-weight:500;color:#1a1a1a;line-height:1;">'+months+'</div>';
-    html+='<div style="font-size:18px;color:#555;margin-top:2px;">months to '+dest+'</div>';
-    html+='<p style="margin:10px 0 0;font-size:13px;color:#555;line-height:1.5;">Keep spending on your card like normal and you\'ll have enough points in about '+months+' month'+(months===1?'':'s')+'.</p>';
+    if(bestGapCard&&shortcutMonths!==null){
+      // Step 1: the problem — slow path struck through
+      html+='<div style="margin-bottom:16px;">';
+      html+='<div style="font-size:48px;font-weight:600;color:#d0d0d0;line-height:1;text-decoration:line-through;text-decoration-color:#d94040;text-decoration-thickness:3px;">'+months+'</div>';
+      html+='<div style="font-size:14px;color:#c0c0c0;margin-top:3px;text-decoration:line-through;text-decoration-color:#d94040;">months at your current pace</div>';
+      html+='</div>';
+      // Step 2: the solution — dark green block
+      var fasterLabel=shortcutMonths===0?'~3':shortcutMonths===1?'1':''+shortcutMonths;
+      html+='<div style="font-size:11px;font-weight:600;color:#8a8a8a;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;">With '+bestGapCard.name+'</div>';
+      html+='<div style="background:linear-gradient(135deg,#0a2a0a,#1a4a1a);border-radius:12px;padding:18px 16px;margin-bottom:12px;">';
+      html+='<div style="font-size:64px;font-weight:700;color:#7dff9a;line-height:1;">'+fasterLabel+'</div>';
+      html+='<div style="font-size:17px;color:rgba(255,255,255,0.85);margin-top:6px;">month'+(shortcutMonths===1?'':'s')+' to '+dest+'</div>';
+      html+='<div style="margin-top:12px;display:inline-flex;align-items:center;gap:6px;background:rgba(125,255,154,0.12);border:1px solid rgba(125,255,154,0.3);border-radius:20px;padding:6px 14px;">';
+      html+='<span style="font-size:12px;color:#7dff9a;font-weight:500;">'+Math.round(bestGapCard.bonus/1000)+'k sign-up bonus</span>';
+      html+='<span style="font-size:12px;color:rgba(255,255,255,0.3);">·</span>';
+      html+='<span style="font-size:12px;color:rgba(255,255,255,0.6);">one card application</span>';
+      html+='</div></div>';
+    } else {
+      html+='<div style="font-size:56px;font-weight:500;color:#0f0f0f;line-height:1;">'+months+'</div>';
+      html+='<div style="font-size:17px;color:#525252;margin-top:4px;">months to '+dest+'</div>';
+    }
+    // Compact stats — 3 numbers inline
+    html+='<div style="display:flex;gap:0;border:1px solid #eeeeec;border-radius:10px;overflow:hidden;text-align:left;margin-top:4px;">';
+    html+='<div style="flex:1;padding:10px 12px;border-right:1px solid #eeeeec;">';
+    html+='<div style="font-size:11px;color:#8a8a8a;margin-bottom:3px;">You have</div>';
+    html+='<div style="font-size:14px;font-weight:500;color:#1e6b2e;">'+youHave.toLocaleString()+'</div>';
+    html+='<div style="font-size:10px;color:#8a8a8a;">pts</div></div>';
+    html+='<div style="flex:1;padding:10px 12px;border-right:1px solid #eeeeec;">';
+    html+='<div style="font-size:11px;color:#8a8a8a;margin-bottom:3px;">You need</div>';
+    html+='<div style="font-size:14px;font-weight:500;color:#0f0f0f;">'+totalPts.toLocaleString()+'</div>';
+    html+='<div style="font-size:10px;color:#8a8a8a;">pts</div></div>';
+    html+='<div style="flex:1;padding:10px 12px;">';
+    html+='<div style="font-size:11px;color:#8a8a8a;margin-bottom:3px;">Earning now</div>';
+    html+='<div style="font-size:14px;font-weight:500;color:#0057a8;" id="hpts-mo">'+totalPtsPerMo.toLocaleString()+'</div>';
+    html+='<div style="font-size:10px;color:#8a8a8a;">pts/mo</div></div>';
+    html+='</div>';
+    // Date urgency
+    var urg=getTripUrgency();
+    if(urg&&!urg.past){
+      var urgColor=urg.months<months?'#d94040':(urg.months<=months+2?'#b06010':'#1e6b2e');
+      var urgBg=urgColor==='#d94040'?'#fff5f5':urgColor==='#b06010'?'#fff8f0':'#f0faf2';
+      var daysLabel=urg.days===1?'1 day':urg.days+' days';
+      var tripLenStr=urg.tripLength?' ('+urg.tripLength+' nights)':'';
+      var urgMsg='';
+      if(urg.months<months) urgMsg='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px;"><circle cx="7" cy="7" r="6" fill="#fee2e2" stroke="#d94040" stroke-width="1"/><path d="M7 4v3.5M7 9.5v.5" stroke="#d94040" stroke-width="1.3" stroke-linecap="round"/></svg> Departing <strong>'+urg.label+'</strong>'+tripLenStr+' — '+daysLabel+' away. You\'ll need a sign-up bonus to make it in time.';
+      else if(urg.months<=months+2) urgMsg='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px;"><circle cx="7" cy="7" r="6" fill="#fef3c7" stroke="#b06010" stroke-width="1"/><path d="M7 4v3.5M7 9.5v.5" stroke="#b06010" stroke-width="1.3" stroke-linecap="round"/></svg> Departing <strong>'+urg.label+'</strong>'+tripLenStr+' — '+daysLabel+' away. On track, but tight.';
+      else urgMsg='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px;"><circle cx="7" cy="7" r="6" fill="#dcfce7" stroke="#1e6b2e" stroke-width="1"/><path d="M4.5 7l2 2 3-3" stroke="#1e6b2e" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg> Departing <strong>'+urg.label+'</strong>'+tripLenStr+' — '+daysLabel+' away. Plenty of runway.';
+      html+='<div style="display:flex;align-items:flex-start;gap:8px;padding:10px 12px;background:'+urgBg+';border-radius:8px;margin-top:8px;font-size:13px;color:'+urgColor+';line-height:1.5;">'+urgMsg+'</div>';
+    }
+    html+='<p style="margin:8px 0 0;font-size:11px;color:#c0c0c0;">Estimates only · costs vary by date and cabin</p>';
   }
   html+='</div>';
 
-  // ── Gap shortcut teaser — right after the big number ──
-  if(!covered && bestGapCard){
-    var shortcutLabel=shortcutMonths===1?'1 month':shortcutMonths+'months';
-    var shortcutMsg=shortcutMonths===0?'One card application could cover this entire trip right now.':'Cut that to <strong>'+shortcutLabel+'</strong> instead of '+months+(months===1?' month':' months')+'.';
-    html+='<div style="border:1.5px solid #0070c9;border-radius:12px;padding:14px 16px;background:#e8f1fb;display:flex;justify-content:space-between;align-items:center;gap:12px;">';
-    html+='<div><p style="margin:0 0 3px;font-size:13px;font-weight:500;color:#0070c9;">⚡ There\'s a faster way</p>';
-    html+='<p style="margin:0;font-size:13px;color:#1a1a1a;line-height:1.4;">'+shortcutMsg+' The <strong>'+bestGapCard.name+'</strong> has a '+Math.round(bestGapCard.bonus/1000)+'k sign-up bonus.</p></div>';
-    html+='<a href="#gap-offers" onclick="document.getElementById(\'gap-offers\').scrollIntoView({behavior:\'smooth\'});return false;" style="flex-shrink:0;padding:8px 14px;background:#0070c9;color:#fff;border-radius:8px;font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap;">Show me the hack ↓</a>';
+  // ── 3. Gap card offers — the actual product, right after the emotional peak ──
+  if(!covered){
+    html+='<div id="gap-offers">';
+    html+=buildGapCardSuggestion(gap, userCards, totalPtsPerMo);
     html+='</div>';
   }
 
-  // ── Plain English routing ──
-  html+='<div style="border:0.5px solid #ebebeb;border-radius:12px;padding:14px 16px;background:#fff;">';
-  html+='<p style="margin:0 0 6px;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">HOW YOUR POINTS GET THERE</p>';
-  html+='<p style="margin:0 0 10px;font-size:14px;color:#1a1a1a;line-height:1.6;">Your <strong>Chase points</strong> transfer directly to <strong>'+di.airline+'</strong> — usually within minutes. You use those miles to book your flight at a fraction of the cash price.</p>';
-  html+='<div style="padding:10px 12px;background:#eaf5ea;border-radius:8px;font-size:13px;color:#2d7a2d;">'+getFlightPts().toLocaleString()+' points = a flight worth about <strong>$'+cashVal.toLocaleString()+' cash</strong></div>';
-  html+='</div>';
-
-  // ── Spend table ──
-  html+='<div style="border:0.5px solid #ebebeb;border-radius:12px;padding:14px 16px;background:#fff;">';
-  html+='<p style="margin:0 0 4px;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">WHAT TO PUT ON EACH CARD EVERY MONTH</p>';
-  html+='<p style="margin:0 0 10px;font-size:13px;color:#555;">Different cards earn more on different things. Use the right card for each purchase — no extra spending needed.</p>';
-  html+=swipe.html.replace('<div class="card" style="background:#f5f5f5;padding:12px 14px;">','<div>').replace('<p style="margin:0 0 8px;font-size:12px;font-weight:500;color:#1a1a1a;">Which card to swipe — by category</p>','');
-  html+='</div>';
-
-  // ── Gap card offers with anchor ──
-  html+='<div id="gap-offers">';
-  html+=buildGapCardSuggestion(gap, userCards, swipe.ptsPerMo);
-  html+='</div>';
-
-  html+=buildItinerary(opt,totalPts,opt.cpp);
+  // ── 4. Email gate — catch them while motivated ──
   html+=buildGate('a');
+
+  // ── 5. How your points get there — education after commitment ──
+  html+='<div style="border:1px solid #eeeeec;border-radius:14px;padding:14px 16px;background:#fff;">';
+  html+='<p style="margin:0 0 8px;font-size:12px;font-weight:600;color:#8a8a8a;letter-spacing:.06em;text-transform:uppercase;">How your points get there</p>';
+  html+='<p style="margin:0 0 10px;font-size:13px;color:#525252;line-height:1.6;">Your points transfer directly to <strong>'+di.airline+'</strong> — usually within minutes. You use those miles to book your flight at a fraction of the cash price.</p>';
+  html+='<div style="padding:10px 12px;background:#e8f5eb;border-radius:8px;font-size:13px;color:#1e6b2e;">'+getFlightPts().toLocaleString()+' points = a flight worth about <strong>~$'+cashVal.toLocaleString()+' cash</strong></div>';
+  html+='</div>';
+
+  // ── 6. Spend breakdown — collapsed by default ──
+  var breakdownId='bd-'+Math.random().toString(36).slice(2);
+  html+='<div style="border:1px solid #eeeeec;border-radius:14px;overflow:hidden;background:#fff;">';
+  html+='<button onclick="var el=document.getElementById(\''+breakdownId+'\');var open=el.style.display!==\'none\';el.style.display=open?\'none\':\'\';this.querySelector(\'span\').textContent=open?\'Show ↓\':\'Hide ↑\';" style="width:100%;padding:14px 16px;background:transparent;border:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:var(--font-body);">';
+  html+='<span style="font-size:12px;font-weight:600;color:#8a8a8a;letter-spacing:.06em;text-transform:uppercase;">How we calculated this</span>';
+  html+='<span style="font-size:12px;color:#8a8a8a;font-weight:500;">Show ↓</span>';
+  html+='</button>';
+  html+='<div id="'+breakdownId+'" style="display:none;padding:0 16px 14px;">';
+  html+='<p style="margin:0 0 10px;font-size:13px;color:#525252;">Edit any number to match what you actually spend — your timeline updates automatically.</p>';
+  html+='<table class="spend-table"><thead><tr><th>Category</th><th class="c">Earn</th><th>$/month</th><th class="r">Pts</th></tr></thead><tbody>'+spendRows+'</tbody></table>';
+  html+='<div class="totals-row pts-bg" style="margin-top:6px;"><span style="font-size:12px;color:#0057a8;">Points earned per month</span><span style="font-size:14px;font-weight:500;color:#0057a8;" id="hpts-mo-total">'+totalPtsPerMo.toLocaleString()+' pts/month</span></div>';
+  html+='</div></div>';
+
   return html;
 }
+
+function updateCatSpendHas(catKey,val){
+  customSpend[catKey]=Math.max(0,parseInt(val)||0);
+  // Recalculate total pts per month and months
+  var mo=getMonthlyBudget();
+  var userCards=getUserCards();
+  var totalPts=getTotalPts(1);
+  var youHave=getBestBalance();
+  var gap=Math.max(0,totalPts-youHave);
+  var newTotal=0;
+  CATEGORIES.forEach(function(cat){
+    var spend=customSpend[cat.key]!==null?customSpend[cat.key]:getSpendForCat(cat.key,mo);
+    var bestMult=0;
+    userCards.forEach(function(k){var m=(CARD_PROFILES[k]&&CARD_PROFILES[k].mults[cat.key])||1;if(m>bestMult)bestMult=m;});
+    var pts=Math.round(spend*(bestMult||1));
+    newTotal+=pts;
+    var el=document.getElementById('hpts-'+catKey);
+    if(el&&cat.key===catKey)el.textContent=pts.toLocaleString();
+  });
+  if(rentAmount>0) newTotal+=rentAmount;
+  var newMonths=newTotal>0?Math.max(1,Math.ceil(gap/newTotal)):99;
+  var hm=document.getElementById('hmonths');
+  if(hm) hm.textContent=newMonths+' month'+(newMonths===1?'':'s');
+  var hp=document.getElementById('hpts-mo');
+  if(hp) hp.textContent=newTotal.toLocaleString()+' pts';
+  var ht=document.getElementById('hpts-mo-total');
+  if(ht) ht.textContent=newTotal.toLocaleString()+' pts/month';
+}
+
+
 
 // Per-category monthly spend — editable by user on results screen
 var customSpend={groceries:null,dining:null,gas:null,streaming:null,other:null};
@@ -1173,8 +1727,7 @@ var FEE_CARDS=[
   {name:'Amex Gold',fee:325,credits:[{label:'$120 dining credit',val:120,note:'$10/mo at Grubhub, Cheesecake Factory, Five Guys'},{label:'$120 Uber Cash',val:120,note:'$10/mo on Uber rides or Uber Eats'},{label:'$100 Resy credit',val:100,note:'$50 semi-annually at Resy restaurants'}],tagline:'If you eat out or order delivery, this card basically pays for itself.'},
   {name:'Capital One Venture X',fee:395,credits:[{label:'$300 travel credit',val:300,note:'Applied automatically to any travel purchase'},{label:'10k anniversary bonus miles',val:100,note:'Worth ~$100 in travel, every year'}],tagline:'The $300 travel credit alone nearly covers the fee. Straightforward value.'},
   {name:'Chase Sapphire Reserve',fee:795,credits:[{label:'$300 travel credit',val:300,note:'Gas, flights, hotels — almost any travel purchase'},{label:'$300 dining credit',val:300,note:'$150 semi-annually at Sapphire Exclusive Tables'},{label:'$300 DoorDash credit',val:300,note:'Up to $25/mo on DoorDash through 2027'}],tagline:'High fee, but the credits stack fast for anyone who eats out or travels regularly.'},
-  {name:'Chase Freedom Unlimited',fee:0,credits:[],tagline:'No annual fee, ever. A great card to keep forever.'},
-  {name:'Bilt Mastercard',fee:0,credits:[],tagline:'No annual fee. The only card that earns points on rent and mortgage.'}
+  {name:'Chase Freedom Unlimited',fee:0,credits:[],tagline:'No annual fee, ever. A great card to keep forever.'}
 ];
 
 function buildFeesPane(){
@@ -1248,16 +1801,6 @@ function buildNoMainPlan(){
     spendRows+='<td class="r" style="font-weight:500;vertical-align:middle;" id="pts-'+cat.key+'">'+pts.toLocaleString()+'</td>';
     spendRows+='</tr>';
   });
-  var isMainCardBilt=card.name==='Bilt Mastercard';
-  if(rentAmount>0){
-    totalPtsPerMo+=rentAmount;
-    spendRows+='<tr style="background:#f0f7ff;">';
-    spendRows+='<td style="vertical-align:middle;">Rent / mortgage <span style="font-size:10px;color:#0070c9;font-weight:500;margin-left:4px;">BILT</span></td>';
-    spendRows+='<td class="c" style="color:#2d7a2d;font-weight:500;vertical-align:middle;">1x</td>';
-    spendRows+='<td style="vertical-align:middle;font-size:13px;">$'+rentAmount.toLocaleString()+'</td>';
-    spendRows+='<td class="r" style="font-weight:500;vertical-align:middle;" id="pts-rent">'+rentAmount.toLocaleString()+'</td>';
-    spendRows+='</tr>';
-  }
   var afterBonus=Math.max(0,totalPts-(card.bonus||0));
   var months=calcCardMonths(card,totalPts,totalPtsPerMo,mo);
   var minSpendMonths=card.minSpend>0?Math.ceil(card.minSpend/mo):0;
@@ -1275,92 +1818,131 @@ function buildNoMainPlan(){
   html+='<span style="font-size:13px;font-weight:500;color:#1a1a1a;">'+totalPts.toLocaleString()+' pts</span>';
   html+='</div>';
   html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:0.5px solid #ebebeb;background:#fff;">';
-  html+='<span style="font-size:13px;color:#555;">Sign-up bonus ('+card.name+')</span>';
+  html+='<span style="font-size:13px;color:#555;">Points you get just for signing up</span>';
   html+='<span style="font-size:13px;font-weight:500;color:#2d7a2d;">+'+(card.bonus||0).toLocaleString()+' pts</span>';
   html+='</div>';
-  if(!bonusPlusEarnCovers){
-    html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:0.5px solid #ebebeb;background:#fff;">';
-    html+='<span style="font-size:13px;color:#555;">Still need to earn on card</span>';
-    html+='<span style="font-size:13px;font-weight:500;color:#b45309;">'+afterBonus.toLocaleString()+' pts</span>';
-    html+='</div>';
-  }
   html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:0.5px solid #ebebeb;background:#fff;">';
-  html+='<span style="font-size:13px;color:#555;">You\'d earn per month (at $'+mo.toLocaleString()+' spend)</span>';
+  html+='<span style="font-size:13px;color:#555;">You\'d earn per month (on normal spending)</span>';
   html+='<span style="font-size:13px;font-weight:500;color:#0070c9;" id="nb-monthly">'+totalPtsPerMo.toLocaleString()+' pts</span>';
   html+='</div>';
-  if(card.minSpend>0){
-    html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#f9f9f9;">';
-    html+='<span style="font-size:13px;color:#555;">Months to unlock sign-up bonus</span>';
-    html+='<span style="font-size:13px;font-weight:500;color:#1a1a1a;" id="nb-sub-months">'+minSpendMonths+' month'+(minSpendMonths===1?'':'s')+'</span>';
-    html+='</div>';
-  } else {
-    html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:'+( bonusPlusEarnCovers?'#eaf5ea':'#f9f9f9')+';">';
-    html+='<span style="font-size:13px;color:#555;">Estimated time to book</span>';
-    html+='<span style="font-size:13px;font-weight:500;color:'+(bonusPlusEarnCovers?'#2d7a2d':'#1a1a1a')+';">'+months+' month'+(months===1?'':'s')+'</span>';
-    html+='</div>';
+  html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:'+(bonusPlusEarnCovers?'#eaf5ea':'#f9f9f9')+';">';
+  html+='<span style="font-size:13px;color:#555;">Months until you can book your trip</span>';
+  html+='<span style="font-size:13px;font-weight:500;color:'+(bonusPlusEarnCovers?'#2d7a2d':'#1a1a1a')+';" id="nb-sub-months">'+months+' month'+(months===1?'':'s')+'</span>';
+  html+='</div>';
+  html+='</div>';
+  // Date urgency
+  var nurg=getTripUrgency();
+  if(nurg){
+    if(nurg.past){
+      html+='<div style="padding:10px 14px;background:#fff5f5;border-radius:8px;border:0.5px solid #fcc;">';
+      html+='<p style="margin:0;font-size:13px;color:#E24B4A;">Your selected departure date has already passed — update it to see your real timeline.</p>';
+      html+='</div>';
+    } else {
+      var nurgColor=nurg.months<months?'#E24B4A':(nurg.months<=months+2?'#b45309':'#2d7a2d');
+      var nurgBg=nurgColor==='#E24B4A'?'#fff5f5':nurgColor==='#b45309'?'#fff8f0':'#f0f9f0';
+      var nurgBorder=nurgColor==='#E24B4A'?'#fcc':'#ddd';
+      var ndaysLabel=nurg.days===1?'1 day':nurg.days+' days';
+      var ntripLen=nurg.tripLength?' ('+nurg.tripLength+'-night trip)':'';
+      var nurgMsg='';
+      if(nurg.months<months) nurgMsg='<span style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" fill="#fee2e2" stroke="#d94040" stroke-width="1"/><path d="M7 4v3.5M7 9.5v.5" stroke="#d94040" stroke-width="1.3" stroke-linecap="round"/></svg></span> You want to leave <strong>'+nurg.label+'</strong>'+ntripLen+' — '+ndaysLabel+' away, but earning normally takes '+months+' months. A sign-up bonus is the fastest way to get there in time.';
+      else if(nurg.months<=months+2) nurgMsg='<span style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" fill="#fef3c7" stroke="#b06010" stroke-width="1"/><path d="M7 4v3.5M7 9.5v.5" stroke="#b06010" stroke-width="1.3" stroke-linecap="round"/></svg></span> Departing <strong>'+nurg.label+'</strong>'+ntripLen+' — '+ndaysLabel+' away. On track, but a sign-up bonus gives you a cushion.';
+      else nurgMsg='<span style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" fill="#dcfce7" stroke="#1e6b2e" stroke-width="1"/><path d="M4.5 7l2 2 3-3" stroke="#1e6b2e" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Departing <strong>'+nurg.label+'</strong>'+ntripLen+' — '+ndaysLabel+' away. Plenty of time to earn the '+months+' months needed.';
+      html+='<div style="padding:10px 14px;background:'+nurgBg+';border-radius:8px;border:0.5px solid '+nurgBorder+'">';
+      html+='<p style="margin:0;font-size:13px;color:'+nurgColor+';line-height:1.5;">'+nurgMsg+'</p>';
+      html+='</div>';
+    }
   }
+  html+='<p style="margin:6px 0 0;font-size:11px;color:#aaa;text-align:center;">These are estimates. Actual points costs vary by season, how far out you book, and availability.</p>';
+  html+='</div>';
+
+  // ── Sample itinerary — right after results to get people excited ──
+  html+=buildItinerary(card,totalPts,0.022);
+
+  // ── Education bridge ──
+  html+='<div style="border:0.5px solid #ebebeb;border-radius:12px;padding:16px;background:#fff;">';
+  html+='<p style="margin:0 0 10px;font-size:14px;font-weight:500;color:#1a1a1a;">How everyday spending pays for travel</p>';
+  html+='<p style="margin:0 0 12px;font-size:13px;color:#555;line-height:1.6;">You\'re already spending money on groceries, gas, and subscriptions every month. A travel credit card earns you points on every dollar — automatically, with no extra work. Those points add up and can be exchanged for flights and hotels worth hundreds or thousands of dollars.</p>';
+  html+='<div style="display:flex;flex-direction:column;gap:6px;">';
+  html+='<div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:#f5f5f5;border-radius:8px;"><span style="font-size:15px;flex-shrink:0;">🛒</span><p style="margin:0;font-size:13px;color:#555;line-height:1.4;">Every $1 you spend on groceries earns points — often 3–4 points per dollar</p></div>';
+  html+='<div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:#f5f5f5;border-radius:8px;"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" style="flex-shrink:0;margin-top:1px;"><path d="M2 10l2-2 2 1 5-6 1 1-6 6 1 2-3 1-2-3z" stroke="#525252" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg><p style="margin:0;font-size:13px;color:#555;line-height:1.4;">Once you have enough points, you can book flights and hotels at a fraction of the cash price</p></div>';
+  html+='<div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:#f5f5f5;border-radius:8px;"><span style="font-size:15px;flex-shrink:0;">🎁</span><p style="margin:0;font-size:13px;color:#555;line-height:1.4;">Sign-up bonuses give you a huge head start — often enough points for a whole trip just for applying</p></div>';
   html+='</div></div>';
 
-  // Card + step-by-step bullets
-  var step1Months=minSpendMonths||1;
-  html+='<div style="border:1.5px solid #a8cff0;border-radius:12px;padding:16px;background:#fff;">';
-  html+='<p style="margin:0 0 10px;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">THE CARD WE RECOMMEND</p>';
-  html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">';
-  html+='<div><p style="margin:0;font-size:15px;font-weight:500;color:#1a1a1a;">'+card.name+'</p><p style="margin:3px 0 0;font-size:12px;color:#888;">'+card.bank+'</p></div>';
-  html+='<div style="text-align:right;"><p style="margin:0;font-size:22px;font-weight:500;color:#2d7a2d;">'+Math.round((card.bonus||0)/1000)+'k</p><p style="margin:0;font-size:11px;color:#888;">sign-up bonus</p></div></div>';
-  var bullets=[];
-  bullets.push({icon:'1️⃣',text:'<strong>Apply for the '+card.name+'</strong> — takes 5 minutes online. No impact to your credit score until you accept.'});
-  if(card.minSpend>0) bullets.push({icon:'2️⃣',text:'<strong>Spend $'+card.minSpend.toLocaleString()+' over your first '+step1Months+' month'+(step1Months===1?'':'s')+'</strong> on groceries, gas, subscriptions — things you already buy.'});
-  if(card.minSpend>0) bullets.push({icon:'3️⃣',text:'<strong>Automatically get '+(card.bonus||0).toLocaleString()+' bonus points</strong> once you hit the spending amount.'});
-  if(!bonusPlusEarnCovers){
-    bullets.push({icon:'4️⃣',text:'<strong>Keep using the card for everything</strong> — you\'ll earn about '+totalPtsPerMo.toLocaleString()+' points per month on normal purchases.'});
-    bullets.push({icon:'5️⃣',text:'<strong>After '+months+' months you\'ll have enough points</strong> to book your trip to '+capDest(r.d)+'.'});
-  } else {
-    bullets.push({icon:'4️⃣',text:'<strong>The bonus alone covers your whole trip.</strong> Transfer your points and book '+capDest(r.d)+'.'});
-  }
-  html+='<div style="display:flex;flex-direction:column;gap:8px;">';
-  bullets.forEach(function(b){
-    html+='<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#f9f9f9;border-radius:8px;">';
-    html+='<span style="font-size:16px;flex-shrink:0;line-height:1.4;">'+b.icon+'</span>';
-    html+='<p style="margin:0;font-size:13px;color:#1a1a1a;line-height:1.5;">'+b.text+'</p>';
-    html+='</div>';
-  });
-  html+='</div></div>';
-
-  // Bilt stack
-  if(rentAmount>0 && !isMainCardBilt){
-    html+='<div style="border:1.5px solid #000;border-radius:12px;padding:14px 16px;background:#fff;">';
-    html+='<p style="margin:0 0 8px;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">ALSO ADD THIS — FREE</p>';
-    html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">';
-    html+='<div><p style="margin:0;font-size:15px;font-weight:500;color:#1a1a1a;">Bilt Mastercard</p><p style="margin:3px 0 0;font-size:12px;color:#888;">No annual fee</p></div>';
-    html+='<div style="text-align:right;"><p style="margin:0;font-size:14px;font-weight:500;color:#1a1a1a;">+'+rentAmount.toLocaleString()+'</p><p style="margin:0;font-size:11px;color:#888;">pts/month on rent</p></div></div>';
-    html+='<div style="display:flex;flex-direction:column;gap:6px;">';
-    html+='<div style="display:flex;gap:8px;align-items:flex-start;padding:8px 10px;background:#f9f9f9;border-radius:8px;"><span style="font-size:14px;flex-shrink:0;">🏠</span><p style="margin:0;font-size:13px;color:#1a1a1a;line-height:1.5;">Pay rent with Bilt, use '+card.name+' for everything else</p></div>';
-    html+='<div style="display:flex;gap:8px;align-items:flex-start;padding:8px 10px;background:#f9f9f9;border-radius:8px;"><span style="font-size:14px;flex-shrink:0;">🆓</span><p style="margin:0;font-size:13px;color:#1a1a1a;line-height:1.5;">No annual fee — earns points on rent at zero cost</p></div>';
-    html+='<div style="display:flex;gap:8px;align-items:flex-start;padding:8px 10px;background:#f9f9f9;border-radius:8px;"><span style="font-size:14px;flex-shrink:0;">📈</span><p style="margin:0;font-size:13px;color:#1a1a1a;line-height:1.5;"><strong>'+totalPtsPerMo.toLocaleString()+' pts/month</strong> combined</p></div>';
-    html+='</div></div>';
-  }
-
-  // Spend table
+  // ── Budget breakdown — below education ──
   html+='<div style="border:0.5px solid #ebebeb;border-radius:12px;padding:14px 16px;background:#fff;">';
-  html+='<p style="margin:0 0 4px;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">ADJUST YOUR MONTHLY SPENDING</p>';
-  html+='<p style="margin:0 0 10px;font-size:13px;color:#555;">Edit any number — your timeline updates automatically.</p>';
+  html+='<p style="margin:0 0 4px;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">YOUR MONTHLY BUDGET BREAKDOWN</p>';
+  html+='<p style="margin:0 0 10px;font-size:13px;color:#555;">Edit any number to match what you actually spend — your timeline updates automatically.</p>';
   html+='<table class="spend-table"><thead><tr><th>Category</th><th class="c">Earn</th><th>$/month</th><th class="r">Pts</th></tr></thead><tbody>'+spendRows+'</tbody></table>';
   html+='<div class="totals-row pts-bg" style="margin-top:6px;"><span style="font-size:12px;color:#0070c9;">Points earned per month</span><span style="font-size:14px;font-weight:500;color:#0070c9;" id="nb-pts-mo">'+totalPtsPerMo.toLocaleString()+' pts/month</span></div>';
   html+='</div>';
-  html+=buildItinerary(card,totalPts,0.022);
-  html+=buildGate('b');
 
-  // ── Learn more — collapsed by default, below everything ──
-  var learnId='learn-'+Math.random().toString(36).slice(2);
-  html+='<div style="border:0.5px solid #ebebeb;border-radius:12px;overflow:hidden;background:#fff;">';
-  html+='<button onclick="toggleLearnMore(\''+learnId+'\')" style="width:100%;padding:14px 16px;border:none;background:transparent;cursor:pointer;display:flex;justify-content:space-between;align-items:center;">';
-  html+='<span style="font-size:14px;font-weight:500;color:#1a1a1a;">Learn more about sign-up bonuses</span>';
-  html+='<span id="'+learnId+'-icon" style="font-size:13px;color:#888;">+ Show</span>';
+  // ── Card recommendation ──
+  var step1Months=minSpendMonths||1;
+  var cardFeeInfo=getFeeInfo(card.name);
+  var whyMainId='whymain-'+Math.random().toString(36).slice(2);
+  html+='<div style="border:1.5px solid #a8cff0;border-radius:12px;padding:16px;background:#fff;">';
+  html+='<p style="margin:0 0 10px;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">THE CARD WE RECOMMEND</p>';
+  html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">';
+  html+='<div><p style="margin:0;font-size:15px;font-weight:500;color:#1a1a1a;">'+card.name+'</p><p style="margin:3px 0 0;font-size:12px;color:#888;">'+card.bank+'</p></div>';
+  html+='<div style="text-align:right;"><p style="margin:0;font-size:22px;font-weight:500;color:#2d7a2d;">'+Math.round((card.bonus||0)/1000)+'k pts</p><p style="margin:0;font-size:11px;color:#888;">sign-up bonus</p></div></div>';
+  // Fee row
+  if(cardFeeInfo.fee>0){
+    html+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;">';
+    html+='<span style="font-size:12px;color:#aaa;text-decoration:line-through;">$'+cardFeeInfo.fee+'/yr annual fee</span>';
+    html+='<span style="font-size:12px;color:#888;">→</span>';
+    html+='<span style="font-size:13px;font-weight:500;color:#2d7a2d;">$'+cardFeeInfo.effective+'/yr after credits</span>';
+    if(cardFeeInfo.effective===0){
+      html+='<button onclick="toggleLearnMore(\''+whyMainId+'\')" style="padding:2px 8px;border:0.5px solid #2d7a2d;background:transparent;border-radius:20px;font-size:11px;color:#2d7a2d;cursor:pointer;">Why $0? ↓</button>';
+    }
+    html+='</div>';
+    html+='<div id="'+whyMainId+'" style="display:none;margin-bottom:12px;padding:10px 12px;background:#f0f9f0;border-radius:8px;border:0.5px solid #c3e6c3;">';
+    html+='<p style="margin:0 0 6px;font-size:12px;font-weight:500;color:#2d7a2d;">Credits that wipe out the $'+cardFeeInfo.fee+' annual fee:</p>';
+    cardFeeInfo.credits.forEach(function(cr){
+      html+='<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:5px;">';
+      html+='<span style="background:#2d7a2d;color:#fff;font-size:10px;font-weight:600;padding:1px 6px;border-radius:4px;flex-shrink:0;margin-top:1px;">−$'+cr.val+'</span>';
+      html+='<div><div style="font-size:12px;color:#1a1a1a;">'+cr.label+'</div>';
+      html+='<div style="font-size:11px;color:#888;">'+cr.note+'</div></div>';
+      html+='</div>';
+    });
+    html+='<div style="margin-top:6px;padding-top:6px;border-top:0.5px solid #c3e6c3;font-size:12px;color:#2d7a2d;font-weight:500;">Net cost: $0/yr</div>';
+    html+='</div>';
+  }
+  // Steps — no number emojis, clean bullets
+  var steps=[];
+  steps.push('<strong>Apply online</strong> — takes about 5 minutes. Your credit score isn\'t affected until you actually accept the card.');
+  if(card.minSpend>0) steps.push('<strong>Spend $'+card.minSpend.toLocaleString()+' in your first '+step1Months+' month'+(step1Months===1?'':'s')+'</strong> on things you already buy — groceries, gas, subscriptions.');
+  if(card.minSpend>0) steps.push('<strong>Receive '+(card.bonus||0).toLocaleString()+' bonus points automatically</strong> once you\'ve hit the spending amount. No action needed.');
+  if(!bonusPlusEarnCovers){
+    steps.push('<strong>Keep using the card for everyday purchases.</strong> You\'ll earn around '+totalPtsPerMo.toLocaleString()+' points per month without spending anything extra.');
+    steps.push('<strong>After about '+months+' months you\'ll have enough</strong> to book your trip to '+capDest(r.d)+'.');
+  } else {
+    steps.push('<strong>The sign-up bonus covers your whole trip.</strong> Transfer your points and book '+capDest(r.d)+'.');
+  }
+  html+='<div style="display:flex;flex-direction:column;gap:8px;">';
+  steps.forEach(function(s){
+    html+='<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#f9f9f9;border-radius:8px;">';
+    html+='<div style="width:6px;height:6px;border-radius:50%;background:#0070c9;flex-shrink:0;margin-top:6px;"></div>';
+    html+='<p style="margin:0;font-size:13px;color:#1a1a1a;line-height:1.5;">'+s+'</p>';
+    html+='</div>';
+  });
+  html+='</div>';
+
+  // How sign-up bonuses work — inline after card, collapsed
+  var bonusLearnId='bl-'+Math.random().toString(36).slice(2);
+  html+='<button onclick="toggleLearnMore(\''+bonusLearnId+'\')" style="margin-top:12px;width:100%;padding:10px 12px;border:0.5px solid #ddd;background:#f9f9f9;border-radius:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;">';
+  html+='<span style="font-size:13px;color:#555;">How do sign-up bonuses work?</span>';
+  html+='<span id="'+bonusLearnId+'-icon" style="font-size:12px;color:#888;">+ Show</span>';
   html+='</button>';
-  html+='<div id="'+learnId+'" style="display:none;padding:0 16px 16px;">';
-  html+=buildFeesPane().replace('<div style="display:flex;flex-direction:column;gap:12px;padding-top:4px;">','<div style="display:flex;flex-direction:column;gap:12px;">');
-  html+='</div></div>';
+  html+='<div id="'+bonusLearnId+'" style="display:none;margin-top:8px;padding:12px;background:#f9f9f9;border-radius:8px;">';
+  html+='<p style="margin:0 0 8px;font-size:13px;color:#1a1a1a;font-weight:500;">Why do banks give away so many points?</p>';
+  html+='<p style="margin:0 0 8px;font-size:13px;color:#555;line-height:1.6;">Banks make money when you use a credit card — retailers pay a small fee on every transaction. Giving away a big points bonus upfront is worth it to them because they expect you\'ll keep spending on the card for years.</p>';
+  html+='<p style="margin:0 0 8px;font-size:13px;color:#1a1a1a;font-weight:500;">Is there a catch?</p>';
+  html+='<p style="margin:0;font-size:13px;color:#555;line-height:1.6;">You need to spend a minimum amount within the first few months to unlock the bonus. As long as you\'re spending money you were going to spend anyway, there\'s no trick. Just don\'t carry a balance — always pay the full amount each month.</p>';
+  html+='</div>';
+  html+='</div>';
+
+  // Gate
+  html+=buildGate('b');
 
   return html;
 }
@@ -1368,15 +1950,15 @@ function buildNoMainPlan(){
 
 function buildAltHasPlans(){
   var alts=[
-    {icon:'✈',label:'Fly economy instead',desc:'Economy flights cost far fewer points — you could book sooner or use what you already have.'},
-    {icon:'💳',label:'Add a new card to get there faster',desc:'A sign-up bonus from a card you don\'t have yet could cut your timeline from months to weeks.'},
-    {icon:'🏨',label:'Use points for hotel only, pay cash for the flight',desc:'If your hotel points are strong, you can mix points and cash to stretch further.'}
+    {icon:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 14l5-9 3 5 2-3 4 7H2z" stroke="#525252" stroke-width="1.3" stroke-linejoin="round" fill="none"/></svg>',label:'Fly economy instead',desc:'Economy flights cost far fewer points — you could book sooner or use what you already have.'},
+    {icon:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="4" width="16" height="10" rx="2" stroke="#525252" stroke-width="1.2"/><path d="M1 8h16" stroke="#525252" stroke-width="1.2"/><path d="M4 11h3" stroke="#525252" stroke-width="1.2" stroke-linecap="round"/></svg>',label:'Add a new card to get there faster',desc:'A sign-up bonus from a card you don\'t have yet could cut your timeline from months to weeks.'},
+    {icon:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 9L9 2l7 7v8H2V9z" stroke="#525252" stroke-width="1.2" stroke-linejoin="round"/><path d="M7 17v-5h4v5" stroke="#525252" stroke-width="1.2"/></svg>',label:'Use points for hotel only, pay cash for flight',desc:'If your hotel points are strong, you can mix points and cash to stretch further.'}
   ];
   var html='<div style="border:0.5px solid #ebebeb;border-radius:12px;overflow:hidden;background:#fff;">';
   html+='<div style="padding:10px 14px;background:#f5f5f5;border-bottom:0.5px solid #ebebeb;"><p style="margin:0;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">OTHER APPROACHES</p></div>';
   alts.forEach(function(a,i){
     html+='<div style="padding:12px 14px;'+(i<alts.length-1?'border-bottom:0.5px solid #ebebeb;':'')+'display:flex;align-items:flex-start;gap:12px;">';
-    html+='<div style="font-size:20px;flex-shrink:0;margin-top:1px;">'+a.icon+'</div>';
+    html+='<div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">'+a.icon+'</div>';
     html+='<div><p style="margin:0;font-size:13px;font-weight:500;color:#1a1a1a;">'+a.label+'</p><p style="margin:3px 0 0;font-size:12px;color:#888;line-height:1.4;">'+a.desc+'</p></div>';
     html+='</div>';
   });
@@ -1386,15 +1968,14 @@ function buildAltHasPlans(){
 
 function buildAltNoPlans(){
   var alts=[
-    {icon:'💎',name:'Amex Platinum',sub:'$695/yr · 100k sign-up bonus',desc:'Highest bonus available. Best if you want to fly business class or travel frequently.'},
-    {icon:'🆓',name:'Chase Freedom Unlimited',sub:'No annual fee · 20k bonus',desc:'No annual fee. Flat 1.5x on everything — the easiest card to manage.'},
-    {icon:'🏠',name:'Bilt Mastercard',sub:'No annual fee · earns on rent',desc:'The only card that earns points on rent payments. Great if you rent and want to start building points.'}
+    {icon:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><polygon points="9,2 11,7 17,7 12,11 14,17 9,13 4,17 6,11 1,7 7,7" stroke="#525252" stroke-width="1.2" stroke-linejoin="round" fill="none"/></svg>',name:'Amex Platinum',sub:'$695/yr · 100k sign-up bonus',desc:'Highest bonus available. Best if you want to fly business class or travel frequently.'},
+    {icon:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="4" width="16" height="10" rx="2" stroke="#525252" stroke-width="1.2"/><path d="M1 8h16" stroke="#525252" stroke-width="1.2"/></svg>',name:'Chase Freedom Unlimited',sub:'No annual fee · 20k bonus',desc:'No annual fee. Flat 1.5x on everything — the easiest first card.'}
   ];
   var html='<div style="border:0.5px solid #ebebeb;border-radius:12px;overflow:hidden;background:#fff;">';
   html+='<div style="padding:10px 14px;background:#f5f5f5;border-bottom:0.5px solid #ebebeb;"><p style="margin:0;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">OTHER CARD OPTIONS</p></div>';
   alts.forEach(function(a,i){
     html+='<div style="padding:12px 14px;'+(i<alts.length-1?'border-bottom:0.5px solid #ebebeb;':'')+'display:flex;align-items:flex-start;gap:12px;">';
-    html+='<div style="font-size:20px;flex-shrink:0;">'+a.icon+'</div>';
+    html+='<div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">'+a.icon+'</div>';
     html+='<div><p style="margin:0;font-size:13px;font-weight:500;color:#1a1a1a;">'+a.name+'</p>';
     html+='<p style="margin:2px 0 4px;font-size:11px;color:#888;">'+a.sub+'</p>';
     html+='<p style="margin:0;font-size:12px;color:#555;line-height:1.4;">'+a.desc+'</p></div>';
@@ -1412,7 +1993,7 @@ function buildResults(group){
     document.getElementById('alt-plans-a').innerHTML='';
     document.getElementById('waitlist-block-a').innerHTML='';
   } else {
-    document.getElementById('r5b-headline').textContent='Here\'s your path to '+capDest(r.d);
+    document.getElementById('r5b-headline').textContent='Your path to '+capDest(r.d);
     document.getElementById('main-plan-b').innerHTML=buildNoMainPlan();
     document.getElementById('alt-plans-b').innerHTML='';
     document.getElementById('waitlist-block-b').innerHTML='';
@@ -1421,24 +2002,71 @@ function buildResults(group){
 
 function joinWaitlist(inputId,btn){
   var val=document.getElementById(inputId).value;
-  if(!val||!val.includes('@')){document.getElementById(inputId).style.borderColor='#E24B4A';return;}
-  btn.textContent='✓ You\'re on the list';btn.style.background='#2d7a2d';btn.disabled=true;
+  if(!val||!val.includes('@')){
+    document.getElementById(inputId).style.borderColor='#d94040';
+    document.getElementById(inputId).placeholder='Please enter a valid email';
+    return;
+  }
+  btn.textContent='✓ You\'re on the list';
+  btn.style.background='#1e6b2e';
+  btn.style.onmouseover=null;
+  btn.style.onmouseout=null;
+  btn.disabled=true;
   document.getElementById(inputId).disabled=true;
+  document.getElementById(inputId).style.opacity='.5';
 }
 function toggleReferral(id,btn){
   var el=document.getElementById(id);
   if(el.style.display==='none'){el.style.display='block';btn.textContent='Hide referral code ↑';}
   else{el.style.display='none';btn.textContent='I have a referral code →';}
 }
-function go(n){if(n===1){showOnly('s1');}else if(n===2){setRoutePills();setupS2();showOnly('s2');}else if(n===3){showOnly('s3');}else if(n===4){showOnly(path==='has'?'s4a':'s4b');}else if(n==='thinking'){showOnly('s-thinking');['t1','t2','t3'].forEach(function(id){document.getElementById(id).style.color='#888';});var i=0;var tick=setInterval(function(){if(i<3){document.getElementById(['t1','t2','t3'][i]).style.color='#2d7a2d';i++;}else{clearInterval(tick);setTimeout(function(){var g=path==='has'?'a':'b';buildResults(g);showOnly('s5'+g);},400);}},600);}else if(n===6){showOnly('s6');}else if(n===7){showOnly('s7');}else if(n===8){updateConnectedTally();showOnly('s8');}}
+function go(n){if(n===1){showOnly('s1');}else if(n===2){setRoutePills();setupS2();showOnly('s2');}else if(n===3){showOnly('s3');}else if(n===4){showOnly(path==='has'?'s4a':'s4b');}else if(n==='thinking'){
+    showOnly('s-thinking');
+    // Set destination label
+    var r=getRoute();
+    var tl=document.getElementById('thinking-dest-label');
+    if(tl) tl.textContent='Building your '+capDest(r.d)+' plan...';
+    // Reset dots
+    ['t1','t2','t3'].forEach(function(id){
+      document.getElementById(id).style.color='#bbb';
+      var dot=document.getElementById(id+'-dot');
+      if(dot){dot.style.background='transparent';dot.style.borderColor='#ddd';dot.innerHTML='';}
+    });
+    var i=0;
+    var tick=setInterval(function(){
+      if(i<3){
+        var ids=['t1','t2','t3'];
+        document.getElementById(ids[i]).style.color='var(--color-text-primary)';
+        var dot=document.getElementById(ids[i]+'-dot');
+        if(dot){
+          dot.style.background='#1e6b2e';
+          dot.style.borderColor='#1e6b2e';
+          dot.innerHTML='<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+          dot.classList.add('t-check');
+        }
+        i++;
+      }else{
+        clearInterval(tick);
+        setTimeout(function(){var g=path==='has'?'a':'b';buildResults(g);showOnly('s5'+g);},400);
+      }
+    },700);
+  }else if(n===6){
+    // Track conversion with variant
+    if(window._easyVariant){
+      try{
+        if(window.gtag) window.gtag('event','email_capture',{variant:window._easyVariant,dest:(getRoute()||{}).d||''});
+      }catch(e){}
+    }
+    showOnly('s6');
+  }else if(n===7){showOnly('s7');}else if(n===8){updateConnectedTally();showOnly('s8');}}
 function toggleConnect(btn,key){connected[key]=!connected[key];btn.textContent=connected[key]?'Connected':'Connect';btn.className=connected[key]?'connect-btn connected':'connect-btn';updateConnectedTally();}
 function updateConnectedTally(){var keys=Object.keys(connected).filter(function(k){return connected[k];});var count=keys.length;var t=document.getElementById('connected-tally');if(t)t.textContent=count===0?'Connect at least one account to activate alerts':count+' account'+(count>1?'s':'')+' connected — alerts active';var c=document.getElementById('alert-count');if(c)c.textContent=count+' account'+(count===1?'':'s');var l=document.getElementById('connected-list');if(l)l.innerHTML=keys.length===0?'<p style="font-size:12px;color:#888;margin:0;">No accounts connected yet — <span style="color:#0070c9;cursor:pointer;" onclick="go(7)">connect now</span></p>':keys.map(function(k){return'<div style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:6px;"><span style="color:#2d7a2d;">✓</span><span>'+connNames[k]+'</span></div>';}).join('');var s=document.getElementById('hub-sub');if(s&&count>0)s.textContent='Alerts active on '+count+' account'+(count>1?'s':'')+'. easy. will ping you when a transfer bonus drops.';}
 function pickTimeline(btn,val){
   // Highlight selected
   btn.closest('div').querySelectorAll('button').forEach(function(b){
-    b.style.background='#fff';b.style.borderColor='#ddd';b.style.color='#1a1a1a';
+    b.style.background='#fff';b.style.borderColor='var(--color-border-secondary)';b.style.color='var(--color-text-primary)';b.style.fontWeight='400';
   });
-  btn.style.background='#eaf5ea';btn.style.borderColor='#a3d4a3';btn.style.color='#2d7a2d';
+  btn.style.background='#0f0f0f';btn.style.borderColor='#0f0f0f';btn.style.color='#fff';btn.style.fontWeight='500';
   // Store for analytics
   window._easyTimeline=val;
   // Short pause then reveal confirmation
@@ -1451,10 +2079,43 @@ function restart(){
   // Reset S6 state
   var q=document.getElementById('s6-question');if(q)q.style.display='';
   var c=document.getElementById('s6-confirm');if(c)c.style.display='none';
-  window._easyTimeline=null;path='has';spendBand='$1k – $2.5k';whenBand='Within a year';spendSel=false;whenSel=false;adults=1;children=0;booking='flight';cabinSel=false;hotelSel=false;cabinTier='business';hotelTier='upscale';hotelNights=5;rentAmount=0;
-  var ra=document.getElementById('rent-amount');if(ra)ra.value='';
+  window._easyTimeline=null;
+  path='has';spendBand='$1k – $2.5k';whenBand='Within a year';
+  spendSel=false;whenSel=false;
+  adults=1;children=0;booking='flight';
+  cabinSel=false;hotelSel=false;cabinTier='business';hotelTier='upscale';hotelNights=5;
+  rentAmount=0;tripDepartDate=null;tripReturnDate=null;
+  // Reset S3 buttons
+  ['s3-yes','s3-no'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(!el)return;
+    el.classList.remove('s3-sel');
+    el.style.background='#fff';
+    el.style.borderColor='var(--color-border-secondary)';
+    var chk=el.querySelector('svg path');if(chk)chk.setAttribute('opacity','0');
+  });
+  var td=document.getElementById('trip-depart');if(td)td.value='';
+  var tr=document.getElementById('trip-return');if(tr)tr.value='';
   var nv=document.getElementById('nights-val');if(nv)nv.textContent='5';
-  var nm=document.getElementById('nights-minus');if(nm)nm.disabled=true;connected={};document.getElementById('origin').value='';document.getElementById('dest').value='';document.getElementById('adults-val').textContent='1';document.getElementById('children-val').textContent='0';document.getElementById('adults-minus').disabled=true;document.getElementById('children-minus').disabled=true;['flight','both','hotel'].forEach(function(t){document.getElementById('tog-'+t).classList.toggle('sel',t==='flight');});tog('s1cta',false);tog('s4acta',false);tog('s4bcta',false);spendSel=false;document.querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});document.querySelectorAll('.bal-input').forEach(function(i){i.value='';});document.getElementById('total-val').textContent='$0';showOnly('s1');}
+  var nm=document.getElementById('nights-minus');if(nm)nm.disabled=true;
+  connected={};
+  document.getElementById('origin').value='';
+  document.getElementById('dest').value='';
+  document.getElementById('adults-val').textContent='1';
+  document.getElementById('children-val').textContent='0';
+  document.getElementById('adults-minus').disabled=true;
+  document.getElementById('children-minus').disabled=true;
+  ['flight','both','hotel'].forEach(function(t){document.getElementById('tog-'+t).classList.toggle('sel',t==='flight');});
+  tog('s1cta',true);tog('s3cta',true);tog('s4acta',true);tog('s4bcta',true);
+  ['s1-error','s2-error','s3-error','s4a-error','s4b-error'].forEach(clearError);
+  spendSel=false;
+  document.querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});
+  document.querySelectorAll('.bal-input').forEach(function(i){i.value='';});
+  var tv=document.getElementById('total-val');if(tv)tv.textContent='$0';
+  // Reset explore mode back to know
+  setDestMode('know');
+  showOnly('s1');
+}
 </script>
 </body>
 </html>

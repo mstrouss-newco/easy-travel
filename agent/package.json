@@ -1,0 +1,17 @@
+{
+  "name": "easy-points-agent",
+  "version": "1.0.0",
+  "description": "Daily points alert agent for easy. travel app",
+  "main": "agent.js",
+  "scripts": {
+    "start": "node agent.js",
+    "test": "node agent.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "resend": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

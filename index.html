@@ -108,32 +108,20 @@ body::after {
   #right-col { flex:1; background:#ede9e2; display:flex; flex-direction:column; height:100vh; overflow-y:auto; }
   #right-col > div { width:100%; max-width:460px; padding:48px 40px 60px; margin:0 auto; }
   #s1-wordmark { display:none; }
-  /* Tighter gaps on desktop S1 to fit viewport */
-  #s1.screen.active { gap:10px; }
+  /* Right col padding */
+  #right-col > div { padding-top:36px; padding-bottom:36px; }
+  /* S1 desktop — tighter gaps, hide dates (optional anyway) */
+  #s1.screen.active { gap:11px; }
   #s1 .prog { margin-top:0; }
-  #s1 .main-q { font-size:19px; }
-  /* Hero section smaller on desktop */
-  #s1 #hero-headline { font-size:26px !important; margin-bottom:6px !important; }
+  #s1 .main-q { font-size:20px; }
+  #s1 #hero-headline { font-size:28px !important; margin-bottom:6px !important; }
   #s1 #hero-sub { font-size:13px !important; }
-  /* Compact padding on right col for S1 specifically */
-  #right-col > div { padding-top:32px; padding-bottom:32px; }
-  /* Put travelers + booking type side by side */
-  #s1-bottom-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; align-items:start; }
-  /* Date row more compact */
-  #s1 input[type="date"] { padding:9px 10px !important; font-size:13px !important; }
-  /* Counter rows more compact */
-  #s1 .counter-row { padding:9px 12px; }
-  /* Mode toggle buttons */
-  #mode-know, #mode-explore { padding:9px !important; }
-  /* Route inputs */
-  #s1 .big-input { padding:11px 12px; }
-  /* CTA */
-  #s1 .cta { padding:13px; }
-  /* Social line hidden on desktop — trust badges are in left panel */
   #s1 .social { display:none; }
-  /* Hero padding tighter */
-  #s1 > div:first-child { padding:0; }
+  #s1 .counter-row { padding:10px 12px; }
+  #s1 .cta { padding:13px; }
 }
+/* Hide date pickers on desktop — optional field, fits screen */
+@media(min-width:900px){ .s1-dates { display:none !important; } }
 
 /* Entrance animation */
 @keyframes fadeUp {
@@ -616,23 +604,18 @@ body::after {
     <div id="explore-cats" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"></div>
     <div id="explore-dests" style="display:none;margin-top:10px;"></div>
   </div>
-  <div id="s1-bottom-grid">
-  <div>
   <span class="input-lbl" style="margin-top:2px;">Travelers</span>
-  <div style="display:flex;gap:8px;margin-top:4px;">
+  <div style="display:flex;gap:10px;">
     <div class="counter-row" style="flex:1;"><div><div style="font-size:13px;color:var(--color-text-primary);">Adults</div><div style="font-size:11px;color:var(--color-text-secondary);">18+</div></div><div class="counter-ctrl"><button class="counter-btn" id="adults-minus" onclick="changeCount('adults',-1)" disabled>−</button><span class="counter-val" id="adults-val">1</span><button class="counter-btn" onclick="changeCount('adults',1)">+</button></div></div>
     <div class="counter-row" style="flex:1;"><div><div style="font-size:13px;color:var(--color-text-primary);">Children</div><div style="font-size:11px;color:var(--color-text-secondary);">Under 18</div></div><div class="counter-ctrl"><button class="counter-btn" id="children-minus" onclick="changeCount('children',-1)" disabled>−</button><span class="counter-val" id="children-val">0</span><button class="counter-btn" onclick="changeCount('children',1)">+</button></div></div>
   </div>
-  </div>
-  <div>
   <span class="input-lbl" style="margin-top:2px;">What do you need?</span>
-  <div class="toggle-group" style="margin-top:4px;">
+  <div class="toggle-group">
     <div class="toggle-opt sel" id="tog-flight" onclick="setBooking('flight')">Flight only</div>
     <div class="toggle-opt" id="tog-both" onclick="setBooking('both')">Flight + hotel</div>
     <div class="toggle-opt" id="tog-hotel" onclick="setBooking('hotel')">Hotel only</div>
   </div>
-  </div>
-  </div>
+  <div class="s1-dates">
   <span class="input-lbl" style="margin-top:2px;">When do you want to go? <span style="color:#bbb;font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></span>
   <div style="display:flex;gap:8px;">
     <div style="flex:1;">
@@ -643,6 +626,7 @@ body::after {
       <span class="input-lbl" style="font-size:11px;color:#aaa;margin-bottom:3px;display:block;">Return <span style="color:#bbb;">(optional)</span></span>
       <input type="date" id="trip-return" onchange="setTripDate()" style="width:100%;padding:11px 12px;border:1.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:14px;color:var(--color-text-primary);background:var(--color-background-primary);box-sizing:border-box;font-family:var(--font-body);">
     </div>
+  </div>
   </div>
   <div id="date-error" style="display:none;padding:8px 12px;background:#fff5f5;border:1px solid #fcc;border-radius:8px;font-size:12px;color:#d94040;"></div>
   <button class="cta" id="s1cta" onclick="tryGoS1()">Show me how to get there →</button>

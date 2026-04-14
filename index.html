@@ -105,9 +105,11 @@ body::after {
   #panel-bottom { display:flex; gap:22px; flex-wrap:wrap; }
   .panel-trust { display:flex; align-items:center; gap:6px; font-size:12px; color:rgba(255,255,255,.38); }
   .panel-trust-dot { width:5px; height:5px; border-radius:50%; background:var(--accent); flex-shrink:0; }
-  #right-col { flex:1; background:#ede9e2; display:flex; flex-direction:column; justify-content:flex-start; height:100vh; overflow-y:auto; padding-top:48px; }
+  #right-col { display:block; }
   #right-col > div { width:100%; max-width:460px; padding:0 40px 48px; margin:0 auto; }
   #s1-wordmark { display:none; }
+  #right-col { flex:1; background:#ede9e2; display:flex; flex-direction:column; justify-content:flex-start; height:100vh; overflow-y:auto; padding-top:48px; }
+  #right-col > div { max-width:460px; padding:0 40px 48px; margin:0 auto; }
   /* Right col padding */
   #right-col > div { padding-top:36px; padding-bottom:36px; }
   /* S1 desktop — tighter gaps, hide dates (optional anyway) */
@@ -2481,7 +2483,7 @@ function restart(){
   setDestMode('know');
   showOnly('s1');
 }
-</script>
+<\/script>
 
 <script>
 // ── Desktop panel updates ─────────────────────────────────────────────────
@@ -2577,7 +2579,7 @@ if (destInput) {
 
 // Init panel
 updatePanel(1, '');
-</script>
+<\/script>
 </div>
 </div>
 </body>

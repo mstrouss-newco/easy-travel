@@ -360,17 +360,18 @@ body::after {
 /* Counter */
 .counter-row{
   display:flex;align-items:center;justify-content:space-between;
-  padding:12px 14px;
+  padding:10px 12px;
   border:1.5px solid var(--color-border-secondary);
   border-radius:var(--border-radius-md);
   background:var(--color-background-primary);
+  min-width:0;
 }
-.counter-ctrl{display:flex;align-items:center;gap:14px;}
+.counter-ctrl{display:flex;align-items:center;gap:10px;}
 .counter-btn{
-  width:30px;height:30px;border-radius:50%;
+  width:28px;height:28px;border-radius:50%;
   border:1.5px solid var(--color-border-secondary);
   background:var(--color-background-secondary);
-  color:var(--color-text-primary);font-size:16px;
+  color:var(--color-text-primary);font-size:15px;
   cursor:pointer;display:flex;align-items:center;justify-content:center;
   line-height:1;flex-shrink:0;padding:0;
   transition:all .15s;
@@ -381,7 +382,7 @@ body::after {
   background:var(--accent-light);
 }
 .counter-btn:disabled{opacity:.3;cursor:default;}
-.counter-val{font-size:16px;font-weight:500;color:var(--color-text-primary);min-width:20px;text-align:center;}
+.counter-val{font-size:15px;font-weight:500;color:var(--color-text-primary);min-width:18px;text-align:center;}
 
 /* Toggle group */
 .toggle-group{
@@ -554,14 +555,14 @@ body::after {
 
 <!-- Right column — quiz content -->
 <div id="right-col">
-<div style="max-width:520px;margin:0 auto;background:#fdfcf9;border-radius:24px;position:relative;z-index:1;">
+<div style="max-width:520px;margin:0 auto;background:#fdfcf9;border-radius:24px;position:relative;z-index:1;padding:28px 20px 48px;">
 <style>
 @media(min-width:600px) and (max-width:899px){
   body > div { background:#fdfcf9; box-shadow:0 12px 60px rgba(60,40,20,0.12),0 2px 8px rgba(60,40,20,0.06); padding:36px 36px 52px; border-radius:24px; }
   .screen { gap:18px; }
 }
 @media(min-width:900px){
-  #right-col > div { background:transparent; box-shadow:none; border-radius:0; }
+  #right-col > div { background:transparent; box-shadow:none; border-radius:0; padding:0; }
   .screen { gap:18px; }
 }
 </style>
@@ -607,9 +608,9 @@ body::after {
     <div id="explore-dests" style="display:none;margin-top:10px;"></div>
   </div>
   <span class="input-lbl" style="margin-top:2px;">Travelers</span>
-  <div style="display:flex;gap:10px;">
-    <div class="counter-row" style="flex:1;"><div><div style="font-size:13px;color:var(--color-text-primary);">Adults</div><div style="font-size:11px;color:var(--color-text-secondary);">18+</div></div><div class="counter-ctrl"><button class="counter-btn" id="adults-minus" onclick="changeCount('adults',-1)" disabled>−</button><span class="counter-val" id="adults-val">1</span><button class="counter-btn" onclick="changeCount('adults',1)">+</button></div></div>
-    <div class="counter-row" style="flex:1;"><div><div style="font-size:13px;color:var(--color-text-primary);">Children</div><div style="font-size:11px;color:var(--color-text-secondary);">Under 18</div></div><div class="counter-ctrl"><button class="counter-btn" id="children-minus" onclick="changeCount('children',-1)" disabled>−</button><span class="counter-val" id="children-val">0</span><button class="counter-btn" onclick="changeCount('children',1)">+</button></div></div>
+  <div style="display:flex;gap:8px;">
+    <div class="counter-row" style="flex:1;min-width:0;"><div><div style="font-size:13px;color:var(--color-text-primary);">Adults</div><div style="font-size:11px;color:var(--color-text-secondary);">18+</div></div><div class="counter-ctrl"><button class="counter-btn" id="adults-minus" onclick="changeCount('adults',-1)" disabled>−</button><span class="counter-val" id="adults-val">1</span><button class="counter-btn" onclick="changeCount('adults',1)">+</button></div></div>
+    <div class="counter-row" style="flex:1;min-width:0;"><div><div style="font-size:13px;color:var(--color-text-primary);">Children</div><div style="font-size:11px;color:var(--color-text-secondary);">Under 18</div></div><div class="counter-ctrl"><button class="counter-btn" id="children-minus" onclick="changeCount('children',-1)" disabled>−</button><span class="counter-val" id="children-val">0</span><button class="counter-btn" onclick="changeCount('children',1)">+</button></div></div>
   </div>
   <span class="input-lbl" style="margin-top:2px;">What do you need?</span>
   <div class="toggle-group">

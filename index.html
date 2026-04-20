@@ -790,6 +790,85 @@ body::after {
 .t-check { animation: checkPop .3s cubic-bezier(.16,1,.3,1) both; }
 </style>
 
+
+<!-- Email gate screen -->
+<div id="s-gate" class="screen">
+  <div class="nav-row"><span class="step-lbl">Almost there</span></div>
+  <div class="prog"><div class="prog-fill" style="width:95%"></div></div>
+
+  <!-- Destination hero image — Paris -->
+  <div style="border-radius:var(--border-radius-lg);overflow:hidden;position:relative;height:180px;">
+    <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80" 
+         alt="Paris" style="width:100%;height:100%;object-fit:cover;" id="gate-dest-img">
+    <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.1) 60%);">
+    </div>
+    <div style="position:absolute;bottom:14px;left:16px;right:16px;">
+      <p style="margin:0;font-size:22px;font-weight:400;font-family:var(--font-display);color:#fff;line-height:1.2;" id="gate-dest-headline">Paris, France</p>
+      <p style="margin:2px 0 0;font-size:12px;color:rgba(255,255,255,0.75);" id="gate-dest-sub">Business class · 2 travelers</p>
+    </div>
+  </div>
+
+  <!-- Teaser stats -->
+  <div style="background:var(--color-background-primary);border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);overflow:hidden;">
+    <div style="display:flex;border-bottom:1px solid var(--color-border-tertiary);">
+      <div style="flex:1;text-align:center;padding:13px 8px;">
+        <div style="font-size:18px;font-weight:600;font-family:var(--font-display);color:var(--color-text-primary);" id="gate-stat-pts">80k</div>
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:2px;">pts needed</div>
+      </div>
+      <div style="flex:1;text-align:center;padding:13px 8px;border-left:1px solid var(--color-border-tertiary);border-right:1px solid var(--color-border-tertiary);">
+        <div style="font-size:18px;font-weight:600;font-family:var(--font-display);color:var(--color-text-primary);" id="gate-stat-months">~8</div>
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:2px;">months away</div>
+      </div>
+      <div style="flex:1;text-align:center;padding:13px 8px;">
+        <div style="font-size:18px;font-weight:600;font-family:var(--font-display);color:var(--color-text-success);" id="gate-stat-value">$4.2k</div>
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:2px;">cash value</div>
+      </div>
+    </div>
+
+    <!-- Blurred preview of results -->
+    <div style="position:relative;overflow:hidden;">
+      <!-- Mock results preview -->
+      <div style="padding:14px 16px;filter:blur(5px);user-select:none;pointer-events:none;opacity:0.7;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <div style="width:36px;height:36px;border-radius:9px;background:#1a1f71;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#7b9eff;flex-shrink:0;">AMEX</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--color-text-primary);">Amex Gold Card</div>
+            <div style="font-size:11px;color:var(--color-text-tertiary);">90,000 pts sign-up bonus · 4× groceries</div>
+          </div>
+          <div style="margin-left:auto;font-size:14px;font-weight:600;color:var(--color-text-success);">90k pts</div>
+        </div>
+        <div style="background:linear-gradient(135deg,#1a3d22,#1e5228);border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.7);">Cuts your wait from 8 months to</div>
+            <div style="font-size:20px;font-weight:600;color:#fff;">~3 months</div>
+          </div>
+          <div style="font-size:28px;font-weight:400;color:#5cf0b8;font-family:var(--font-display);">3</div>
+        </div>
+        <div style="font-size:12px;color:var(--color-text-secondary);background:var(--color-background-secondary);border-radius:8px;padding:10px 12px;">
+          Transfer Chase UR → Flying Blue at 1:1 · <strong>CDG nonstop</strong> in business available June–Sept
+        </div>
+      </div>
+      <!-- Unlock overlay -->
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(253,252,249,0.6);backdrop-filter:blur(2px);">
+        <div style="font-size:20px;margin-bottom:6px;">🔒</div>
+        <p style="margin:0;font-size:14px;font-weight:600;color:var(--color-text-primary);text-align:center;">Enter your email to unlock</p>
+        <p style="margin:4px 0 0;font-size:12px;color:var(--color-text-tertiary);text-align:center;">Free · Takes 10 seconds</p>
+      </div>
+    </div>
+
+    <!-- Email form -->
+    <div style="padding:16px;border-top:1px solid var(--color-border-tertiary);">
+      <input type="email" id="gate-email-input" placeholder="your@email.com" 
+        style="width:100%;padding:13px 14px;font-size:15px;border:1.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-body);margin-bottom:10px;outline:none;box-sizing:border-box;" 
+        oninput="document.getElementById('gate-submit').disabled=!this.value.includes('@')" 
+        onfocus="this.style.borderColor='var(--accent)'" 
+        onblur="this.style.borderColor='var(--color-border-secondary)'">
+      <button class="cta" id="gate-submit" onclick="submitGate()" disabled>Unlock my plan →</button>
+      <p style="margin:8px 0 0;font-size:11px;color:var(--color-text-tertiary);text-align:center;">No credit check · Free · Won't affect your score</p>
+    </div>
+  </div>
+</div>
+
 <!-- S5a: Has points -->
 <div id="s5a" class="screen">
   <div class="nav-row"><button class="back-btn" onclick="go(4)">← Edit answers</button><span class="step-lbl">Your plan</span></div>
@@ -1035,26 +1114,26 @@ function changeNights(delta){
 // mults = per-category earn rates for everyday spending
 var GAP_CARDS=[
   {name:'Chase Sapphire Reserve', bank:'Chase', bonus:125000, minSpend:6000, bg:'#1a1f71',
-   cls:'cp-chase', shortName:'Chase Reserve',
+   cls:'cp-chase', shortName:'Chase Reserve', url:'https://creditcards.chase.com/rewards-credit-cards/sapphire/reserve',
    note:'125k pts after $6k spend in 3 months. Best premium Chase card — 3x dining, 4x flights & hotels.',
    mults:{groceries:3,dining:3,gas:2,streaming:3,other:1}},
-  {name:'Amex Platinum',          bank:'American Express', bonus:175000, minSpend:12000, bg:'#007dc5',
+  {name:'Amex Platinum', url:'https://www.americanexpress.com/us/credit-cards/card/platinum/',          bank:'American Express', bonus:175000, minSpend:12000, bg:'#007dc5',
    cls:'cp-amex', shortName:'Amex Platinum',
    note:'Up to 175k pts after $12k spend in 6 months. Highest bonus available.',
    mults:{groceries:1,dining:1,gas:1,streaming:1,other:1}},
-  {name:'Amex Gold',              bank:'American Express', bonus:100000, minSpend:6000, bg:'#b8860b',
+  {name:'Amex Gold', url:'https://www.americanexpress.com/us/credit-cards/card/gold-card/',              bank:'American Express', bonus:100000, minSpend:6000, bg:'#b8860b',
    cls:'cp-amex', shortName:'Amex Gold',
    note:'Up to 100k pts after $6k spend in 6 months. 4x groceries & dining — best everyday earner.',
    mults:{groceries:4,dining:4,gas:1,streaming:1,other:1}},
-  {name:'Citi Strata Premier',    bank:'Citi', bonus:75000, minSpend:4000, bg:'#003087',
+  {name:'Citi Strata Premier', url:'https://www.citi.com/credit-cards/citi-strata-premier-credit-card',    bank:'Citi', bonus:75000, minSpend:4000, bg:'#003087',
    cls:'cp-citi', shortName:'Citi Premier',
    note:'75k pts after $4k spend in 3 months. 3x groceries, dining, gas, flights & hotels.',
    mults:{groceries:3,dining:3,gas:3,streaming:1,other:1}},
-  {name:'Capital One Venture X',  bank:'Capital One', bonus:75000, minSpend:4000, bg:'#003580',
+  {name:'Capital One Venture X', url:'https://creditcards.capitalone.com/venture-x-credit-card',  bank:'Capital One', bonus:75000, minSpend:4000, bg:'#003580',
    cls:'cp-cap1', shortName:'Capital One',
    note:'75k miles after $4k spend in 3 months. Simple 2x on everything.',
    mults:{groceries:2,dining:2,gas:2,streaming:2,other:2}},
-  {name:'Chase Sapphire Preferred',bank:'Chase', bonus:75000, minSpend:5000, bg:'#2d3a8c',
+  {name:'Chase Sapphire Preferred', url:'https://creditcards.chase.com/rewards-credit-cards/sapphire/preferred',bank:'Chase', bonus:75000, minSpend:5000, bg:'#2d3a8c',
    cls:'cp-chase', shortName:'Chase Sapphire',
    note:'75k pts after $5k spend in 3 months. Best value travel card under $100/yr.',
    mults:{groceries:3,dining:3,gas:2,streaming:3,other:1}}
@@ -1102,6 +1181,7 @@ function buildGapCardSuggestion(gap, userCards, ptsPerMo){
   html+='<p style="margin:4px 0 0;font-size:12px;color:#555;">At your current earn rate you\'re <strong>'+slowLabel+'</strong> away. A sign-up bonus could cut that dramatically.</p>';
   html+='</div>';
 
+  window.__topGapCard = suggestions[0] || null;
   suggestions.forEach(function(c){
     var bonusWindowMonths = c.name.indexOf('Amex')>=0 ? 6 : 3;
     // Honest months: time to hit min spend + any remaining gap after bonus
@@ -1192,8 +1272,19 @@ function buildGapCardSuggestion(gap, userCards, ptsPerMo){
     // Wallet section — skip if bonus-only card (user should keep using existing cards)
     html+='<div style="background:#f5f5f3;border-radius:8px;padding:10px 12px;">';
     if(isBonusOnlyCard || !anyNewCard){
-      html+='<p style="margin:0 0 4px;font-size:13px;font-weight:500;color:#0f0f0f;">How to use it</p>';
-      html+='<p style="margin:0;font-size:12px;color:#525252;line-height:1.6;">Apply for the <strong>'+c.name+'</strong> to earn the sign-up bonus. Once you have it, keep using your existing cards for daily spending — they earn more points per dollar on groceries and dining.</p>';
+      html+='<p style="margin:0 0 8px;font-size:13px;font-weight:600;color:var(--color-text-primary);">Your next step</p>';
+      html+='<p style="margin:0 0 12px;font-size:12px;color:var(--color-text-secondary);line-height:1.6;">Apply for the <strong>'+c.name+'</strong> to earn the sign-up bonus, then keep using your existing cards for daily spend — they earn more on groceries and dining.</p>';
+      var bonusLabel=(c.bonus/1000).toFixed(0)+'k pts bonus';
+      html+='<div style="background:var(--color-background-secondary);border-radius:12px;padding:14px 16px;margin-bottom:10px;">';
+      html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">';
+      html+='<span style="font-size:12px;font-weight:600;color:var(--color-text-primary);">Current offer</span>';
+      html+='<span style="font-size:11px;font-weight:700;padding:2px 8px;background:var(--color-background-success);color:var(--color-text-success);border-radius:20px;">LIMITED</span>';
+      html+='</div>';
+      html+='<p style="margin:0;font-size:14px;font-weight:600;color:var(--color-text-primary);">'+c.bonus.toLocaleString()+' point bonus — worth ~$'+(Math.round(c.bonus*0.02/50)*50).toLocaleString()+'</p>';
+      html+='<p style="margin:2px 0 0;font-size:12px;color:var(--color-text-secondary);">After $'+c.minSpend.toLocaleString()+' spend in first '+(c.name.indexOf('Amex')>=0?'6':'3')+' months</p>';
+      html+='</div>';
+      html+='<a href="'+(c.url||'#')+'" target="_blank" rel="noopener" style="display:block;width:100%;padding:16px;background:linear-gradient(135deg,#1a1814,#2c2820);color:#fdfcf9;text-align:center;border-radius:12px;font-size:15px;font-weight:700;text-decoration:none;letter-spacing:.01em;box-shadow:0 4px 16px rgba(26,24,20,0.2);box-sizing:border-box;">Apply for '+c.shortName+' →</a>';
+      html+='<p style="margin:8px 0 0;font-size:11px;color:var(--color-text-tertiary);text-align:center;">No credit check to see if you qualify · Won\'t affect your score</p>';
     } else {
       html+='<p style="margin:0 0 2px;font-size:13px;font-weight:500;color:#0f0f0f;">Your optimized wallet</p>';
       html+='<p style="margin:0 0 8px;font-size:12px;color:#525252;">After getting this card, use it where it earns the most:</p>';
@@ -1202,6 +1293,8 @@ function buildGapCardSuggestion(gap, userCards, ptsPerMo){
       html+='<span style="font-size:12px;color:#0057a8;">Total pts/month with this card</span>';
       html+='<span style="font-size:14px;font-weight:500;color:#0057a8;">'+newTotalPtsPerMo.toLocaleString()+'</span>';
       html+='</div>';
+      html+='<a href="'+(c.url||'#')+'" target="_blank" rel="noopener" style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#1a1814,#2c2820);color:#fdfcf9;text-align:center;border-radius:12px;font-size:14px;font-weight:600;text-decoration:none;margin-top:12px;box-sizing:border-box;">Apply for '+c.shortName+' →</a>';
+      html+='<p style="margin:6px 0 0;font-size:11px;color:var(--color-text-tertiary);text-align:center;">No credit check to see if you qualify · Won\'t affect your score</p>';
     }
     html+='</div></div>';
   });
@@ -1311,8 +1404,8 @@ function pickExploreDest(dest){
 }
 
 var CARD_PROFILES={
-  chase:{name:'Chase Sapphire Preferred',shortName:'Chase Sapphire',cls:'cp-chase',mults:{groceries:3,dining:3,gas:2,streaming:3,other:1}},
-  amex:{name:'Amex Gold',shortName:'Amex Gold',cls:'cp-amex',mults:{groceries:4,dining:4,gas:1,streaming:1,other:1}},
+  chase:{name:'Chase Sapphire Preferred', url:'https://creditcards.chase.com/rewards-credit-cards/sapphire/preferred',shortName:'Chase Sapphire',cls:'cp-chase',mults:{groceries:3,dining:3,gas:2,streaming:3,other:1}},
+  amex:{name:'Amex Gold', url:'https://www.americanexpress.com/us/credit-cards/card/gold-card/',shortName:'Amex Gold',cls:'cp-amex',mults:{groceries:4,dining:4,gas:1,streaming:1,other:1}},
   cap1:{name:'Capital One Venture',shortName:'Capital One',cls:'cp-cap1',mults:{groceries:2,dining:2,gas:2,streaming:2,other:2}},
   bilt:{name:'Bilt Rewards',shortName:'Bilt',cls:'cp-bilt',mults:{groceries:3,dining:3,gas:2,streaming:1,other:1}},
   citi:{name:'Citi Premier',shortName:'Citi Premier',cls:'cp-citi',mults:{groceries:3,dining:3,gas:3,streaming:1,other:1}}
@@ -1331,12 +1424,12 @@ var BOOKING_OPTS=[
   {label:'Fewest pts',recommended:false,airline:'Iberia',airlineCode:'IB',airlineColor:'#c0392b',cabin:'Business',route:'Amex → Iberia Plus',hotel:'Hilton Paris Opéra',hotelCode:'HLT',hotelColor:'#1e8449',hotelTier:'Mid-range · Hilton',cpp:0.018,ptsM:0.82}
 ];
 var NEW_CARDS=[
-  {label:'Recommended',recommended:true, name:'Chase Sapphire Preferred', bank:'Chase',           bonus:75000,  minSpend:5000,  mults:{groceries:3,dining:3,gas:2,streaming:3,other:1}},
+  {label:'Recommended',recommended:true, name:'Chase Sapphire Preferred', url:'https://creditcards.chase.com/rewards-credit-cards/sapphire/preferred', bank:'Chase',           bonus:75000,  minSpend:5000,  mults:{groceries:3,dining:3,gas:2,streaming:3,other:1}},
   {label:'Premium',    recommended:false, name:'Chase Sapphire Reserve',  bank:'Chase',           bonus:125000, minSpend:6000,  mults:{groceries:3,dining:3,gas:2,streaming:3,other:1}},
-  {label:'Big bonus',  recommended:false, name:'Amex Platinum',           bank:'American Express',bonus:175000, minSpend:12000, mults:{groceries:1,dining:1,gas:1,streaming:1,other:1}},
-  {label:'Everyday',   recommended:false, name:'Amex Gold',               bank:'American Express',bonus:100000, minSpend:6000,  mults:{groceries:4,dining:4,gas:1,streaming:1,other:1}},
-  {label:'Simple',     recommended:false, name:'Capital One Venture X',   bank:'Capital One',     bonus:75000,  minSpend:4000,  mults:{groceries:2,dining:2,gas:2,streaming:2,other:2}},
-  {label:'No fee',     recommended:false, name:'Chase Freedom Unlimited', bank:'Chase',           bonus:20000,  minSpend:500,   mults:{groceries:1.5,dining:3,gas:1.5,streaming:1.5,other:1.5}}
+  {label:'Big bonus',  recommended:false, name:'Amex Platinum', url:'https://www.americanexpress.com/us/credit-cards/card/platinum/',           bank:'American Express',bonus:175000, minSpend:12000, mults:{groceries:1,dining:1,gas:1,streaming:1,other:1}},
+  {label:'Everyday',   recommended:false, name:'Amex Gold', url:'https://www.americanexpress.com/us/credit-cards/card/gold-card/',               bank:'American Express',bonus:100000, minSpend:6000,  mults:{groceries:4,dining:4,gas:1,streaming:1,other:1}},
+  {label:'Simple',     recommended:false, name:'Capital One Venture X', url:'https://creditcards.capitalone.com/venture-x-credit-card',   bank:'Capital One',     bonus:75000,  minSpend:4000,  mults:{groceries:2,dining:2,gas:2,streaming:2,other:2}},
+  {label:'No fee',     recommended:false, name:'Chase Freedom Unlimited', url:'https://creditcards.chase.com/cash-back-credit-cards/freedom/unlimited', bank:'Chase',           bonus:20000,  minSpend:500,   mults:{groceries:1.5,dining:3,gas:1.5,streaming:1.5,other:1.5}}
   // Bilt intentionally excluded from primary recommendations — no sign-up bonus
   // It is added as a stack suggestion separately when user has rent
 ];
@@ -2090,12 +2183,12 @@ function switchTab(tab){
 }
 
 var FEE_CARDS=[
-  {name:'Chase Sapphire Preferred',fee:95,credits:[{label:'$50 hotel credit/yr',val:50,note:'Book a hotel once through Chase Travel'},{label:'DoorDash DashPass ($120 value)',val:120,note:'Free delivery on orders through 2027'}],tagline:'Best starter travel card. The credits easily cover the fee.'},
-  {name:'Amex Platinum',fee:895,credits:[{label:'$300 streaming credit',val:300,note:'Disney+, Hulu, Peacock, YouTube Premium'},{label:'$200 Uber Cash',val:200,note:'$15/month on Uber rides or Uber Eats'},{label:'$400 Resy dining credit',val:400,note:'$100/quarter at restaurants on Resy'}],tagline:'Looks expensive. But if you stream and use Uber, the credits basically pay you back.'},
-  {name:'Amex Gold',fee:325,credits:[{label:'$120 dining credit',val:120,note:'$10/mo at Grubhub, Cheesecake Factory, Five Guys'},{label:'$120 Uber Cash',val:120,note:'$10/mo on Uber rides or Uber Eats'},{label:'$100 Resy credit',val:100,note:'$50 semi-annually at Resy restaurants'}],tagline:'If you eat out or order delivery, this card basically pays for itself.'},
-  {name:'Capital One Venture X',fee:395,credits:[{label:'$300 travel credit',val:300,note:'Applied automatically to any travel purchase'},{label:'10k anniversary bonus miles',val:100,note:'Worth ~$100 in travel, every year'}],tagline:'The $300 travel credit alone nearly covers the fee. Straightforward value.'},
+  {name:'Chase Sapphire Preferred', url:'https://creditcards.chase.com/rewards-credit-cards/sapphire/preferred',fee:95,credits:[{label:'$50 hotel credit/yr',val:50,note:'Book a hotel once through Chase Travel'},{label:'DoorDash DashPass ($120 value)',val:120,note:'Free delivery on orders through 2027'}],tagline:'Best starter travel card. The credits easily cover the fee.'},
+  {name:'Amex Platinum', url:'https://www.americanexpress.com/us/credit-cards/card/platinum/',fee:895,credits:[{label:'$300 streaming credit',val:300,note:'Disney+, Hulu, Peacock, YouTube Premium'},{label:'$200 Uber Cash',val:200,note:'$15/month on Uber rides or Uber Eats'},{label:'$400 Resy dining credit',val:400,note:'$100/quarter at restaurants on Resy'}],tagline:'Looks expensive. But if you stream and use Uber, the credits basically pay you back.'},
+  {name:'Amex Gold', url:'https://www.americanexpress.com/us/credit-cards/card/gold-card/',fee:325,credits:[{label:'$120 dining credit',val:120,note:'$10/mo at Grubhub, Cheesecake Factory, Five Guys'},{label:'$120 Uber Cash',val:120,note:'$10/mo on Uber rides or Uber Eats'},{label:'$100 Resy credit',val:100,note:'$50 semi-annually at Resy restaurants'}],tagline:'If you eat out or order delivery, this card basically pays for itself.'},
+  {name:'Capital One Venture X', url:'https://creditcards.capitalone.com/venture-x-credit-card',fee:395,credits:[{label:'$300 travel credit',val:300,note:'Applied automatically to any travel purchase'},{label:'10k anniversary bonus miles',val:100,note:'Worth ~$100 in travel, every year'}],tagline:'The $300 travel credit alone nearly covers the fee. Straightforward value.'},
   {name:'Chase Sapphire Reserve',fee:795,credits:[{label:'$300 travel credit',val:300,note:'Gas, flights, hotels — almost any travel purchase'},{label:'$300 dining credit',val:300,note:'$150 semi-annually at Sapphire Exclusive Tables'},{label:'$300 DoorDash credit',val:300,note:'Up to $25/mo on DoorDash through 2027'}],tagline:'High fee, but the credits stack fast for anyone who eats out or travels regularly.'},
-  {name:'Chase Freedom Unlimited',fee:0,credits:[],tagline:'No annual fee, ever. A great card to keep forever.'}
+  {name:'Chase Freedom Unlimited', url:'https://creditcards.chase.com/cash-back-credit-cards/freedom/unlimited',fee:0,credits:[],tagline:'No annual fee, ever. A great card to keep forever.'}
 ];
 
 function buildFeesPane(){
@@ -2309,6 +2402,10 @@ function buildNoMainPlan(){
   html+='</div>';
   html+='</div>';
 
+  // Apply CTA
+  html+='<a href="'+(card.url||'#')+'" target="_blank" rel="noopener" style="display:block;width:100%;padding:16px;background:linear-gradient(135deg,#1a1814,#2c2820);color:#fdfcf9;text-align:center;border-radius:12px;font-size:16px;font-weight:600;text-decoration:none;letter-spacing:.01em;box-shadow:0 4px 16px rgba(26,24,20,0.2);box-sizing:border-box;margin-bottom:6px;">Apply for '+(card.shortName||card.name)+' →</a>';
+  html+='<p style="margin:0 0 16px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">No credit check to see if you qualify · Won\'t affect your score</p>';
+
   // Gate
   html+=buildGate('b');
 
@@ -2336,8 +2433,8 @@ function buildAltHasPlans(){
 
 function buildAltNoPlans(){
   var alts=[
-    {icon:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><polygon points="9,2 11,7 17,7 12,11 14,17 9,13 4,17 6,11 1,7 7,7" stroke="#525252" stroke-width="1.2" stroke-linejoin="round" fill="none"/></svg>',name:'Amex Platinum',sub:'$695/yr · 100k sign-up bonus',desc:'Highest bonus available. Best if you want to fly business class or travel frequently.'},
-    {icon:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="4" width="16" height="10" rx="2" stroke="#525252" stroke-width="1.2"/><path d="M1 8h16" stroke="#525252" stroke-width="1.2"/></svg>',name:'Chase Freedom Unlimited',sub:'No annual fee · 20k bonus',desc:'No annual fee. Flat 1.5x on everything — the easiest first card.'}
+    {icon:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><polygon points="9,2 11,7 17,7 12,11 14,17 9,13 4,17 6,11 1,7 7,7" stroke="#525252" stroke-width="1.2" stroke-linejoin="round" fill="none"/></svg>',name:'Amex Platinum', url:'https://www.americanexpress.com/us/credit-cards/card/platinum/',sub:'$695/yr · 100k sign-up bonus',desc:'Highest bonus available. Best if you want to fly business class or travel frequently.'},
+    {icon:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="4" width="16" height="10" rx="2" stroke="#525252" stroke-width="1.2"/><path d="M1 8h16" stroke="#525252" stroke-width="1.2"/></svg>',name:'Chase Freedom Unlimited', url:'https://creditcards.chase.com/cash-back-credit-cards/freedom/unlimited',sub:'No annual fee · 20k bonus',desc:'No annual fee. Flat 1.5x on everything — the easiest first card.'}
   ];
   var html='<div style="border:0.5px solid #ebebeb;border-radius:12px;overflow:hidden;background:#fff;">';
   html+='<div style="padding:10px 14px;background:#f5f5f5;border-bottom:0.5px solid #ebebeb;"><p style="margin:0;font-size:12px;font-weight:500;color:#888;letter-spacing:.05em;">OTHER CARD OPTIONS</p></div>';
@@ -2355,6 +2452,52 @@ function buildAltNoPlans(){
 
 function buildResults(group){
   var r=getRoute();
+  // Populate gate screen stats
+  try{
+    var dest=capDest(r.d)||'your destination';
+    var gh=document.getElementById('gate-dest-headline');
+    if(gh) gh.textContent=capDest(r.d)||'Paris, France';
+    var gsub=document.getElementById('gate-dest-sub');
+    if(gsub){
+      var cabin=cabinSel?cabinTier.charAt(0).toUpperCase()+cabinTier.slice(1):'Economy';
+      var pax=(parseInt(document.getElementById('adults-val').textContent)||1)+(parseInt(document.getElementById('children-val').textContent)||0);
+      gsub.textContent=cabin+' class · '+(pax===1?'1 traveler':pax+' travelers');
+    }
+    // Swap destination image
+    var destImgs={
+      'paris':'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80',
+      'tokyo':'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=800&q=80',
+      'bali':'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80',
+      'london':'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80',
+      'rome':'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=80',
+      'sydney':'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=800&q=80',
+      'nyc':'https://images.unsplash.com/photo-1522083165195-3424ed129620?auto=format&fit=crop&w=800&q=80',
+      'dubai':'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80',
+      'maldives':'https://images.unsplash.com/photo-1573843981267-be1999ff37cd?auto=format&fit=crop&w=800&q=80',
+      'santorini':'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=800&q=80',
+    };
+    var imgEl=document.getElementById('gate-dest-img');
+    if(imgEl){
+      var imgKey=(r.d||'paris').toLowerCase().replace(/[^a-z]/g,'');
+      imgEl.src=destImgs[imgKey]||destImgs['paris'];
+    }
+    // Get pts needed from dest data
+    var destKey=(r.d||'').toLowerCase().replace(/[^a-z]/g,'');
+    var destData=DEST_DATA[destKey]||DEST_DATA['paris'];
+    var cabin=cabinSel?cabinTier:'economy';
+    var pts=destData&&destData[cabin]?destData[cabin]:destData?destData['economy']:60000;
+    var cashVal=destData&&destData.cashVal?destData.cashVal:2400;
+    var mo=getMonthlyBudget();
+    var earn=mo*(cabinSel&&cabinTier!=='economy'?3:2);
+    var months=Math.max(1,Math.ceil(pts/earn));
+    var gp=document.getElementById('gate-stat-pts');
+    var gm=document.getElementById('gate-stat-months');
+    var gv=document.getElementById('gate-stat-value');
+    if(gp) gp.textContent=(pts/1000).toFixed(0)+'k';
+    if(gm) gm.textContent='~'+months;
+    if(gv) gv.textContent='$'+(cashVal/1000).toFixed(1)+'k';
+  }catch(e){}
+  
   if(group==='a'){
     document.getElementById('r5a-headline').textContent='Here\'s how you get to '+capDest(r.d);
     document.getElementById('main-plan-a').innerHTML=buildHasMainPlan();
@@ -2442,6 +2585,21 @@ function pickTimeline(btn,val){
     document.getElementById('s6-question').style.display='none';
     var c=document.getElementById('s6-confirm');c.style.display='flex';c.style.flexDirection='column';c.style.gap='14px';
   },400);
+}
+
+function submitGate(){
+  var emailEl = document.getElementById('gate-email-input');
+  var email = emailEl ? emailEl.value.trim() : '';
+  if(!email || !email.includes('@')){
+    if(emailEl) emailEl.style.borderColor='var(--accent)';
+    if(emailEl) emailEl.focus();
+    return;
+  }
+  try{
+    if(window.gtag) window.gtag('event','email_capture',{dest:(getRoute()||{}).d||''});
+  }catch(e){}
+  var g = window.__resultGroup || 'a';
+  showOnly('s5'+g);
 }
 function restart(){
   // Reset S6 state
